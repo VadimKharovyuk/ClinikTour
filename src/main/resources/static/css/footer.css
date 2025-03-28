@@ -1,0 +1,30 @@
+.footer {
+    background-color: #343a40;
+    color: #fff;
+    padding: 60px 0 30px;
+}
+.footer a {
+    color: #adb5bd;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+.footer a:hover {
+    color: #fff;
+}
+.social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: rgba(255,255,255,0.1);
+    margin-right: 10px;
+    transition: background-color 0.3s;
+}
+.social-icon:hover {
+    background-color: rgba(255,255,255,0.2);
+}
+.list-inline-item:not(:last-child) {
+    margin-right: 15px;
+}

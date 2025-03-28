@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- Фрагмент хедера -->
+<header th:fragment="header" class="main-header">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        <span class="fw-bold">Asiamedtour</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain"
+              aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarMain">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="/" data-path="/">Главная</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/clinics" data-path="/clinics">Клиники</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/departments" data-path="/departments">Отделения</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/doctors" data-path="/doctors">Врачи</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/services" data-path="/services">Услуги</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about" data-path="/about">О нас</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/contact" data-path="/contact">Контакты</a>
+          </li>
+        </ul>
+
+        <div class="d-flex align-items-center">
+          <div class="me-3">
+            <a href="tel:+905321234567" class="text-white text-decoration-none">
+              <i class="fas fa-phone-alt me-2"></i>+90 532 123 45 67
+            </a>
+          </div>
+          <a href="/consultation" class="btn btn-outline-light">Получить консультацию</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const currentPath = window.location.pathname;
+      const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+
+      navLinks.forEach(link => {
+        const path = link.getAttribute('data-path');
+        if (path === '/' && currentPath === '/') {
+          link.classList.add('active');
+        } else if (path !== '/' && currentPath.startsWith(path)) {
+          link.classList.add('active');
+        }
+      });
+    });
+  </script>
+</header>
+</body>
+</html>

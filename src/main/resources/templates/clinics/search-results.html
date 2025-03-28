@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Результаты поиска - Asiamedtour</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<!--&lt;!&ndash; Навигация &ndash;&gt;-->
+<!--<header th:replace="fragments/header :: header"></header>-->
+
+<!-- Основной контент -->
+<main class="container py-5">
+  <!-- Хлебные крошки -->
+  <nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a th:href="@{/}">Главная</a></li>
+      <li class="breadcrumb-item"><a th:href="@{/clinics}">Клиники</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Результаты поиска</li>
+    </ol>
+  </nav>
+
+  <!-- Заголовок с результатами поиска -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Результаты поиска: <span class="text-primary" th:text="${search}">запрос</span></h1>
+    <a th:href="@{/clinics}" class="btn btn-outline-secondary">
+      <i class="fas fa-arrow-left me-2"></i>Вернуться к списку клиник
+    </a>
+  </div>
+
+  <!-- Форма повторного поиска -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <form th:action="@{/clinics/search}" method="get" class="d-flex">
+        <input type="text" name="query" class="form-control me-2"
+               placeholder="Найти клинику..." th:value="${search}">
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-search"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Количество найденных результатов -->
+  <div class="alert alert-info mb-4">
+    <i class="fas fa-info-circle me-2"></i>
+    Найдено результатов: <strong th:text="${clinics != null ? clinics.size() : 0}">0</strong>
+  </div>
+
+  <!-- Список найденных клиник -->
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" th:if="${clinics != null && !clinics.empty}">
+    <div class="col" th:each="clinic : ${clinics}">
+      <div class="card h-100 shadow-sm">
+        <div class="position-relative">
+          <img th:if="${clinic.imagePath}" th:src="${clinic.imagePath}" class="card-img-top"
+               alt="Изображение клиники" style="height: 200px; object-fit: cover;">
+          <img th:unless="${clinic.imagePath}" th:src="@{/img/default-clinic.jpg}" class="card-img-top"
+               alt="Изображение клиники по умолчанию" style="height: 200px; object-fit: cover;">
+          <div class="position-absolute bottom-0 start-0 p-2 bg-light">
+            <span th:text="${clinic.city + ', ' + clinic.country}">Город, Страна</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title" th:text="${clinic.name}">Название клиники</h5>
+          <p class="card-text" th:if="${clinic.shortDescription}" th:text="${clinic.shortDescription}">
+            Краткое описание клиники...
+          </p>
+          <div class="mb-3 small">
+            <div th:if="${clinic.departmentNames != null && !clinic.departmentNames.empty}">
+              <strong>Отделения:</strong>
+              <span th:each="dept, iterStat : ${clinic.departmentNames}" th:if="${iterStat.index < clinic.displayedDepartmentsCount}">
+                                <span th:text="${dept}"></span><span th:unless="${iterStat.last && iterStat.index < clinic.displayedDepartmentsCount - 1}">, </span>
+                            </span>
+              <span th:if="${clinic.totalDepartmentsCount > clinic.displayedDepartmentsCount}">
+                                и еще <span th:text="${clinic.totalDepartmentsCount - clinic.displayedDepartmentsCount}"></span>
+                            </span>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer bg-white border-top-0">
+          <a th:href="@{/clinics/{id}(id=${clinic.id})}" class="btn btn-primary">Подробнее</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Сообщение, если ничего не найдено -->
+  <div class="alert alert-warning" th:if="${clinics == null || clinics.empty}">
+    <i class="fas fa-exclamation-triangle me-2"></i>
+    По вашему запросу "<span th:text="${search}">запрос</span>" не найдено ни одной клиники.
+    <div class="mt-3">
+      <p>Попробуйте:</p>
+      <ul>
+        <li>Изменить поисковый запрос</li>
+        <li>Проверить правильность написания</li>
+        <li>Использовать более общие ключевые слова</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Рекомендации (показываются, если результатов мало) -->
+  <div class="mt-5" th:if="${clinics != null && clinics.size() <= 3 && clinics.size() > 0}">
+    <h3>Возможно, вас заинтересуют:</h3>
+    <div class="alert alert-light">
+      <p>Для получения более точных результатов вы можете:</p>
+      <ul>
+        <li>Просмотреть полный <a th:href="@{/clinics}">список клиник</a></li>
+        <li>Воспользоваться фильтрами по стране или городу</li>
+        <li>Искать по названию отделения или специализации</li>
+      </ul>
+    </div>
+  </div>
+</main>
+
+<link rel="stylesheet" th:href="@{/css/footer.css}">
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/scripts.js}"></script>
+</body>
+</html>

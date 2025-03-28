@@ -6,6 +6,7 @@ import com.example.cliniktour.model.Clinic;
 
 import com.example.cliniktour.repository.ClinicRepository;
 import com.example.cliniktour.util.ImgurService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -115,5 +116,25 @@ public class ClinicService {
      */
     public long getClinicCount() {
         return clinicRepository.count();
+    }
+
+    @Transactional
+    public Clinic saveClinicFromDto(ClinicDto clinicDto, MultipartFile image) throws IOException {
+        // Преобразуем DTO в сущность
+        Clinic clinic;
+        boolean isNew = clinicDto.getId() == null;
+
+        if (isNew) {
+            clinic = clinicMapper.toEntity(clinicDto);
+        } else {
+            Optional<Clinic> existingClinic = getClinicById(clinicDto.getId());
+            if (existingClinic.isEmpty()) {
+                throw new EntityNotFoundException("Клиника не найдена");
+            }
+            clinic = clinicMapper.updateEntityFromDto(clinicDto, existingClinic.get());
+        }
+
+        // Сохраняем клинику с изображением
+        return saveClinicWithImage(clinic, image);
     }
 }

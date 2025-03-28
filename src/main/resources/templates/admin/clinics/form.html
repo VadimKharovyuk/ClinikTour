@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${isNew ? 'Создание клиники' : 'Редактирование клиники'} + ' - Asiamedtour'">Клиника - Asiamedtour</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs5.min.css">
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+<!-- Боковое меню и верхняя навигация (могут быть вынесены во фрагменты) -->
+<!--<div th:replace="admin/fragments/sidebar :: sidebar"></div>-->
+
+<!-- Основной контент -->
+<main class="main-content">
+  <div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="h3" th:text="${isNew ? 'Создание клиники' : 'Редактирование клиники: ' + clinic.name}">Клиника</h1>
+      <a th:href="@{/admin/clinics}" class="btn btn-outline-primary">
+        <i class="fas fa-arrow-left me-2"></i>Назад к списку
+      </a>
+    </div>
+
+    <!-- Сообщения об ошибке -->
+    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+      <span th:text="${error}"></span>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <!-- Форма клиники -->
+    <div class="card">
+      <div class="card-body">
+        <form th:action="@{/admin/clinics/save}" method="post" enctype="multipart/form-data" th:object="${clinic}">
+          <input type="hidden" th:field="*{id}">
+
+          <ul class="nav nav-tabs mb-4" id="clinicTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="general-tab" data-bs-toggle="tab" data-bs-target="#general"
+                      type="button" role="tab" aria-controls="general" aria-selected="true">
+                Основная информация
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="description-tab" data-bs-toggle="tab" data-bs-target="#description"
+                      type="button" role="tab" aria-controls="description" aria-selected="false">
+                Описание
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="departments-tab" data-bs-toggle="tab" data-bs-target="#departments"
+                      type="button" role="tab" aria-controls="departments" aria-selected="false">
+                Отделения
+              </button>
+            </li>
+          </ul>
+
+          <div class="tab-content" id="clinicTabsContent">
+            <!-- Вкладка с основной информацией -->
+            <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
+              <div class="row">
+                <div class="col-md-8">
+                  <div class="mb-3">
+                    <label for="name" class="form-label">Название клиники <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="name" th:field="*{name}" required>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-4 mb-3">
+                      <label for="city" class="form-label">Город <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="city" th:field="*{city}" required>
+                      <div class="invalid-feedback" th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></div>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                      <label for="country" class="form-label">Страна <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="country" th:field="*{country}" required>
+                      <div class="invalid-feedback" th:if="${#fields.hasErrors('country')}" th:errors="*{country}"></div>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                      <label for="founded" class="form-label">Год основания</label>
+                      <input type="number" class="form-control" id="founded" th:field="*{founded}" min="1800" max="2100">
+                      <div class="invalid-feedback" th:if="${#fields.hasErrors('founded')}" th:errors="*{founded}"></div>
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="address" class="form-label">Адрес</label>
+                    <input type="text" class="form-control" id="address" th:field="*{address}">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></div>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="mb-3">
+                    <label class="form-label">Изображение клиники</label>
+                    <div class="d-flex flex-column">
+                      <!-- Текущее изображение (при редактировании) -->
+                      <div th:if="${clinic.imagePath}" class="mb-3">
+                        <img th:src="${clinic.imagePath}" alt="Текущее изображение" class="img-thumbnail mb-2" style="max-height: 200px;">
+                        <div class="small text-muted">Текущее изображение</div>
+                      </div>
+
+                      <!-- Загрузка нового изображения -->
+                      <div class="mb-3">
+                        <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                        <div class="form-text">Рекомендуемый размер: 800x600. Макс. размер: 5 МБ</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Вкладка с описанием -->
+            <div class="tab-pane fade" id="description" role="tabpanel" aria-labelledby="description-tab">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="descriptionBlock1" class="form-label">Блок описания 1</label>
+                  <textarea class="form-control summernote" id="descriptionBlock1" th:field="*{descriptionBlock1}" rows="5"></textarea>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label for="descriptionBlock2" class="form-label">Блок описания 2</label>
+                  <textarea class="form-control summernote" id="descriptionBlock2" th:field="*{descriptionBlock2}" rows="5"></textarea>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label for="descriptionBlock3" class="form-label">Блок описания 3</label>
+                  <textarea class="form-control summernote" id="descriptionBlock3" th:field="*{descriptionBlock3}" rows="5"></textarea>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label for="descriptionBlock4" class="form-label">Блок описания 4</label>
+                  <textarea class="form-control summernote" id="descriptionBlock4" th:field="*{descriptionBlock4}" rows="5"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- Вкладка с отделениями -->
+            <div class="tab-pane fade" id="departments" role="tabpanel" aria-labelledby="departments-tab">
+              <div class="row">
+                <div class="col-12 mb-4">
+                  <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i> Выберите отделения, которые представлены в данной клинике.
+                  </div>
+
+                  <div class="card">
+                    <div class="card-header">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">Доступные отделения</h6>
+                        <div class="form-check form-switch">
+                          <input class="form-check-input" type="checkbox" id="toggleAllDepartments">
+                          <label class="form-check-label" for="toggleAllDepartments">Выбрать все</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <div class="row">
+                        <div th:each="department : ${departments}" class="col-md-4 mb-2">
+                          <div class="form-check">
+                            <input class="form-check-input department-checkbox" type="checkbox"
+                                   th:id="${'dept-' + department.id}"
+                                   name="selectedDepartments"
+                                   th:value="${department.id}"
+                                   th:checked="${selectedDepartmentIds != null && selectedDepartmentIds.contains(department.id)}">
+                            <label class="form-check-label" th:for="${'dept-' + department.id}" th:text="${department.name}">
+                              Название отделения
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Кнопки формы -->
+          <div class="d-flex justify-content-end mt-4">
+            <a th:href="@{/admin/clinics}" class="btn btn-light me-2">Отмена</a>
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-save me-2"></i>Сохранить
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs5.min.js"></script>
+<script th:src="@{/js/admin.js}"></script>
+<script>
+  $(document).ready(function() {
+    // Инициализация Summernote для полей описания
+    $('.summernote').summernote({
+      height: 200,
+      toolbar: [
+        ['style', ['style']],
+        ['font', ['bold', 'underline', 'clear']],
+        ['color', ['color']],
+        ['para', ['ul', 'ol', 'paragraph']],
+        ['table', ['table']],
+        ['insert', ['link']],
+        ['view', ['fullscreen', 'codeview', 'help']]
+      ],
+      callbacks: {
+        onImageUpload: function(files) {
+          alert('Загрузка изображений в редакторе не поддерживается. Используйте специальное поле для загрузки основного изображения клиники.');
+        }
+      }
+    });
+
+    // Выбрать/снять выбор со всех отделений
+    $('#toggleAllDepartments').on('change', function() {
+      $('.department-checkbox').prop('checked', $(this).is(':checked'));
+    });
+
+    // Обновление состояния "выбрать все" при изменении отдельных чекбоксов
+    $('.department-checkbox').on('change', function() {
+      $('#toggleAllDepartments').prop('checked', $('.department-checkbox:checked').length === $('.department-checkbox').length);
+    });
+
+    // Установка начального состояния "выбрать все"
+    $('#toggleAllDepartments').prop('checked', $('.department-checkbox:checked').length === $('.department-checkbox').length);
+  });
+</script>
+</body>
+</html>

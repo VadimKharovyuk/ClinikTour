@@ -14,8 +14,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/admin")
 public class AdminAuthController {
 
-//    private static final String ADMIN_USERNAME = "${admin.username:admin}";
-//    private static final String ADMIN_PASSWORD = "${admin.password:secure_password}";
 
     @Value("${admin.username:admin}")
     private String ADMIN_USERNAME;
@@ -37,9 +35,7 @@ public class AdminAuthController {
         return "admin/login";
     }
 
-    /**
-     * Обработка формы входа
-     */
+
     @PostMapping("/login")
     public String processLogin(@RequestParam String username,
                                @RequestParam String password,
@@ -58,32 +54,12 @@ public class AdminAuthController {
         }
     }
 
-    /**
-     * Выход из админ-панели
-     */
+
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         // Удаляем флаг аутентификации из сессии
         session.removeAttribute(ADMIN_AUTH_KEY);
         return "redirect:/admin/login";
     }
-
-
-
-//    /**
-//     * Главная страница админ-панели (дашборд)
-//     */
-//    @GetMapping("/dashboard")
-//    public String dashboard(HttpSession session, Model model) {
-//        // Проверяем, авторизован ли пользователь
-//        if (!Boolean.TRUE.equals(session.getAttribute(ADMIN_AUTH_KEY))) {
-//            return "redirect:/admin/login";
-//        }
-//
-//        // Здесь можно добавить различные данные для отображения на дашборде
-//        // model.addAttribute("clinicsCount", clinicService.getClinicCount());
-//
-//        return "admin/dashboard";
-//    }
 
 }

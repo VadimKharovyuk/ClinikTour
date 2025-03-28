@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${department != null ? department.name + ' - Клиники - Asiamedtour' : 'Клиники по отделению - Asiamedtour'}">Клиники по отделению - Asiamedtour</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<!-- Навигация -->
+<!--<header th:replace="fragments/header :: header"></header>-->
+
+<!-- Основной контент -->
+<main class="container py-5">
+  <!-- Хлебные крошки -->
+  <nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a th:href="@{/}">Главная</a></li>
+      <li class="breadcrumb-item"><a th:href="@{/clinics}">Клиники</a></li>
+      <li class="breadcrumb-item"><a th:href="@{/departments}">Отделения</a></li>
+      <li class="breadcrumb-item active" aria-current="page" th:text="${department != null ? department.name : 'Отделение'}">Отделение</li>
+    </ol>
+  </nav>
+
+  <!-- Заголовок и информация об отделении -->
+  <div class="row mb-5">
+    <div class="col-lg-8">
+      <h1 class="mb-3" th:text="${department != null ? 'Клиники с отделением «' + department.name + '»' : 'Клиники по выбранному отделению'}">
+        Клиники с отделением
+      </h1>
+
+      <div class="alert alert-info" th:if="${department != null && department.description != null && !department.description.isEmpty()}">
+        <h5 class="alert-heading">Об отделении</h5>
+        <p th:text="${department.description}">Описание отделения</p>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Фильтры</h5>
+          <form th:action="@{/clinics}" method="get">
+            <div class="mb-3">
+              <label for="country" class="form-label">Страна</label>
+              <select id="country" name="country" class="form-select">
+                <option value="">Все страны</option>
+                <option th:each="country : ${countries}" th:value="${country}" th:text="${country}"></option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="city" class="form-label">Город</label>
+              <select id="city" name="city" class="form-select">
+                <option value="">Все города</option>
+                <option th:each="city : ${cities}" th:value="${city}" th:text="${city}"></option>
+              </select>
+            </div>
+            <input type="hidden" name="departmentId" th:value="${departmentId}">
+            <button type="submit" class="btn btn-primary w-100">Применить фильтры</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Список клиник с пагинацией -->
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" th:if="${clinicPage != null && !clinicPage.empty}">
+    <div class="col" th:each="clinic : ${clinicPage.content}">
+      <div class="card h-100 shadow-sm">
+        <div class="position-relative">
+          <img th:if="${clinic.imagePath}" th:src="${clinic.imagePath}" class="card-img-top"
+               alt="Изображение клиники" style="height: 200px; object-fit: cover;">
+          <img th:unless="${clinic.imagePath}" th:src="@{/img/default-clinic.jpg}" class="card-img-top"
+               alt="Изображение клиники по умолчанию" style="height: 200px; object-fit: cover;">
+          <div class="position-absolute bottom-0 start-0 p-2 bg-light">
+            <span th:text="${clinic.city + ', ' + clinic.country}">Город, Страна</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title" th:text="${clinic.name}">Название клиники</h5>
+          <p class="card-text" th:if="${clinic.shortDescription}" th:text="${clinic.shortDescription}">
+            Краткое описание клиники...
+          </p>
+          <div class="mb-3 small">
+            <div th:if="${clinic.departmentNames != null && !clinic.departmentNames.empty}">
+              <strong>Отделения:</strong>
+              <span th:each="dept, iterStat : ${clinic.departmentNames}" th:if="${iterStat.index < clinic.displayedDepartmentsCount}">
+                                <span th:text="${dept}"></span><span th:unless="${iterStat.last && iterStat.index < clinic.displayedDepartmentsCount - 1}">, </span>
+                            </span>
+              <span th:if="${clinic.totalDepartmentsCount > clinic.displayedDepartmentsCount}">
+                                и еще <span th:text="${clinic.totalDepartmentsCount - clinic.displayedDepartmentsCount}"></span>
+                            </span>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer bg-white border-top-0 d-flex justify-content-between align-items-center">
+          <a th:href="@{/clinics/{id}(id=${clinic.id})}" class="btn btn-primary">Подробнее</a>
+          <!-- Значок, показывающий наличие выбранного отделения -->
+          <span class="badge rounded-pill bg-success">
+                        <i class="fas fa-check me-1"></i>Отделение доступно
+                    </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Пагинация -->
+  <div class="mt-4" th:if="${clinicPage != null && clinicPage.totalPages > 1}">
+    <nav aria-label="Навигация по страницам">
+      <ul class="pagination justify-content-center">
+        <li class="page-item" th:classappend="${currentPage == 0 ? 'disabled' : ''}">
+          <a class="page-link" th:href="@{/clinics/by-department/{departmentId}(departmentId=${departmentId}, page=${currentPage - 1}, size=${pageSize})}" aria-label="Предыдущая">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+
+        <li class="page-item" th:each="i : ${#numbers.sequence(0, clinicPage.totalPages - 1)}"
+            th:classappend="${i == currentPage ? 'active' : ''}">
+          <a class="page-link" th:href="@{/clinics/by-department/{departmentId}(departmentId=${departmentId}, page=${i}, size=${pageSize})}"
+             th:text="${i + 1}">1</a>
+        </li>
+
+        <li class="page-item" th:classappend="${currentPage == clinicPage.totalPages - 1 ? 'disabled' : ''}">
+          <a class="page-link" th:href="@{/clinics/by-department/{departmentId}(departmentId=${departmentId}, page=${currentPage + 1}, size=${pageSize})}" aria-label="Следующая">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Сообщение, если клиник нет -->
+  <div class="alert alert-info" th:if="${clinicPage == null || clinicPage.empty}">
+    <i class="fas fa-info-circle me-2"></i>
+    <span th:if="${department != null}">
+            К сожалению, клиник с отделением "<span th:text="${department.name}">Отделение</span>" не найдено.
+        </span>
+    <span th:unless="${department != null}">
+            К сожалению, клиник с выбранным отделением не найдено.
+        </span>
+    <div class="mt-3">
+      <p>Вы можете:</p>
+      <ul>
+        <li><a th:href="@{/clinics}">Просмотреть все клиники</a></li>
+        <li><a th:href="@{/departments}">Выбрать другое отделение</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Дополнительная информация -->
+  <div class="card mt-5">
+    <div class="card-body">
+      <h5 class="card-title">Информация о лечении</h5>
+      <p th:if="${department != null}">
+        Лечение в отделении "<span th:text="${department.name}">Отделение</span>" предлагают различные клиники в нашей сети.
+        Выберите подходящую клинику исходя из местоположения, цен и дополнительных услуг.
+      </p>
+      <p th:unless="${department != null}">
+        На этой странице представлены клиники, предлагающие лечение в выбранном отделении.
+        Выберите подходящую клинику исходя из местоположения, цен и дополнительных услуг.
+      </p>
+      <p>
+        Для получения дополнительной информации о стоимости лечения, сроках и других деталях,
+        пожалуйста, воспользуйтесь формой обратной связи на странице выбранной клиники или свяжитесь с нами напрямую.
+      </p>
+    </div>
+  </div>
+</main>
+
+<link rel="stylesheet" th:href="@{/css/footer.css}">
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/scripts.js}"></script>
+</body>
+</html>

@@ -1,4 +1,5 @@
 package com.example.cliniktour.dto;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +20,13 @@ public class ClinicDto {
     private String country;
     private Integer founded;
 
-    // Краткое описание (можно использовать для карточки клиники)
+    // Описания
+    private String descriptionBlock1;
+    private String descriptionBlock2;
+    private String descriptionBlock3;
+    private String descriptionBlock4;
+
+    // Краткое описание (сокращенная версия первого блока для карточек)
     private String shortDescription;
 
     // Список отделений клиники

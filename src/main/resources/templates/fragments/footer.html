@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- Фрагмент футера -->
+<footer th:fragment="footer" class="footer">
+  <div class="container">
+    <div class="row g-4 mb-5">
+      <div class="col-lg-4 mb-4 mb-lg-0">
+        <p class="mb-4">Мы делаем медицинский туризм доступным, безопасным и комфортным для наших пациентов.</p>
+        <div class="d-flex">
+          <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-telegram"></i></a>
+        </div>
+      </div>
+
+      <div class="col-md-4 col-lg-2">
+        <h5 class="fw-bold mb-4">О нас</h5>
+        <ul class="list-unstyled">
+          <li class="mb-2"><a href="/about">О компании</a></li>
+          <li class="mb-2"><a href="/team">Наша команда</a></li>
+          <li class="mb-2"><a href="/testimonials">Отзывы</a></li>
+          <li class="mb-2"><a href="/blog">Блог</a></li>
+        </ul>
+      </div>
+
+      <div class="col-md-4 col-lg-2">
+        <h5 class="fw-bold mb-4">Пациентам</h5>
+        <ul class="list-unstyled">
+          <li class="mb-2"><a href="/clinics">Клиники</a></li>
+          <li class="mb-2"><a href="/departments">Отделения</a></li>
+          <li class="mb-2"><a href="/doctors">Врачи</a></li>
+          <li class="mb-2"><a href="/services">Услуги</a></li>
+        </ul>
+      </div>
+
+      <div class="col-md-4 col-lg-4">
+        <h5 class="fw-bold mb-4">Контакты</h5>
+        <ul class="list-unstyled">
+          <li class="mb-3">
+            <div class="d-flex">
+              <i class="fas fa-map-marker-alt me-3 mt-1"></i>
+              <span>Стамбул, Турция<br>Ataşehir, D-100</span>
+            </div>
+          </li>
+          <li class="mb-3">
+            <div class="d-flex">
+              <i class="fas fa-phone-alt me-3 mt-1"></i>
+              <span>+90 532 123 45 67</span>
+            </div>
+          </li>
+          <li class="mb-3">
+            <div class="d-flex">
+              <i class="fas fa-envelope me-3 mt-1"></i>
+              <span>info@Luckytour.com</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <hr class="border-light opacity-25 my-4">
+
+    <div class="row align-items-center">
+      <div class="col-md-6 text-center text-md-start">
+        <p class="mb-0">&copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2023</span> Luckytour. Все права защищены.</p>
+      </div>
+      <div class="col-md-6 text-center text-md-end mt-3 mt-md-0">
+        <ul class="list-inline mb-0">
+          <li class="list-inline-item"><a href="/faq">Частые вопросы</a></li>
+          <li class="list-inline-item"><a href="/privacy">Конфиденциальность</a></li>
+          <li class="list-inline-item"><a href="/terms">Условия</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

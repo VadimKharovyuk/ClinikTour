@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${isNew ? 'Создание отделения' : 'Редактирование отделения'} + ' - Asiamedtour'">Отделение - Asiamedtour</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs5.min.css">
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+<!-- Боковое меню и верхняя навигация (могут быть вынесены во фрагменты) -->
+<div th:replace="/fragments/sidebar :: sidebar"></div>
+
+<!-- Основной контент -->
+<main class="main-content">
+  <div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="h3" th:text="${isNew ? 'Создание отделения' : 'Редактирование отделения'}">Отделение</h1>
+      <a th:href="@{/admin/departments}" class="btn btn-outline-primary">
+        <i class="fas fa-arrow-left me-2"></i>Назад к списку
+      </a>
+    </div>
+
+    <!-- Сообщения об ошибке -->
+    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+      <span th:text="${error}"></span>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <!-- Форма отделения -->
+    <div class="card">
+      <div class="card-body">
+        <form th:action="@{/admin/departments/save}" method="post" enctype="multipart/form-data" th:object="${department}">
+          <!-- Скрытое поле для ID (при редактировании) -->
+          <input type="hidden" th:field="*{id}">
+
+          <div class="row">
+            <!-- Левая колонка -->
+            <div class="col-md-8">
+              <div class="mb-3">
+                <label for="name" class="form-label">Название отделения <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="name" th:field="*{name}" required>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+              </div>
+
+              <div class="mb-3">
+                <label for="description" class="form-label">Описание</label>
+                <textarea class="form-control" id="description" th:field="*{description}" rows="8"></textarea>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+              </div>
+            </div>
+
+            <!-- Правая колонка -->
+            <div class="col-md-4">
+              <div class="mb-3">
+                <label class="form-label">Изображение отделения</label>
+                <div class="d-flex flex-column">
+                  <!-- Текущее изображение (при редактировании) -->
+                  <div th:if="${department.imagePath}" class="mb-3">
+                    <img th:src="${department.imagePath}" alt="Текущее изображение" class="img-thumbnail mb-2" style="max-height: 200px;">
+                    <div class="small text-muted">Текущее изображение</div>
+                  </div>
+
+                  <!-- Загрузка нового изображения -->
+                  <div class="mb-3">
+                    <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                    <div class="form-text">Рекомендуемый размер: 800x600. Макс. размер: 5 МБ</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Статистика</label>
+                <div class="card">
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center" th:if="${!isNew}">
+                      Клиник с этим отделением
+                      <span class="badge bg-primary rounded-pill" th:text="${department.clinicsCount ?: 0}">0</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center" th:if="${!isNew}">
+                      Врачей этой специализации
+                      <span class="badge bg-primary rounded-pill" th:text="${department.doctorsCount ?: 0}">0</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mt-4">
+            <div class="col-12 d-flex justify-content-end">
+              <a th:href="@{/admin/departments}" class="btn btn-light me-2">Отмена</a>
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save me-2"></i>Сохранить
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs5.min.js"></script>
+<script th:src="@{/js/admin.js}"></script>
+<script>
+  $(document).ready(function() {
+    // Инициализация редактора Summernote для описания
+    $('#description').summernote({
+      height: 300,
+      minHeight: null,
+      maxHeight: null,
+      toolbar: [
+        ['style', ['style']],
+        ['font', ['bold', 'italic', 'underline', 'clear']],
+        ['color', ['color']],
+        ['para', ['ul', 'ol', 'paragraph']],
+        ['table', ['table']],
+        ['insert', ['link']],
+        ['view', ['fullscreen', 'codeview', 'help']]
+      ],
+      placeholder: 'Введите описание отделения...',
+      callbacks: {
+        onImageUpload: function(files) {
+          // Можно добавить логику для загрузки изображений в редакторе
+          alert('Загрузка изображений в редакторе не поддерживается. Пожалуйста, используйте специальное поле для загрузки основного изображения отделения.');
+        }
+      }
+    });
+  });
+</script>
+</body>
+</html>

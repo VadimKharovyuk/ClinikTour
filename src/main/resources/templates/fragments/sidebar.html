@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- Фрагмент бокового меню админки -->
+<div th:fragment="sidebar" class="admin-sidebar">
+  <div class="sidebar-header">
+    <a href="/admin" class="d-flex align-items-center mb-3 mb-md-0 text-decoration-none">
+      <span class="fs-4 fw-bold text-white">Asiamedtour</span>
+      <span class="badge bg-warning ms-2">Admin</span>
+    </a>
+    <button id="sidebarToggle" class="btn btn-link d-md-none text-white">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+
+  <hr class="sidebar-divider">
+
+  <ul class="nav flex-column">
+    <li class="nav-item">
+      <a class="nav-link"
+         th:classappend="${#strings.startsWith(#ctx.path ?: '', '/admin/dashboard') ? 'active' : ''}"
+         href="/admin/dashboard">
+        <i class="fas fa-tachometer-alt me-2"></i>
+        Панель управления
+      </a>
+    </li>
+
+    <li class="nav-header">Клиники и отделения</li>
+
+    <li class="nav-item">
+      <a class="nav-link"
+         th:classappend="${#strings.startsWith(#ctx.path ?: '', '/admin/clinics') ? 'active' : ''}"
+         href="/admin/clinics">
+        <i class="fas fa-hospital me-2"></i>
+        Клиники
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link"
+         th:classappend="${#strings.startsWith(#ctx.path ?: '', '/admin/departments') ? 'active' : ''}"
+         href="/admin/departments">
+        <i class="fas fa-stethoscope me-2"></i>
+        Отделения
+      </a>
+    </li>
+
+    <li class="nav-header">Персонал</li>
+
+    <li class="nav-item">
+      <a class="nav-link"
+         th:classappend="${#strings.startsWith(#ctx.path ?: '', '/admin/doctors') ? 'active' : ''}"
+         href="/admin/doctors">
+        <i class="fas fa-user-md me-2"></i>
+        Врачи
+      </a>
+    </li>
+
+    <li class="nav-header">Контент</li>
+
+    <li class="nav-item">
+      <a class="nav-link"
+         th:classappend="${#strings.startsWith(#ctx.path ?: '', '/admin/services') ? 'active' : ''}"
+         href="/admin/services">
+        <i class="fas fa-clipboard-list me-2"></i>
+        Услуги
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link"
+         th:classappend="${#strings.startsWith(#ctx.path ?: '', '/admin/blog') ? 'active' : ''}"
+         href="/admin/blog">
+        <i class="fas fa-blog me-2"></i>
+        Блог
+      </a>
+    </li>
+
+    <li class="nav-header">Пользователи</li>
+
+    <li class="nav-item">
+      <a class="nav-link"
+         th:classappend="${#strings.startsWith(#ctx.path ?: '', '/admin/users') ? 'active' : ''}"
+         href="/admin/users">
+        <i class="fas fa-users me-2"></i>
+        Пользователи
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link"
+         th:classappend="${#strings.startsWith(#ctx.path ?: '', '/admin/roles') ? 'active' : ''}"
+         href="/admin/roles">
+        <i class="fas fa-user-tag me-2"></i>
+        Роли и права
+      </a>
+    </li>
+
+    <li class="nav-header">Система</li>
+
+    <li class="nav-item">
+      <a class="nav-link"
+         th:classappend="${#strings.startsWith(#ctx.path ?: '', '/admin/settings') ? 'active' : ''}"
+         href="/admin/settings">
+        <i class="fas fa-cog me-2"></i>
+        Настройки
+      </a>
+    </li>
+  </ul>
+
+  <hr class="sidebar-divider">
+
+  <div class="sidebar-footer">
+    <div class="d-flex justify-content-between align-items-center">
+      <span class="text-white-50">Вы вошли как:</span>
+      <span class="text-white" th:text="${#authentication?.name ?: 'Администратор'}">Администратор</span>
+    </div>
+    <a href="/logout" class="btn btn-outline-danger btn-sm mt-2 w-100">
+      <i class="fas fa-sign-out-alt me-2"></i>Выйти
+    </a>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Функция для выделения активных пунктов меню
+      const currentPath = window.location.pathname;
+      document.querySelectorAll('.admin-sidebar .nav-link').forEach(link => {
+        const href = link.getAttribute('href');
+        if (currentPath.startsWith(href) && href !== '/admin' ||
+                currentPath === href) {
+          link.classList.add('active');
+        }
+      });
+
+      // Обработчик для переключения видимости меню на мобильных устройствах
+      const sidebarToggle = document.getElementById('sidebarToggle');
+      if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', function() {
+          document.body.classList.toggle('sidebar-toggled');
+          document.querySelector('.admin-sidebar').classList.toggle('toggled');
+        });
+      }
+    });
+  </script>
+</div>
+</body>
+</html>

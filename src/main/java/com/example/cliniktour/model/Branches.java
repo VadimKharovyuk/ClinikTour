@@ -9,7 +9,7 @@ import lombok.*;
 @Setter
 @Builder
 @NoArgsConstructor
-public class Branches {//филиалы
+public class Branches {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
