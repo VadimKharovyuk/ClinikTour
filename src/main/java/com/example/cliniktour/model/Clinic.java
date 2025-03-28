@@ -33,7 +33,7 @@ public class Clinic {
     @Column(columnDefinition = "TEXT")
     private String descriptionBlock4;
 
-    private Integer founded; // Год основания (используйте Integer вместо int для возможности null)
+    private Integer founded; //основания
     private String address;
     private String city;
     private String country;

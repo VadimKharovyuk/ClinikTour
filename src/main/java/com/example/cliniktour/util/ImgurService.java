@@ -1,6 +1,8 @@
 package com.example.cliniktour.util;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -35,6 +37,7 @@ public class ImgurService {
     /**
      * Результат загрузки изображения
      */
+    @Getter
     public static class UploadResult {
         private String url;
         private String deleteHash;
@@ -44,13 +47,6 @@ public class ImgurService {
             this.deleteHash = deleteHash;
         }
 
-        public String getUrl() {
-            return url;
-        }
-
-        public String getDeleteHash() {
-            return deleteHash;
-        }
     }
 
     /**

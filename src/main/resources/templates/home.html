@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Asiamedtour - Медицинский туризм</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<!-- Навигация -->
+<nav class="navbar navbar-expand-lg fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+<!--      <img src="/images/Leonardo_Lightning_XL_modern_clinic_3.jpg" alt="Asiamedtour" height="36">-->
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/">Главная</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/clinics">Клиники</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/departments">Отделения</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/doctors">Врачи</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/services">Услуги</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/about">О нас</a>
+        </li>
+        <li class="nav-item ms-lg-3">
+          <a class="btn btn-primary rounded-pill" href="/contact">Связаться</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Герой-секция -->
+<section class="hero-section">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6 hero-content">
+        <h1 class="display-4 fw-bold mb-4">Современная медицина<br>для вашего здоровья</h1>
+        <p class="lead mb-5">Мы предлагаем лечение в лучших клиниках Турции с использованием передовых технологий и опыта высококвалифицированных специалистов.</p>
+        <div class="d-flex flex-wrap gap-3">
+          <a href="/clinics" class="btn btn-primary">Найти клинику</a>
+          <a href="/departments" class="btn btn-outline">Выбрать отделение</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-image-container">
+    <img src="/images/Leonardo_Lightning_XL_modern_clinic_3.jpg" alt="Современная клиника" class="hero-image">
+  </div>
+</section>
+
+<!-- О нас -->
+<section class="section">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6 mb-5 mb-lg-0">
+        <div class="position-relative">
+          <img src="/images/Leonardo_Lightning_XL_modern_clinic_2.jpg" alt="О нас" class="img-fluid rounded-4 shadow">
+          <div class="position-absolute bg-white rounded-4 shadow p-4" style="bottom: -30px; right: -30px; max-width: 60%;">
+            <div class="d-flex align-items-center">
+              <div class="me-3">
+                <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                  <i class="fas fa-heartbeat text-white"></i>
+                </div>
+              </div>
+              <div>
+                <h4 class="h5 mb-1">Высокое качество</h4>
+                <p class="mb-0 small text-muted">Лечение мирового уровня</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 ps-lg-5">
+        <h6 class="text-primary fw-bold mb-3">О НАС</h6>
+        <h2 class="mb-4">Мы делаем медицинский туризм доступным и безопасным</h2>
+        <p class="lead mb-4">Asiamedtour — это ваш надежный партнер в организации медицинского лечения в лучших клиниках Турции. Мы предлагаем полное сопровождение пациентов на всех этапах.</p>
+        <div class="row mb-4">
+          <div class="col-md-6 mb-3">
+            <div class="d-flex">
+              <div class="me-3 text-primary">
+                <i class="fas fa-check-circle fa-2x"></i>
+              </div>
+              <div>
+                <h5 class="fw-bold">Индивидуальный подход</h5>
+                <p class="mb-0">Персональный координатор для каждого пациента</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="d-flex">
+              <div class="me-3 text-primary">
+                <i class="fas fa-check-circle fa-2x"></i>
+              </div>
+              <div>
+                <h5 class="fw-bold">Полный спектр услуг</h5>
+                <p class="mb-0">От подбора клиники до организации проживания</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <a href="/about" class="btn btn-primary">Узнать больше</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Преимущества -->
+<section class="section bg-light">
+  <div class="container">
+    <div class="section-heading">
+      <h6 class="text-primary fw-bold mb-3">ПОЧЕМУ МЫ</h6>
+      <h2 class="section-title">Основные преимущества лечения в Турции</h2>
+      <p class="section-subtitle">Мы предоставляем полный спектр услуг медицинского туризма, обеспечивая комфорт и безопасность пациентов на каждом этапе лечения.</p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3">
+        <div class="feature-card">
+          <div class="feature-number">01</div>
+          <i class="fas fa-clipboard-list feature-icon"></i>
+          <h3 class="h5 fw-bold mb-3">Индивидуальное планирование</h3>
+          <p class="mb-0">Разработка персонального плана лечения с учетом всех особенностей пациента.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="feature-card">
+          <div class="feature-number">02</div>
+          <i class="fas fa-user-md feature-icon"></i>
+          <h3 class="h5 fw-bold mb-3">Опытные специалисты</h3>
+          <p class="mb-0">Врачи международного уровня с многолетним опытом и признанием в медицинском сообществе.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="feature-card">
+          <div class="feature-number">03</div>
+          <i class="fas fa-hospital feature-icon"></i>
+          <h3 class="h5 fw-bold mb-3">Современные клиники</h3>
+          <p class="mb-0">Медицинские центры с передовым оборудованием и инновационными методиками лечения.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="feature-card">
+          <div class="feature-number">04</div>
+          <i class="fas fa-coins feature-icon"></i>
+          <h3 class="h5 fw-bold mb-3">Прозрачные цены</h3>
+          <p class="mb-0">Оптимальное соотношение цены и качества с подробной калькуляцией всех расходов.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Популярные клиники -->
+<section class="section">
+  <div class="container">
+    <div class="section-heading">
+      <h6 class="text-primary fw-bold mb-3">ЛУЧШИЙ ВЫБОР</h6>
+      <h2 class="section-title">Популярные клиники</h2>
+      <p class="section-subtitle">Сотрудничаем с ведущими медицинскими центрами Турции, которые отвечают всем международным стандартам качества</p>
+    </div>
+
+    <div class="row g-4">
+      <div th:each="clinic : ${topClinics}" class="col-md-6 col-lg-4">
+        <div class="card">
+          <img th:src="${clinic.imagePath}" th:alt="${clinic.name}" class="card-img-top">
+          <div class="card-body">
+            <h3 class="h5 card-title" th:text="${clinic.name}">Название клиники</h3>
+            <p class="card-text mb-3" th:text="${clinic.shortDescription}">Краткое описание клиники...</p>
+
+            <div class="d-flex align-items-center mb-3">
+              <i class="fas fa-map-marker-alt text-primary me-2"></i>
+              <span th:text="${clinic.city + ', ' + clinic.country}">Стамбул, Турция</span>
+            </div>
+
+            <div class="mb-4">
+                                <span th:each="dept, stat : ${clinic.departmentNames}" class="badge bg-light text-dark me-1 mb-1"
+                                      th:text="${dept}">Отделение</span>
+              <span th:if="${clinic.totalDepartmentsCount > clinic.displayedDepartmentsCount}"
+                    class="badge bg-primary me-1 mb-1"
+                    th:text="${'+' + (clinic.totalDepartmentsCount - clinic.displayedDepartmentsCount)}">+3</span>
+            </div>
+
+            <a th:href="@{/clinics/{id}(id=${clinic.id})}" class="btn btn-outline w-100">Подробнее</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-5">
+      <a href="/clinics" class="btn btn-primary">Все клиники</a>
+    </div>
+  </div>
+</section>
+
+<!-- Миссия -->
+<section class="mission-section">
+  <div class="container position-relative">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 text-center">
+        <h6 class="text-white-50 fw-bold mb-3">НАША МИССИЯ</h6>
+        <h2 class="display-6 fw-bold mb-4">Мы помогаем пациентам получить лучшее лечение</h2>
+        <p class="lead mb-5">Наша цель — обеспечить пациентам доступ к передовой медицине и заботу на всех этапах лечения. Команда Asiamedtour предоставляет комплексные решения для вашего здоровья.</p>
+        <a href="/contact" class="btn btn-light">Связаться с нами</a>
+      </div>
+    </div>
+  </div>
+  <div class="mission-shape"></div>
+</section>
+
+<!-- Популярные отделения -->
+<section class="section">
+  <div class="container">
+    <div class="section-heading">
+      <h6 class="text-primary fw-bold mb-3">СПЕЦИАЛИЗАЦИИ</h6>
+      <h2 class="section-title">Популярные направления лечения</h2>
+      <p class="section-subtitle">Выберите необходимое направление медицины для решения вашей проблемы</p>
+    </div>
+
+    <div class="row g-4">
+      <div th:each="dept : ${popularDepartments}" class="col-6 col-md-4 col-lg-3">
+        <a th:href="@{/departments/{id}(id=${dept.id})}" class="text-decoration-none">
+          <div class="department-card h-100">
+            <i class="fas fa-heartbeat department-icon"></i>
+            <h3 class="h6 mb-0" th:text="${dept.name}">Название отделения</h3>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="text-center mt-5">
+      <a href="/departments" class="btn btn-primary">Все направления</a>
+    </div>
+  </div>
+</section>
+
+<!-- Футер -->
+<footer class="footer">
+  <div class="container">
+    <div class="row g-4 mb-5">
+      <div class="col-lg-4 mb-4 mb-lg-0">
+<!--        <img src="/images/Leonardo_Lightning_XL_modern_clinic_3.jpg" alt="Asiamedtour" height="36" class="mb-4">-->
+        <p class="mb-4">Мы делаем медицинский туризм доступным, безопасным и комфортным для наших пациентов.</p>
+        <div class="d-flex">
+          <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-telegram"></i></a>
+        </div>
+      </div>
+
+      <div class="col-md-4 col-lg-2">
+        <h5 class="fw-bold mb-4">О нас</h5>
+        <ul class="list-unstyled">
+          <li class="mb-2"><a href="/about">О компании</a></li>
+          <li class="mb-2"><a href="/team">Наша команда</a></li>
+          <li class="mb-2"><a href="/testimonials">Отзывы</a></li>
+          <li class="mb-2"><a href="/blog">Блог</a></li>
+        </ul>
+      </div>
+
+      <div class="col-md-4 col-lg-2">
+        <h5 class="fw-bold mb-4">Пациентам</h5>
+        <ul class="list-unstyled">
+          <li class="mb-2"><a href="/clinics">Клиники</a></li>
+          <li class="mb-2"><a href="/departments">Отделения</a></li>
+          <li class="mb-2"><a href="/doctors">Врачи</a></li>
+          <li class="mb-2"><a href="/services">Услуги</a></li>
+        </ul>
+      </div>
+
+      <div class="col-md-4 col-lg-4">
+        <h5 class="fw-bold mb-4">Контакты</h5>
+        <ul class="list-unstyled">
+          <li class="mb-3">
+            <div class="d-flex">
+              <i class="fas fa-map-marker-alt me-3 mt-1"></i>
+              <span>Стамбул, Турция<br>Ataşehir, D-100</span>
+            </div>
+          </li>
+          <li class="mb-3">
+            <div class="d-flex">
+              <i class="fas fa-phone-alt me-3 mt-1"></i>
+              <span>+90 532 123 45 67</span>
+            </div>
+          </li>
+          <li class="mb-3">
+            <div class="d-flex">
+              <i class="fas fa-envelope me-3 mt-1"></i>
+              <span>info@Luckytour.com</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <hr class="border-light opacity-25 my-4">
+
+    <div class="row align-items-center">
+      <div class="col-md-6 text-center text-md-start">
+        <p class="mb-0">&copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2023</span> Luckytour. Все права защищены.</p>
+      </div>
+      <div class="col-md-6 text-center text-md-end mt-3 mt-md-0">
+        <ul class="list-inline mb-0">
+          <li class="list-inline-item"><a href="/faq">Частые вопросы</a></li>
+          <li class="list-inline-item"><a href="/privacy">Конфиденциальность</a></li>
+          <li class="list-inline-item"><a href="/terms">Условия</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+<script th:src="@{/js/main.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

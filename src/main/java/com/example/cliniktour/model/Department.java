@@ -22,6 +22,10 @@ public class Department {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+
+    private String imagePath;
+    private String imageDeleteHash;
+
     // Связь с branches
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Branches> branches;
