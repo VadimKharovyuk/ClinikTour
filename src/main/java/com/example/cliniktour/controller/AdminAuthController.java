@@ -68,19 +68,22 @@ public class AdminAuthController {
         return "redirect:/admin/login";
     }
 
-    /**
-     * Главная страница админ-панели (дашборд)
-     */
-    @GetMapping("/dashboard")
-    public String dashboard(HttpSession session, Model model) {
-        // Проверяем, авторизован ли пользователь
-        if (!Boolean.TRUE.equals(session.getAttribute(ADMIN_AUTH_KEY))) {
-            return "redirect:/admin/login";
-        }
 
-        // Здесь можно добавить различные данные для отображения на дашборде
-        // model.addAttribute("clinicsCount", clinicService.getClinicCount());
 
-        return "admin/dashboard";
-    }
+//    /**
+//     * Главная страница админ-панели (дашборд)
+//     */
+//    @GetMapping("/dashboard")
+//    public String dashboard(HttpSession session, Model model) {
+//        // Проверяем, авторизован ли пользователь
+//        if (!Boolean.TRUE.equals(session.getAttribute(ADMIN_AUTH_KEY))) {
+//            return "redirect:/admin/login";
+//        }
+//
+//        // Здесь можно добавить различные данные для отображения на дашборде
+//        // model.addAttribute("clinicsCount", clinicService.getClinicCount());
+//
+//        return "admin/dashboard";
+//    }
+
 }
