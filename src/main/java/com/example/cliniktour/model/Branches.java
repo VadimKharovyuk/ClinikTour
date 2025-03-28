@@ -1,4 +1,24 @@
 package com.example.cliniktour.model;
 
-public class Branches {
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@AllArgsConstructor
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+public class Branches {//филиалы
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "clinic_id")
+    private Clinic clinic;
+
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
 }
