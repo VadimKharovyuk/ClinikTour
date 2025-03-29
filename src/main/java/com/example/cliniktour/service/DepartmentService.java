@@ -169,4 +169,6 @@ public class DepartmentService {
     public long getDepartmentsCount() {
         return departmentRepository.count();
     }
+
+
 }

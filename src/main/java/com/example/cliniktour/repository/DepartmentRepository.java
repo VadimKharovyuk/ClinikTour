@@ -1,6 +1,8 @@
 package com.example.cliniktour.repository;
 
 import com.example.cliniktour.model.Department;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -15,15 +17,5 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
      */
     List<Department> findByNameContainingIgnoreCase(String name);
 
-    /**
-     * Получение популярных отделений на основе количества связанных клиник
-     */
-    @Query("SELECT d FROM Department d LEFT JOIN d.branches b GROUP BY d.id ORDER BY COUNT(b.id) DESC")
-    List<Department> findPopularDepartmentsByClinicCount();
 
-    /**
-     * Получение популярных отделений на основе количества связанных докторов
-     */
-    @Query("SELECT d FROM Department d LEFT JOIN d.doctors dr GROUP BY d.id ORDER BY COUNT(dr.id) DESC")
-    List<Department> findPopularDepartmentsByDoctorCount();
 }

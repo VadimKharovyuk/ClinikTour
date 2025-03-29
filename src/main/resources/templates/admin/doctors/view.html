@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${doctor.fullName} + ' - Административная панель'">Просмотр врача - Административная панель</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+  <link rel="stylesheet" th:href="@{/css/admin-sidebar.css}">
+</head>
+<body>
+<!-- Боковое меню -->
+<div th:replace="~{/fragments/sidebar :: sidebar}"></div>
+
+<!-- Основной контент -->
+<main class="main-content">
+  <div class="container-fluid py-4">
+    <!-- Заголовок и кнопки действий -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="h3" th:text="${doctor.fullName}">ФИО врача</h1>
+      <div>
+        <a th:href="@{/admin/doctors/edit/{id}(id=${doctor.id})}" class="btn btn-primary me-2">
+          <i class="fas fa-edit me-2"></i>Редактировать
+        </a>
+        <a th:href="@{/admin/doctors}" class="btn btn-outline-secondary">
+          <i class="fas fa-arrow-left me-2"></i>Назад к списку
+        </a>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- Основная информация -->
+      <div class="col-lg-8">
+        <!-- Основные сведения -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="mb-0">Основная информация</h5>
+          </div>
+          <div class="card-body">
+            <div class="row mb-3">
+              <div class="col-md-4">
+                <div class="fw-bold">Специализация:</div>
+                <div th:text="${doctor.specialization}">Специализация</div>
+              </div>
+              <div class="col-md-4">
+                <div class="fw-bold">Стаж работы:</div>
+                <div th:text="${doctor.yearsOfExperience != null ? doctor.yearsOfExperience + ' лет' : 'Не указано'}">Стаж</div>
+              </div>
+              <div class="col-md-4">
+                <div class="fw-bold">Статус:</div>
+                <div>
+                  <span th:if="${doctor.active}" class="badge bg-success">Активен</span>
+                  <span th:unless="${doctor.active}" class="badge bg-danger">Неактивен</span>
+                  <span th:if="${doctor.featured}" class="badge bg-warning ms-1">Рекомендуемый</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <div class="fw-bold">Email:</div>
+                <div th:text="${doctor.email ?: 'Не указано'}">Email</div>
+              </div>
+              <div class="col-md-6">
+                <div class="fw-bold">Телефон:</div>
+                <div th:text="${doctor.phone ?: 'Не указано'}">Телефон</div>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <div class="fw-bold">Клиника:</div>
+                <div th:if="${doctor.clinic != null}">
+                  <a th:href="@{/admin/clinics/view/{id}(id=${doctor.clinic.id})}" th:text="${doctor.clinic.name}">Название клиники</a>
+                </div>
+                <div th:unless="${doctor.clinic != null}">Не указано</div>
+              </div>
+              <div class="col-md-6">
+                <div class="fw-bold">Отделение:</div>
+                <div th:if="${doctor.department != null}">
+                  <a th:href="@{/admin/departments/view/{id}(id=${doctor.department.id})}" th:text="${doctor.department.name}">Название отделения</a>
+                </div>
+                <div th:unless="${doctor.department != null}">Не указано</div>
+              </div>
+            </div>
+
+            <div class="mb-3" th:if="${doctor.additionalSpecializations != null && !doctor.additionalSpecializations.empty}">
+              <div class="fw-bold">Дополнительные специализации:</div>
+              <div>
+                <span th:each="spec, iterStat : ${doctor.additionalSpecializations}" class="badge bg-info me-1 mb-1" th:text="${spec}">Специализация</span>
+              </div>
+            </div>
+
+            <div class="mb-3" th:if="${doctor.shortBio != null && !doctor.shortBio.isEmpty()}">
+              <div class="fw-bold">Краткая биография:</div>
+              <div th:text="${doctor.shortBio}">Краткая биография</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Полная биография -->
+        <div class="card mb-4" th:if="${doctor.biography != null && !doctor.biography.isEmpty()}">
+          <div class="card-header">
+            <h5 class="mb-0">Биография</h5>
+          </div>
+          <div class="card-body">
+            <div th:utext="${doctor.biography}">Биография</div>
+          </div>
+        </div>
+
+        <!-- Образование и квалификация -->
+        <div class="card mb-4" th:if="${doctor.education != null && !doctor.education.isEmpty()}">
+          <div class="card-header">
+            <h5 class="mb-0">Образование и квалификация</h5>
+          </div>
+          <div class="card-body">
+            <div th:utext="${doctor.education}">Образование</div>
+          </div>
+        </div>
+
+        <!-- Навыки и методики -->
+        <div class="card mb-4" th:if="${doctor.skills != null && !doctor.skills.isEmpty()}">
+          <div class="card-header">
+            <h5 class="mb-0">Навыки и методики</h5>
+          </div>
+          <div class="card-body">
+            <div th:utext="${doctor.skills}">Навыки</div>
+          </div>
+        </div>
+
+        <!-- Публикации и достижения -->
+        <div class="card mb-4" th:if="${doctor.publications != null && !doctor.publications.isEmpty()}">
+          <div class="card-header">
+            <h5 class="mb-0">Публикации и достижения</h5>
+          </div>
+          <div class="card-body">
+            <div th:utext="${doctor.publications}">Публикации</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Боковая информация -->
+      <div class="col-lg-4">
+        <!-- Изображение врача -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="mb-0">Изображение</h5>
+          </div>
+          <div class="card-body text-center">
+            <div th:if="${doctor.imagePath}">
+              <img th:src="${doctor.imagePath}" alt="Изображение врача" class="img-fluid rounded">
+            </div>
+            <div th:unless="${doctor.imagePath}" class="alert alert-secondary">
+              Изображение не загружено
+            </div>
+          </div>
+        </div>
+
+        <!-- Системные данные -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="mb-0">Системная информация</h5>
+          </div>
+          <div class="card-body">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                ID
+                <span class="badge bg-secondary" th:text="${doctor.id}">1</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Порядок отображения
+                <span class="badge bg-secondary" th:text="${doctor.sortOrder ?: 0}">0</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Дата создания
+                <span class="text-muted" th:text="${doctor.createdAt != null ? #temporals.format(doctor.createdAt, 'dd.MM.yyyy HH:mm') : 'Не указано'}">01.01.2023</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Последнее обновление
+                <span class="text-muted" th:text="${doctor.updatedAt != null ? #temporals.format(doctor.updatedAt, 'dd.MM.yyyy HH:mm') : 'Не указано'}">01.01.2023</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Действия -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="mb-0">Действия</h5>
+          </div>
+          <div class="card-body">
+            <div class="d-grid gap-2">
+              <a th:href="@{/admin/doctors/edit/{id}(id=${doctor.id})}" class="btn btn-primary">
+                <i class="fas fa-edit me-2"></i>Редактировать
+              </a>
+              <a th:href="@{/admin/doctors/delete/{id}(id=${doctor.id})}"
+                 class="btn btn-danger"
+                 onclick="return confirm('Вы уверены, что хотите удалить этого врача? Это действие нельзя отменить.');">
+                <i class="fas fa-trash me-2"></i>Удалить
+              </a>
+              <a th:href="@{/doctors/{id}(id=${doctor.id})}" target="_blank" class="btn btn-outline-primary">
+                <i class="fas fa-external-link-alt me-2"></i>Просмотр на сайте
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/admin.js}"></script>
+</body>
+</html>

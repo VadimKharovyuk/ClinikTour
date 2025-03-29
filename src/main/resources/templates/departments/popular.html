@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Популярные отделения - Asiamedtour</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<!-- Навигация -->
+<link rel="stylesheet" th:href="@{/css/header.css}">
+<header th:replace="~{fragments/header :: header}"></header>
+
+<!-- Основной контент -->
+<main class="container py-5">
+  <!-- Хлебные крошки -->
+  <nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a th:href="@{/}">Главная</a></li>
+      <li class="breadcrumb-item"><a th:href="@{/departments}">Отделения</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Популярные отделения</li>
+    </ol>
+  </nav>
+
+  <!-- Заголовок -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Популярные отделения</h1>
+    <a th:href="@{/departments}" class="btn btn-outline-secondary">
+      <i class="fas fa-arrow-left me-2"></i>Все отделения
+    </a>
+  </div>
+
+  <!-- Информация -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <p>Представляем вам список наиболее востребованных медицинских отделений. Эти отделения обслуживают наибольшее количество пациентов и представлены в большинстве наших партнерских клиник.</p>
+      <p>Выбирая лечение в популярных отделениях, вы получаете доступ к:</p>
+      <ul>
+        <li>Опытным врачам с большой практикой</li>
+        <li>Современному оборудованию и инновационным методикам</li>
+        <li>Широкому выбору клиник в разных странах</li>
+        <li>Проверенным протоколам лечения с высокой эффективностью</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Список популярных отделений -->
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" th:if="${departments != null && !departments.empty}">
+    <div class="col" th:each="department : ${departments}">
+      <div class="card h-100 shadow-sm">
+        <div class="position-relative">
+          <img th:if="${department.imagePath}" th:src="${department.imagePath}" class="card-img-top"
+               alt="Изображение отделения" style="height: 200px; object-fit: cover;">
+          <img th:unless="${department.imagePath}" th:src="@{/img/default-department.jpg}" class="card-img-top"
+               alt="Изображение отделения по умолчанию" style="height: 200px; object-fit: cover;">
+          <div class="position-absolute top-0 end-0 p-2">
+            <span class="badge bg-danger">Популярное</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title" th:text="${department.name}">Название отделения</h5>
+
+          <p class="card-text small text-muted" th:if="${department.description}"
+             th:text="${#strings.length(department.description) > 100 ? #strings.substring(department.description, 0, 100) + '...' : department.description}">
+            Краткое описание отделения...
+          </p>
+
+          <div class="d-flex justify-content-between align-items-center mt-2">
+            <div>
+                            <span class="badge bg-primary me-1" th:if="${department.branches != null && !department.branches.empty}">
+                                <i class="fas fa-hospital me-1"></i><span th:text="${department.branches.size()}">0</span> клиник
+                            </span>
+              <span class="badge bg-info" th:if="${department.doctors != null && !department.doctors.empty}">
+                                <i class="fas fa-user-md me-1"></i><span th:text="${department.doctors.size()}">0</span> врачей
+                            </span>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer bg-white border-top-0">
+          <a th:href="@{/departments/{id}(id=${department.id})}" class="btn btn-primary w-100">Подробнее</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Сообщение, если отделений нет -->
+  <div class="alert alert-info" th:if="${departments == null || departments.empty}">
+    <i class="fas fa-info-circle me-2"></i>
+    На данный момент информация о популярных отделениях недоступна.
+  </div>
+
+  <!-- Запрос консультации -->
+  <div class="card mt-5">
+    <div class="card-header bg-primary text-white">
+      <h3 class="mb-0">Нужна помощь в выборе?</h3>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-8">
+          <p>Если вы затрудняетесь с выбором подходящего отделения для вашего лечения, наши медицинские консультанты помогут вам:</p>
+          <ul>
+            <li>Подобрать оптимальное отделение и клинику на основе ваших медицинских показаний</li>
+            <li>Рассказать о специализациях врачей и доступных методиках лечения</li>
+            <li>Предоставить информацию о стоимости и длительности лечения</li>
+            <li>Организовать консультацию с профильным специалистом</li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <div class="d-grid gap-2">
+            <a href="tel:+123456789" class="btn btn-primary">
+              <i class="fas fa-phone-alt me-2"></i>Позвонить нам
+            </a>
+            <a th:href="@{/contact}" class="btn btn-outline-primary">
+              <i class="fas fa-envelope me-2"></i>Отправить запрос
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Подвал -->
+<link rel="stylesheet" th:href="@{/css/footer.css}">
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/scripts.js}"></script>
+</body>
+</html>

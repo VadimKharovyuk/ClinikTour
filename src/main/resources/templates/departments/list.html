@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Отделения - Asiamedtour</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<!-- Навигация -->
+<link rel="stylesheet" th:href="@{/css/header.css}">
+<header th:replace="~{fragments/header :: header}"></header>
+
+<!-- Основной контент -->
+<main class="container py-5">
+  <h1 class="mb-4">Специализированные отделения</h1>
+
+  <!-- Поиск -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <form th:action="@{/departments/search}" method="get" class="d-flex">
+        <input type="text" name="query" class="form-control me-2"
+               placeholder="Найти отделение..." th:value="${search}">
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-search"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Алфавитная навигация -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title mb-3">Отделения по алфавиту</h5>
+      <div class="d-flex flex-wrap gap-1">
+        <a th:each="letter : ${#arrays.toArray({'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Э', 'Ю', 'Я'})}"
+           th:href="@{/departments/by-letter/{letter}(letter=${letter})}"
+           class="btn btn-outline-primary">
+          <span th:text="${letter}">A</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Результаты поиска, если есть -->
+  <div th:if="${search != null}" class="mb-4">
+    <h3 class="mb-3">Результаты поиска: <span th:text="${search}"></span></h3>
+    <a th:href="@{/departments}" class="btn btn-outline-secondary mb-3">
+      <i class="fas fa-times me-2"></i>Сбросить поиск
+    </a>
+  </div>
+
+  <!-- Список отделений (для поиска) -->
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" th:if="${departments != null}">
+    <div class="col" th:each="department : ${departments}">
+      <div class="card h-100 shadow-sm">
+        <div class="position-relative">
+          <img th:if="${department.imagePath}" th:src="${department.imagePath}" class="card-img-top"
+               alt="Изображение отделения" style="height: 200px; object-fit: cover;">
+          <img th:unless="${department.imagePath}" th:src="@{/img/default-department.jpg}" class="card-img-top"
+               alt="Изображение отделения по умолчанию" style="height: 200px; object-fit: cover;">
+        </div>
+        <div class="card-body">
+          <h5 class="card-title" th:text="${department.name}">Название отделения</h5>
+
+          <p class="card-text small text-muted" th:if="${department.description}"
+             th:text="${#strings.length(department.description) > 100 ? #strings.substring(department.description, 0, 100) + '...' : department.description}">
+            Краткое описание отделения...
+          </p>
+
+          <div class="d-flex justify-content-between align-items-center mt-2">
+            <div>
+                            <span class="badge bg-primary me-1" th:if="${department.clinicsCount > 0}">
+                                <i class="fas fa-hospital me-1"></i><span th:text="${department.clinicsCount}">0</span> клиник
+                            </span>
+              <span class="badge bg-info" th:if="${department.doctorsCount > 0}">
+                                <i class="fas fa-user-md me-1"></i><span th:text="${department.doctorsCount}">0</span> врачей
+                            </span>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer bg-white border-top-0">
+          <a th:href="@{/departments/{id}(id=${department.id})}" class="btn btn-primary w-100">Подробнее</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Список отделений (для пагинации) -->
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" th:if="${departmentPage != null}">
+    <div class="col" th:each="department : ${departmentPage.content}">
+      <div class="card h-100 shadow-sm">
+        <div class="position-relative">
+          <img th:if="${department.imagePath}" th:src="${department.imagePath}" class="card-img-top"
+               alt="Изображение отделения" style="height: 200px; object-fit: cover;">
+          <img th:unless="${department.imagePath}" th:src="@{/img/default-department.jpg}" class="card-img-top"
+               alt="Изображение отделения по умолчанию" style="height: 200px; object-fit: cover;">
+        </div>
+        <div class="card-body">
+          <h5 class="card-title" th:text="${department.name}">Название отделения</h5>
+
+          <p class="card-text small text-muted" th:if="${department.description}"
+             th:text="${#strings.length(department.description) > 100 ? #strings.substring(department.description, 0, 100) + '...' : department.description}">
+            Краткое описание отделения...
+          </p>
+
+          <div class="d-flex justify-content-between align-items-center mt-2">
+            <div>
+                            <span class="badge bg-primary me-1" th:if="${department.clinicsCount > 0}">
+                                <i class="fas fa-hospital me-1"></i><span th:text="${department.clinicsCount}">0</span> клиник
+                            </span>
+              <span class="badge bg-info" th:if="${department.doctorsCount > 0}">
+                                <i class="fas fa-user-md me-1"></i><span th:text="${department.doctorsCount}">0</span> врачей
+                            </span>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer bg-white border-top-0">
+          <a th:href="@{/departments/{id}(id=${department.id})}" class="btn btn-primary w-100">Подробнее</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Пагинация -->
+  <div class="mt-4" th:if="${departmentPage != null && departmentPage.totalPages > 1}">
+    <nav aria-label="Навигация по страницам">
+      <ul class="pagination justify-content-center">
+        <li class="page-item" th:classappend="${currentPage == 0 ? 'disabled' : ''}">
+          <a class="page-link" th:href="@{/departments(page=${currentPage - 1}, size=${pageSize}, sort=${sortField})}" aria-label="Предыдущая">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+
+        <li class="page-item" th:each="i : ${#numbers.sequence(0, departmentPage.totalPages - 1)}"
+            th:classappend="${i == currentPage ? 'active' : ''}">
+          <a class="page-link" th:href="@{/departments(page=${i}, size=${pageSize}, sort=${sortField})}"
+             th:text="${i + 1}">1</a>
+        </li>
+
+        <li class="page-item" th:classappend="${currentPage == departmentPage.totalPages - 1 ? 'disabled' : ''}">
+          <a class="page-link" th:href="@{/departments(page=${currentPage + 1}, size=${pageSize}, sort=${sortField})}" aria-label="Следующая">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Сообщение, если отделений нет -->
+  <div class="alert alert-info" th:if="${(departments == null || departments.empty) && (departmentPage == null || departmentPage.empty)}">
+    <i class="fas fa-info-circle me-2"></i>
+    <span th:if="${search != null}">
+            По вашему запросу "<span th:text="${search}"></span>" не найдено ни одного отделения.
+        </span>
+    <span th:unless="${search != null}">
+            На данный момент информация об отделениях отсутствует.
+        </span>
+  </div>
+
+  <!-- Популярные отделения -->
+  <div class="card mt-5" th:if="${popularDepartments != null && !popularDepartments.empty}">
+    <div class="card-header bg-primary text-white">
+      <h3 class="mb-0">Популярные отделения</h3>
+    </div>
+    <div class="card-body">
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-4" th:each="department : ${popularDepartments}">
+          <div class="d-flex align-items-center">
+            <img th:if="${department.imagePath}" th:src="${department.imagePath}"
+                 alt="Изображение отделения" class="me-3 rounded" style="width: 60px; height: 60px; object-fit: cover;">
+            <img th:unless="${department.imagePath}" th:src="@{/img/default-department.jpg}"
+                 alt="Изображение отделения по умолчанию" class="me-3 rounded" style="width: 60px; height: 60px; object-fit: cover;">
+            <div>
+              <h6 class="mb-0"><a th:href="@{/departments/{id}(id=${department.id})}" th:text="${department.name}">Название отделения</a></h6>
+              <small class="text-muted">
+                                <span th:if="${department.doctors != null && !department.doctors.empty}">
+                                    <span th:text="${department.doctors.size()}">0</span> врачей
+                                </span>
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-4">
+        <a th:href="@{/departments/popular}" class="btn btn-outline-primary">Смотреть все популярные отделения</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Подвал -->
+<link rel="stylesheet" th:href="@{/css/footer.css}">
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/scripts.js}"></script>
+</body>
+</html>

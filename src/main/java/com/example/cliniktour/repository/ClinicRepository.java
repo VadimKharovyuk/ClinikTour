@@ -54,4 +54,9 @@ public interface ClinicRepository extends JpaRepository<Clinic, Long> {
             @Param("city") String city,
             @Param("country") String country,
             @Param("departmentName") String departmentName);
+
+
+    @Query("SELECT c FROM Clinic c JOIN c.branches b WHERE b.department.id = :departmentId")
+    List<Clinic> findByDepartmentId(@Param("departmentId") Long departmentId);
+
 }

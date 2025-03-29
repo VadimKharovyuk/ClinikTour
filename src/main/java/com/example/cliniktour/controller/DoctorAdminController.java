@@ -54,6 +54,7 @@ public class DoctorAdminController {
         return "admin/doctors/list";
     }
 
+
     /**
      * Форма создания нового доктора
      */

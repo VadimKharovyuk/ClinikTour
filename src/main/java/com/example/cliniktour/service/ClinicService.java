@@ -137,4 +137,12 @@ public class ClinicService {
         // Сохраняем клинику с изображением
         return saveClinicWithImage(clinic, image);
     }
+    /**
+     * Получение клиник по ID отделения
+     */
+    public List<ClinicDto> getClinicsByDepartmentId(Long departmentId) {
+        List<Clinic> clinics = clinicRepository.findByDepartmentId(departmentId);
+        return clinicMapper.toDtoList(clinics);
+    }
+
 }

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Результаты поиска - Asiamedtour</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<!-- Навигация -->
+<link rel="stylesheet" th:href="@{/css/header.css}">
+<header th:replace="~{fragments/header :: header}"></header>
+
+<!-- Основной контент -->
+<main class="container py-5">
+    <!-- Хлебные крошки -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/}">Главная</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/departments}">Отделения</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Результаты поиска</li>
+        </ol>
+    </nav>
+
+    <!-- Заголовок с результатами поиска -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Поиск отделений: <span class="text-primary" th:text="${search}">запрос</span></h1>
+        <a th:href="@{/departments}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Вернуться к списку
+        </a>
+    </div>
+
+    <!-- Форма повторного поиска -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form th:action="@{/departments/search}" method="get" class="d-flex">
+                <input type="text" name="query" class="form-control me-2"
+                       placeholder="Найти отделение..." th:value="${search}">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Количество найденных результатов -->
+    <div class="alert alert-info mb-4">
+        <i class="fas fa-info-circle me-2"></i>
+        Найдено результатов: <strong th:text="${departments != null ? departments.size() : 0}">0</strong>
+    </div>
+
+    <!-- Список найденных отделений -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" th:if="${departments != null && !departments.empty}">
+        <div class="col" th:each="department : ${departments}">
+            <div class="card h-100 shadow-sm">
+                <div class="position-relative">
+                    <img th:if="${department.imagePath}" th:src="${department.imagePath}" class="card-img-top"
+                         alt="Изображение отделения" style="height: 200px; object-fit: cover;">
+                    <img th:unless="${department.imagePath}" th:src="@{/img/default-department.jpg}" class="card-img-top"
+                         alt="Изображение отделения по умолчанию" style="height: 200px; object-fit: cover;">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${department.name}">Название отделения</h5>
+
+                    <p class="card-text small text-muted" th:if="${department.description}"
+                       th:text="${#strings.length(department.description) > 100 ? #strings.substring(department.description, 0, 100) + '...' : department.description}">
+                        Краткое описание отделения...
+                    </p>
+
+                    <div class="d-flex justify-content-between align-items-center mt-2">
+                        <div>
+                            <span class="badge bg-primary me-1" th:if="${department.clinicsCount > 0}">
+                                <i class="fas fa-hospital me-1"></i><span th:text="${department.clinicsCount}">0</span> клиник
+                            </span>
+                            <span class="badge bg-info" th:if="${department.doctorsCount > 0}">
+                                <i class="fas fa-user-md me-1"></i><span th:text="${department.doctorsCount}">0</span> врачей
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-white border-top-0">
+                    <a th:href="@{/departments/{id}(id=${department.id})}" class="btn btn-primary w-100">Подробнее</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Сообщение, если ничего не найдено -->
+    <div class="alert alert-warning" th:if="${departments == null || departments.empty}">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        По вашему запросу "<span th:text="${search}">запрос</span>" не найдено ни одного отделения.
+        <div class="mt-3">
+            <p>Попробуйте:</p>
+            <ul>
+                <li>Изменить поисковый запрос</li>
+                <li>Проверить правильность написания</li>
+                <li>Использовать более общие ключевые слова</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Рекомендации (показываются, если результатов мало) -->
+    <div class="mt-5" th:if="${departments != null && departments.size() <= 3 && departments.size() > 0}">
+        <h3>Возможно, вас заинтересуют:</h3>
+        <div class="alert alert-light">
+            <p>Для получения более полной информации вы можете:</p>
+            <ul>
+                <li>Просмотреть полный <a th:href="@{/departments}">список отделений</a></li>
+                <li>Ознакомиться с <a th:href="@{/departments/popular}">популярными отделениями</a></li>
+                <li>Найти отделения по <a th:href="@{/departments/by-letter/А}">алфавиту</a></li>
+            </ul>
+        </div>
+    </div>
+</main>
+
+<!-- Подвал -->
+<link rel="stylesheet" th:href="@{/css/footer.css}">
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/scripts.js}"></script>
+</body>
+</html>

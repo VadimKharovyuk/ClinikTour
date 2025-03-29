@@ -10,6 +10,6 @@ public class ClinikTourApplication {
         SpringApplication.run(ClinikTourApplication.class, args);
     }
 
-    //DoctorAdminController
+
 
 }

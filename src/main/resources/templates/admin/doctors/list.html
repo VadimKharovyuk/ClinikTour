@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Управление врачами - Административная панель</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+  <link rel="stylesheet" th:href="@{/css/admin-sidebar.css}">
+</head>
+<body>
+<!-- Боковое меню -->
+<div th:replace="~{/fragments/sidebar :: sidebar}"></div>
+
+<!-- Основной контент -->
+<main class="main-content">
+  <div class="container-fluid py-4">
+    <!-- Алерты для сообщений -->
+    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+      <span th:text="${success}">Успешно выполнено</span>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+      <span th:text="${error}">Произошла ошибка</span>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <!-- Заголовок и кнопка добавления -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="h3">Управление врачами</h1>
+      <a th:href="@{/admin/doctors/create}" class="btn btn-primary">
+        <i class="fas fa-plus me-2"></i>Добавить врача
+      </a>
+    </div>
+
+    <!-- Панель инструментов -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="row g-3">
+          <!-- Поиск и фильтры -->
+          <div class="col-md-8">
+            <form th:action="@{/admin/doctors/search}" method="get" class="d-flex gap-2">
+              <input type="text" name="name" class="form-control" placeholder="Поиск по имени">
+              <input type="text" name="specialization" class="form-control" placeholder="Специализация">
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-search me-1"></i> Найти
+              </button>
+              <a th:href="@{/admin/doctors}" class="btn btn-outline-secondary">
+                <i class="fas fa-sync-alt me-1"></i> Сбросить
+              </a>
+            </form>
+          </div>
+
+          <!-- Сортировка -->
+          <div class="col-md-4">
+            <form th:action="@{/admin/doctors}" method="get" class="d-flex gap-2">
+              <input type="hidden" name="page" th:value="${currentPage}">
+              <input type="hidden" name="size" th:value="${pageSize}">
+              <select name="sort" class="form-select" onchange="this.form.submit()">
+                <option value="">Сортировать по</option>
+                <option th:each="field : ${sortFields}" th:value="${field}"
+                        th:text="${field == 'fullName' ? 'ФИО' : (field == 'specialization' ? 'Специализация' : 'Стаж')}"
+                        th:selected="${field == sortField}">Поле сортировки</option>
+              </select>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Таблица врачей -->
+    <div class="card mb-4">
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover table-striped align-middle mb-0">
+            <thead class="bg-light">
+            <tr>
+              <th>ID</th>
+              <th>Фото</th>
+              <th>ФИО</th>
+              <th>Специализация</th>
+              <th>Клиника</th>
+              <th>Отделение</th>
+              <th>Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="doctor : ${doctorPage.content}">
+              <td th:text="${doctor.id}">1</td>
+              <td>
+                <img th:if="${doctor.imagePath}" th:src="${doctor.imagePath}"
+                     alt="Фото врача" class="rounded-circle" width="40" height="40">
+                <span th:unless="${doctor.imagePath}" class="avatar-placeholder">
+                                            <i class="fas fa-user"></i>
+                                        </span>
+              </td>
+              <td th:text="${doctor.fullName}">ФИО врача</td>
+              <td th:text="${doctor.specialization}">Специализация</td>
+              <td th:text="${doctor.clinicName ?: '-'}">Название клиники</td>
+              <td th:text="${doctor.departmentName ?: '-'}">Название отделения</td>
+              <td>
+                <div class="d-flex gap-1">
+                  <a th:href="@{/admin/doctors/view/{id}(id=${doctor.id})}" class="btn btn-sm btn-outline-info">
+                    <i class="fas fa-eye"></i>
+                  </a>
+                  <a th:href="@{/admin/doctors/edit/{id}(id=${doctor.id})}" class="btn btn-sm btn-outline-primary">
+                    <i class="fas fa-edit"></i>
+                  </a>
+                  <a th:href="@{/admin/doctors/delete/{id}(id=${doctor.id})}" class="btn btn-sm btn-outline-danger"
+                     onclick="return confirm('Вы уверены, что хотите удалить этого врача? Это действие нельзя отменить.');">
+                    <i class="fas fa-trash"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Нет данных -->
+      <div th:if="${doctorPage.empty}" class="card-body text-center py-5">
+        <div class="text-muted">
+          <i class="fas fa-user-md fa-3x mb-3"></i>
+          <h5>Врачи не найдены</h5>
+          <p>Добавьте нового врача, нажав на кнопку "Добавить врача".</p>
+        </div>
+      </div>
+
+      <!-- Пагинация -->
+      <div class="card-footer" th:if="${doctorPage.totalPages > 1}">
+        <nav aria-label="Навигация по страницам">
+          <ul class="pagination justify-content-center mb-0">
+            <li class="page-item" th:classappend="${currentPage == 0 ? 'disabled' : ''}">
+              <a class="page-link" th:href="@{/admin/doctors(page=${currentPage - 1}, size=${pageSize}, sort=${sortField})}" aria-label="Предыдущая">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, doctorPage.totalPages - 1)}"
+                th:classappend="${i == currentPage ? 'active' : ''}">
+              <a class="page-link" th:href="@{/admin/doctors(page=${i}, size=${pageSize}, sort=${sortField})}"
+                 th:text="${i + 1}">1</a>
+            </li>
+
+            <li class="page-item" th:classappend="${currentPage == doctorPage.totalPages - 1 ? 'disabled' : ''}">
+              <a class="page-link" th:href="@{/admin/doctors(page=${currentPage + 1}, size=${pageSize}, sort=${sortField})}" aria-label="Следующая">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Статистика -->
+    <div class="card">
+      <div class="card-body">
+        <div class="row g-3 text-center">
+          <div class="col-md-4">
+            <div class="p-3 border rounded bg-light">
+              <h3 th:text="${totalItems ?: doctorPage.totalElements}">0</h3>
+              <p class="mb-0">всего врачей</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-3 border rounded bg-light">
+              <h3 th:text="${totalPages ?: doctorPage.totalPages}">0</h3>
+              <p class="mb-0">страниц</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-3 border rounded bg-light">
+              <h3 th:text="${pageSize}">10</h3>
+              <p class="mb-0">записей на странице</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/admin.js}"></script>
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${department.name} + ' - Asiamedtour'">Отделение - Asiamedtour</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<!-- Навигация -->
+<link rel="stylesheet" th:href="@{/css/header.css}">
+<header th:replace="~{fragments/header :: header}"></header>
+
+<!-- Основной контент -->
+<main class="container py-5">
+  <!-- Хлебные крошки -->
+  <nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a th:href="@{/}">Главная</a></li>
+      <li class="breadcrumb-item"><a th:href="@{/departments}">Отделения</a></li>
+      <li class="breadcrumb-item active" aria-current="page" th:text="${department.name}">Название отделения</li>
+    </ol>
+  </nav>
+
+  <!-- Верхняя часть страницы -->
+  <div class="row mb-5">
+    <!-- Информация об отделении -->
+    <div class="col-lg-8">
+      <h1 class="mb-3" th:text="${department.name}">Название отделения</h1>
+
+      <div class="mb-4">
+                <span class="badge bg-primary me-2" th:if="${departmentDto != null && departmentDto.clinicsCount > 0}">
+                    <i class="fas fa-hospital me-1"></i><span th:text="${departmentDto.clinicsCount}">0</span> клиник
+                </span>
+        <span class="badge bg-info" th:if="${departmentDto != null && departmentDto.doctorsCount > 0}">
+                    <i class="fas fa-user-md me-1"></i><span th:text="${departmentDto.doctorsCount}">0</span> врачей
+                </span>
+      </div>
+
+      <!-- Описание отделения -->
+      <div class="card mb-4" th:if="${department.description != null && !department.description.isEmpty()}">
+        <div class="card-body">
+          <div th:utext="${department.description}">
+            Описание отделения...
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Изображение отделения -->
+    <div class="col-lg-4">
+      <div class="card shadow-sm">
+        <img th:if="${department.imagePath}" th:src="${department.imagePath}" class="card-img-top img-fluid"
+             alt="Изображение отделения">
+        <img th:unless="${department.imagePath}" th:src="@{/img/default-department.jpg}" class="card-img-top img-fluid"
+             alt="Изображение отделения по умолчанию">
+        <div class="card-body">
+          <h5 class="card-title">Заинтересовало отделение?</h5>
+          <p class="card-text">Для получения дополнительной информации или записи на консультацию, свяжитесь с нами:</p>
+          <a href="#contact-form" class="btn btn-primary w-100 mb-2">Оставить заявку</a>
+          <a href="tel:+123456789" class="btn btn-outline-primary w-100">Позвонить</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Навигация по разделам -->
+  <ul class="nav nav-tabs mb-4" id="departmentTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="clinics-tab" data-bs-toggle="tab" data-bs-target="#clinics"
+              type="button" role="tab" aria-controls="clinics" aria-selected="true">Клиники</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="doctors-tab" data-bs-toggle="tab" data-bs-target="#doctors"
+              type="button" role="tab" aria-controls="doctors" aria-selected="false">Врачи</button>
+    </li>
+  </ul>
+
+  <!-- Содержимое разделов -->
+  <div class="tab-content" id="departmentTabsContent">
+    <!-- Клиники с этим отделением -->
+    <div class="tab-pane fade show active" id="clinics" role="tabpanel" aria-labelledby="clinics-tab">
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" th:if="${clinics != null && !clinics.empty}">
+        <div class="col" th:each="clinic : ${clinics}">
+          <div class="card h-100 shadow-sm">
+            <div class="position-relative">
+              <img th:if="${clinic.imagePath}" th:src="${clinic.imagePath}" class="card-img-top"
+                   alt="Изображение клиники" style="height: 200px; object-fit: cover;">
+              <img th:unless="${clinic.imagePath}" th:src="@{/img/default-clinic.jpg}" class="card-img-top"
+                   alt="Изображение клиники по умолчанию" style="height: 200px; object-fit: cover;">
+              <div class="position-absolute bottom-0 start-0 p-2 bg-light">
+                <span class="text-dark" th:text="${clinic.city != null && clinic.country != null ? clinic.city + ', ' + clinic.country : 'Местоположение'}">Город, Страна</span>
+              </div>
+            </div>
+            <div class="card-body">
+              <h5 class="card-title" th:text="${clinic.name}">Название клиники</h5>
+
+              <p class="card-text small" th:if="${clinic.address != null && !clinic.address.isEmpty()}">
+                <i class="fas fa-map-marker-alt me-2 text-muted"></i>
+                <span th:text="${clinic.address}">Адрес клиники</span>
+              </p>
+
+              <p class="card-text small text-muted" th:if="${clinic.shortDescription != null && !clinic.shortDescription.isEmpty()}"
+                 th:text="${#strings.length(clinic.shortDescription) > 100 ? #strings.substring(clinic.shortDescription, 0, 100) + '...' : clinic.shortDescription}">
+                Краткое описание клиники...
+              </p>
+            </div>
+            <div class="card-footer bg-white border-top-0">
+              <a th:href="@{/clinics/{id}(id=${clinic.id})}" class="btn btn-primary w-100">Подробнее</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert alert-info" th:if="${clinics == null || clinics.empty}">
+        <i class="fas fa-info-circle me-2"></i>
+        На данный момент нет информации о клиниках с отделением "<span th:text="${department.name}">Отделение</span>".
+      </div>
+    </div>
+
+    <!-- Врачи этой специализации -->
+    <div class="tab-pane fade" id="doctors" role="tabpanel" aria-labelledby="doctors-tab">
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" th:if="${doctors != null && !doctors.empty}">
+        <div class="col" th:each="doctor : ${doctors}">
+          <div class="card h-100 shadow-sm">
+            <div class="position-relative">
+              <img th:if="${doctor.imagePath}" th:src="${doctor.imagePath}" class="card-img-top"
+                   alt="Фото врача" style="height: 250px; object-fit: cover;">
+              <img th:unless="${doctor.imagePath}" th:src="@{/img/default-doctor.jpg}" class="card-img-top"
+                   alt="Фото врача по умолчанию" style="height: 250px; object-fit: cover;">
+              <div class="position-absolute bottom-0 start-0 p-2 bg-light">
+                <span class="badge bg-primary" th:text="${doctor.specialization}">Специализация</span>
+              </div>
+            </div>
+            <div class="card-body">
+              <h5 class="card-title" th:text="${doctor.fullName}">ФИО врача</h5>
+
+              <p class="card-text mb-1" th:if="${doctor.clinic != null}">
+                <i class="fas fa-hospital me-2 text-muted"></i>
+                <span th:text="${doctor.clinic.name}">Название клиники</span>
+              </p>
+
+              <p class="card-text small text-muted mt-2" th:if="${doctor.shortBio != null && !doctor.shortBio.isEmpty()}"
+                 th:text="${#strings.length(doctor.shortBio) > 100 ? #strings.substring(doctor.shortBio, 0, 100) + '...' : doctor.shortBio}">
+                Краткая биография...
+              </p>
+            </div>
+            <div class="card-footer bg-white border-top-0">
+              <a th:href="@{/doctors/{id}(id=${doctor.id})}" class="btn btn-primary w-100">Подробнее</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert alert-info" th:if="${doctors == null || doctors.empty}">
+        <i class="fas fa-info-circle me-2"></i>
+        На данный момент нет информации о врачах специализации "<span th:text="${department.name}">Отделение</span>".
+      </div>
+    </div>
+  </div>
+
+  <!-- Блок с информацией о лечении -->
+  <div class="card mt-5">
+    <div class="card-header bg-primary text-white">
+      <h3 class="mb-0">Лечение в отделении <span th:text="${department.name}">Отделение</span></h3>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <h4>Что мы лечим</h4>
+          <p>В нашем отделении <span th:text="${department.name}">Отделение</span> проводится диагностика и лечение широкого спектра заболеваний с использованием современных технологий и методик.</p>
+
+          <p>Наши специалисты имеют обширный опыт в лечении следующих заболеваний:</p>
+          <ul>
+            <li>Заболевание 1</li>
+            <li>Заболевание 2</li>
+            <li>Заболевание 3</li>
+            <li>И многие другие</li>
+          </ul>
+        </div>
+
+        <div class="col-md-6">
+          <h4>Преимущества лечения у нас</h4>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <i class="fas fa-check-circle text-success me-2"></i>
+              Команда опытных специалистов
+            </li>
+            <li class="list-group-item">
+              <i class="fas fa-check-circle text-success me-2"></i>
+              Современное оборудование и технологии
+            </li>
+            <li class="list-group-item">
+              <i class="fas fa-check-circle text-success me-2"></i>
+              Индивидуальный подход к каждому пациенту
+            </li>
+            <li class="list-group-item">
+              <i class="fas fa-check-circle text-success me-2"></i>
+              Комфортабельные условия пребывания
+            </li>
+            <li class="list-group-item">
+              <i class="fas fa-check-circle text-success me-2"></i>
+              Поддержка и сопровождение на всех этапах лечения
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="text-center mt-4">
+        <a href="#contact-form" class="btn btn-primary">Получить консультацию</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Форма обратной связи -->
+  <div class="card mt-5" id="contact-form">
+    <div class="card-header bg-primary text-white">
+      <h3 class="mb-0">Получить консультацию</h3>
+    </div>
+    <div class="card-body">
+      <form th:action="@{/consultations/request}" method="post">
+        <input type="hidden" name="departmentId" th:value="${department.id}">
+
+        <div class="row mb-3">
+          <div class="col-md-6 mb-3 mb-md-0">
+            <label for="fullName" class="form-label">ФИО</label>
+            <input type="text" class="form-control" id="fullName" name="fullName" required>
+          </div>
+          <div class="col-md-6">
+            <label for="phone" class="form-label">Телефон</label>
+            <input type="tel" class="form-control" id="phone" name="phone" required>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="preferredClinic" class="form-label">Предпочтительная клиника</label>
+          <select class="form-select" id="preferredClinic" name="preferredClinic">
+            <option value="">Выберите клинику</option>
+            <option th:each="clinic : ${clinics}" th:value="${clinic.id}" th:text="${clinic.name}">Название клиники</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="message" class="form-label">Опишите проблему</label>
+          <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+        </div>
+
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" id="agree" name="agree" required>
+          <label class="form-check-label" for="agree">
+            Я согласен на обработку персональных данных
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Отправить заявку</button>
+      </form>
+    </div>
+  </div>
+</main>
+
+<!-- Подвал -->
+<link rel="stylesheet" th:href="@{/css/footer.css}">
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/scripts.js}"></script>
+</body>
+</html>

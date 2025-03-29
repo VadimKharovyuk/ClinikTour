@@ -2,8 +2,10 @@ package com.example.cliniktour.controller;
 
 
 import com.example.cliniktour.dto.ClinicDto;
+import com.example.cliniktour.model.Department;
 import com.example.cliniktour.service.ClinicService;
 
+import com.example.cliniktour.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +21,7 @@ import java.util.List;
 public class HomeController {
 
     private final ClinicService clinicService;
-//    private final DepartmentService departmentService;
+    private final DepartmentService departmentService;
 
     @GetMapping("/")
     public String home(Model model) {
@@ -29,8 +31,8 @@ public class HomeController {
         model.addAttribute("topClinics", topClinics);
 
         // Получаем 10 популярных отделений
-//        List<Department> popularDepartments = departmentService.getPopularDepartments(10);
-//        model.addAttribute("popularDepartments", popularDepartments);
+        List<Department> popularDepartments = departmentService.getPopularDepartments(10);
+        model.addAttribute("popularDepartments", popularDepartments);
 
         return "home";
     }

@@ -32,20 +32,20 @@
 
       <div class="mb-4">
         <span class="badge bg-primary me-2" th:text="${doctor.specialization}">Специализация</span>
-        <span class="badge bg-secondary" th:if="${doctor.experience != null}"
-              th:text="'Опыт работы: ' + ${doctor.experience} + ' лет'">Опыт работы</span>
+        <span class="badge bg-secondary" th:if="${doctor.yearsOfExperience != null}"
+              th:text="'Опыт работы: ' + ${doctor.yearsOfExperience} + ' лет'">Опыт работы</span>
       </div>
 
-      <div class="card mb-4" th:if="${doctor.biography != null && !doctor.biography.isEmpty()}">
-        <div class="card-header">
-          <h5 class="mb-0">Биография</h5>
-        </div>
-        <div class="card-body">
-          <div th:utext="${doctor.biography}">
-            Биография врача...
-          </div>
-        </div>
-      </div>
+<!--      <div class="card mb-4" th:if="${doctor.biography != null && !doctor.biography.isEmpty()}">-->
+<!--        <div class="card-header">-->
+<!--          <h5 class="mb-0">Биография</h5>-->
+<!--        </div>-->
+<!--        <div class="card-body">-->
+<!--          <div th:utext="${doctor.biography}">-->
+<!--            Биография врача...-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
 
       <!-- Образование и квалификация -->
       <div class="card mb-4" th:if="${doctor.education != null && !doctor.education.isEmpty()}">
@@ -60,24 +60,24 @@
       </div>
 
       <!-- Специализация и навыки -->
-      <div class="card mb-4" th:if="${doctor.skills != null && !doctor.skills.isEmpty()}">
+<!--      <div class="card mb-4" th:if="${doctor.skills != null && !doctor.skills.isEmpty()}">-->
         <div class="card-header">
           <h5 class="mb-0">Специализация и навыки</h5>
         </div>
         <div class="card-body">
-          <div th:utext="${doctor.skills}">
+<!--          <div th:utext="${doctor.skills}">-->
             Специализация и навыки врача...
           </div>
         </div>
       </div>
 
       <!-- Публикации и достижения -->
-      <div class="card mb-4" th:if="${doctor.publications != null && !doctor.publications.isEmpty()}">
+<!--      <div class="card mb-4" th:if="${doctor.publications != null && !doctor.publications.isEmpty()}">-->
         <div class="card-header">
           <h5 class="mb-0">Публикации и достижения</h5>
         </div>
         <div class="card-body">
-          <div th:utext="${doctor.publications}">
+<!--          <div th:utext="${doctor.publications}">-->
             Публикации и достижения врача...
           </div>
         </div>
@@ -97,8 +97,9 @@
             <h5 class="card-title">Клиника</h5>
             <p class="card-text">
               <a th:href="@{/clinics/{id}(id=${clinic.id})}" th:text="${clinic.name}">Название клиники</a><br>
-              <span th:if="${clinic.address}" th:text="${clinic.address}">Адрес клиники</span><br>
-              <span th:if="${clinic.city && clinic.country}" th:text="${clinic.city + ', ' + clinic.country}">Город, Страна</span>
+              <span th:if="${!#strings.isEmpty(clinic.address)}" th:text="${clinic.address}">Адрес клиники</span><br>
+              <span th:if="${!#strings.isEmpty(clinic.city) && !#strings.isEmpty(clinic.country)}"
+                    th:text="${clinic.city + ', ' + clinic.country}">Город, Страна</span>
             </p>
           </div>
 
