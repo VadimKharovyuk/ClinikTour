@@ -3,6 +3,7 @@ package com.example.cliniktour.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -55,4 +56,13 @@ public class Doctor {
             joinColumns = @JoinColumn(name = "doctor_id"))
     @Column(name = "specialization")
     private List<String> additionalSpecializations;
+
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
 }

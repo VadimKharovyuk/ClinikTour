@@ -8,9 +8,7 @@ import com.example.cliniktour.repository.ClinicRepository;
 import com.example.cliniktour.util.ImgurService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -145,4 +143,8 @@ public class ClinicService {
         return clinicMapper.toDtoList(clinics);
     }
 
+    public List<ClinicDto> getLatestClinics(int limit) {
+        List<Clinic> clinics = clinicRepository.findLatestClinics(PageRequest.of(0, limit));
+        return clinicMapper.toDtoList(clinics);
+    }
 }

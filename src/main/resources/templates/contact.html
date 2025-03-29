@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Контакты - Asiamedtour</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<!-- Навигация -->
+<link rel="stylesheet" th:href="@{/css/header.css}">
+<header th:replace="~{fragments/header :: header}"></header>
+
+<!-- Основной контент -->
+<main>
+  <!-- Верхний баннер с картой -->
+  <div class="bg-primary text-white py-5">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 mb-4 mb-lg-0">
+          <h1 class="display-4 fw-bold mb-3">Свяжитесь с нами</h1>
+          <p class="lead">Наша команда готова ответить на все ваши вопросы о медицинском туризме и помочь с организацией лечения за рубежом.</p>
+        </div>
+        <div class="col-lg-6">
+          <div class="rounded shadow overflow-hidden">
+            <!-- Встроенная карта (при желании можно заменить на Google Maps или Yandex Maps) -->
+            <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3011.5132944457236!2d29.105315876583868!3d40.99164082082592!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cac8e8dba44019%3A0x7919a8d8b3150c09!2sAta%C5%9Fehir%2C%20D-100%20G%C3%BCney%20Yanyolu%2C%2034746%20Ata%C5%9Fehir%2F%C4%B0stanbul%2C%20Turkey!5e0!3m2!1sen!2sus!4v1711706841182!5m2!1sen!2sus"
+                    width="100%"
+                    height="350"
+                    style="border:0;"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Секция с контактной информацией и формой -->
+  <div class="container py-5">
+    <!-- Алерты для сообщений -->
+    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+      <span th:text="${success}">Сообщение успешно отправлено!</span>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+      <span th:text="${error}">Произошла ошибка при отправке сообщения.</span>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div class="row">
+      <!-- Контактная информация -->
+      <div class="col-lg-4 mb-4 mb-lg-0">
+        <h2 class="h3 mb-4">Наши контакты</h2>
+
+        <div class="d-flex mb-4">
+          <div class="flex-shrink-0 bg-primary text-white rounded-circle p-3 me-3">
+            <i class="fas fa-map-marker-alt"></i>
+          </div>
+          <div>
+            <h3 class="h5">Адрес</h3>
+            <p class="mb-0">Стамбул, Турция<br>Ataşehir, D-100</p>
+          </div>
+        </div>
+
+        <div class="d-flex mb-4">
+          <div class="flex-shrink-0 bg-primary text-white rounded-circle p-3 me-3">
+            <i class="fas fa-phone"></i>
+          </div>
+          <div>
+            <h3 class="h5">Телефон</h3>
+            <p class="mb-0">
+              <a href="tel:+905321234567" class="text-decoration-none">+90 532 123 45 67</a>
+            </p>
+          </div>
+        </div>
+
+        <div class="d-flex mb-4">
+          <div class="flex-shrink-0 bg-primary text-white rounded-circle p-3 me-3">
+            <i class="fas fa-envelope"></i>
+          </div>
+          <div>
+            <h3 class="h5">Email</h3>
+            <p class="mb-0">
+              <a href="mailto:info@asiamedtour.com" class="text-decoration-none">info@asiamedtour.com</a>
+            </p>
+          </div>
+        </div>
+
+        <div class="d-flex mb-4">
+          <div class="flex-shrink-0 bg-primary text-white rounded-circle p-3 me-3">
+            <i class="fas fa-clock"></i>
+          </div>
+          <div>
+            <h3 class="h5">Часы работы</h3>
+            <p class="mb-0">Пн-Пт: 9:00 - 18:00<br>Сб: 10:00 - 15:00<br>Вс: выходной</p>
+          </div>
+        </div>
+
+        <!-- Социальные сети -->
+        <h3 class="h5 mb-3">Мы в социальных сетях</h3>
+        <div class="d-flex gap-2 mb-4">
+          <a href="#" class="btn btn-outline-primary rounded-circle">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="#" class="btn btn-outline-primary rounded-circle">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="#" class="btn btn-outline-primary rounded-circle">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a href="#" class="btn btn-outline-primary rounded-circle">
+            <i class="fab fa-whatsapp"></i>
+          </a>
+          <a href="#" class="btn btn-outline-primary rounded-circle">
+            <i class="fab fa-telegram"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Контактная форма -->
+      <div class="col-lg-8">
+        <div class="card shadow-sm">
+          <div class="card-header bg-primary text-white">
+            <h2 class="h3 mb-0">Свяжитесь с нами</h2>
+          </div>
+          <div class="card-body">
+            <p class="mb-4">Заполните форму ниже, и наши специалисты свяжутся с вами в ближайшее время для консультации и ответа на вопросы.</p>
+
+            <form th:action="@{/contact/submit}" method="post">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="firstName" class="form-label">Имя <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="firstName" name="firstName"
+                         th:value="${firstName}" required>
+                </div>
+                <div class="col-md-6">
+                  <label for="lastName" class="form-label">Фамилия <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="lastName" name="lastName"
+                         th:value="${lastName}" required>
+                </div>
+                <div class="col-md-6">
+                  <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                  <input type="email" class="form-control" id="email" name="email"
+                         th:value="${email}" required>
+                </div>
+                <div class="col-md-6">
+                  <label for="phone" class="form-label">Телефон <span class="text-danger">*</span></label>
+                  <input type="tel" class="form-control" id="phone" name="phone"
+                         th:value="${phone}" required>
+                </div>
+                <div class="col-12">
+                  <label for="message" class="form-label">Сообщение <span class="text-danger">*</span></label>
+                  <textarea class="form-control" id="message" name="message" rows="5"
+                            th:text="${message}" required></textarea>
+                </div>
+                <div class="col-12">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="privacy" required>
+                    <label class="form-check-label" for="privacy">
+                      Я согласен на обработку персональных данных и принимаю <a href="/privacy" target="_blank">политику конфиденциальности</a>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <button type="submit" class="btn btn-primary">Отправить сообщение</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Секция с часто задаваемыми вопросами -->
+  <div class="bg-light py-5">
+    <div class="container">
+      <h2 class="text-center mb-5">Часто задаваемые вопросы</h2>
+
+      <div class="row justify-content-center">
+        <div class="col-lg-10">
+          <div class="accordion" id="faqAccordion">
+            <div class="accordion-item">
+              <h3 class="accordion-header" id="faqHeading1">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse1" aria-expanded="true" aria-controls="faqCollapse1">
+                  Как организовать лечение за границей?
+                </button>
+              </h3>
+              <div id="faqCollapse1" class="accordion-collapse collapse show" aria-labelledby="faqHeading1" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                  <p>Организация лечения за границей через наш сервис проходит в несколько этапов:</p>
+                  <ol>
+                    <li>Заполните форму на сайте или свяжитесь с нами напрямую</li>
+                    <li>Наши специалисты проанализируют вашу медицинскую документацию и предложат оптимальные варианты лечения</li>
+                    <li>Мы организуем консультацию с зарубежным специалистом (очную или дистанционную)</li>
+                    <li>После согласования плана лечения мы помогаем с оформлением визы, бронированием жилья и трансфера</li>
+                    <li>Во время лечения вам предоставляется переводчик и постоянная поддержка нашего специалиста</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <h3 class="accordion-header" id="faqHeading2">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse2" aria-expanded="false" aria-controls="faqCollapse2">
+                  Сколько стоит лечение за рубежом?
+                </button>
+              </h3>
+              <div id="faqCollapse2" class="accordion-collapse collapse" aria-labelledby="faqHeading2" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                  <p>Стоимость лечения зависит от многих факторов: страны, клиники, типа заболевания, необходимых процедур и длительности лечения. Мы предоставляем детальный расчет стоимости лечения после анализа медицинских документов.</p>
+                  <p>В стоимость обычно входят:</p>
+                  <ul>
+                    <li>Консультации специалистов</li>
+                    <li>Диагностические процедуры</li>
+                    <li>Само лечение или операция</li>
+                    <li>Пребывание в стационаре</li>
+                    <li>Необходимые лекарства</li>
+                  </ul>
+                  <p>Дополнительные расходы могут включать перелет, проживание вне клиники, питание, услуги переводчика и т.д.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <h3 class="accordion-header" id="faqHeading3">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse3" aria-expanded="false" aria-controls="faqCollapse3">
+                  Какие документы нужны для лечения за границей?
+                </button>
+              </h3>
+              <div id="faqCollapse3" class="accordion-collapse collapse" aria-labelledby="faqHeading3" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                  <p>Для организации лечения за границей необходимы следующие документы:</p>
+                  <ul>
+                    <li>Загранпаспорт (срок действия не менее 6 месяцев после предполагаемого возвращения)</li>
+                    <li>Медицинская документация (выписки, заключения, результаты обследований, снимки)</li>
+                    <li>Документы для оформления визы (различаются в зависимости от страны)</li>
+                  </ul>
+                  <p>Наши специалисты помогут вам подготовить все необходимые документы и проконсультируют по каждому этапу.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <h3 class="accordion-header" id="faqHeading4">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse4" aria-expanded="false" aria-controls="faqCollapse4">
+                  Нужен ли переводчик во время лечения?
+                </button>
+              </h3>
+              <div id="faqCollapse4" class="accordion-collapse collapse" aria-labelledby="faqHeading4" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                  <p>Да, наличие переводчика крайне важно для эффективной коммуникации с медицинским персоналом. Мы предоставляем услуги профессиональных переводчиков, специализирующихся в медицинской терминологии, которые сопровождают пациентов на всех этапах лечения.</p>
+                  <p>Переводчик помогает:</p>
+                  <ul>
+                    <li>Во время консультаций с врачами</li>
+                    <li>При заполнении медицинских форм</li>
+                    <li>При прохождении диагностических процедур</li>
+                    <li>В решении бытовых вопросов во время пребывания в стране</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <h3 class="accordion-header" id="faqHeading5">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse5" aria-expanded="false" aria-controls="faqCollapse5">
+                  Как долго длится организация лечения?
+                </button>
+              </h3>
+              <div id="faqCollapse5" class="accordion-collapse collapse" aria-labelledby="faqHeading5" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                  <p>Сроки организации лечения зависят от нескольких факторов:</p>
+                  <ul>
+                    <li>Срочности лечения (в экстренных случаях процесс ускоряется)</li>
+                    <li>Выбранной страны и клиники</li>
+                    <li>Времени на оформление визы</li>
+                    <li>Доступности выбранных специалистов</li>
+                  </ul>
+                  <p>В среднем, на организацию планового лечения требуется от 2 до 4 недель. В экстренных случаях мы можем организовать лечение в течение нескольких дней.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-5">
+        <p>Не нашли ответ на свой вопрос?</p>
+        <a href="#" class="btn btn-primary" onclick="document.getElementById('firstName').focus(); return false;">Задайте его нам</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Подвал -->
+<link rel="stylesheet" th:href="@{/css/footer.css}">
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/scripts.js}"></script>
+</body>
+</html>

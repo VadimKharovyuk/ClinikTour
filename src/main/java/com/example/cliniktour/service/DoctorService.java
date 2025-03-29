@@ -8,9 +8,7 @@ import com.example.cliniktour.model.Doctor;
 import com.example.cliniktour.repository.DoctorRepository;
 import com.example.cliniktour.util.ImgurService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -222,5 +220,11 @@ public class DoctorService {
      */
     public long getDoctorsCount() {
         return doctorRepository.count();
+    }
+
+    public List<DoctorDto> getLatestDoctors(int limit) {
+        Page<Doctor> doctorPage = doctorRepository.findAll(
+                PageRequest.of(0, limit, Sort.by(Sort.Direction.DESC, "createdAt")));
+        return doctorMapper.toDtoList(doctorPage.getContent());
     }
 }

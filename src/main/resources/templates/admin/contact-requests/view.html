@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Просмотр заявки - Административная панель</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+  <link rel="stylesheet" th:href="@{/css/admin-sidebar.css}">
+</head>
+<body>
+<!-- Боковое меню -->
+<div th:replace="~{/fragments/sidebar :: sidebar}"></div>
+
+<!-- Основной контент -->
+<main class="main-content">
+  <div class="container-fluid py-4">
+    <!-- Алерты для сообщений -->
+    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+      <span th:text="${success}">Успешно выполнено</span>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+      <span th:text="${error}">Произошла ошибка</span>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <!-- Заголовок и кнопки действий -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="h3">Заявка #<span th:text="${contactRequest.id}">1</span></h1>
+      <div>
+        <a th:href="@{/admin/contact-requests/delete/{id}(id=${contactRequest.id})}" class="btn btn-danger me-2"
+           onclick="return confirm('Вы уверены, что хотите удалить эту заявку? Это действие нельзя отменить.');">
+          <i class="fas fa-trash me-2"></i>Удалить
+        </a>
+        <a th:href="@{/admin/contact-requests}" class="btn btn-outline-secondary">
+          <i class="fas fa-arrow-left me-2"></i>Назад к списку
+        </a>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- Информация о заявке -->
+      <div class="col-lg-8">
+        <!-- Основные сведения -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="mb-0">Информация о заявке</h5>
+          </div>
+          <div class="card-body">
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <div class="fw-bold">Имя:</div>
+                <div th:text="${contactRequest.firstName}">Имя</div>
+              </div>
+              <div class="col-md-6">
+                <div class="fw-bold">Фамилия:</div>
+                <div th:text="${contactRequest.lastName}">Фамилия</div>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <div class="fw-bold">Email:</div>
+                <div>
+                  <a th:href="'mailto:' + ${contactRequest.email}" th:text="${contactRequest.email}">email@example.com</a>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="fw-bold">Телефон:</div>
+                <div>
+                  <a th:href="'tel:' + ${contactRequest.phone}" th:text="${contactRequest.phone}">+7 (123) 456-78-90</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <div class="fw-bold">Статус:</div>
+              <div>
+                                    <span class="badge"
+                                          th:classappend="${
+                                              contactRequest.status.name() == 'NEW' ? 'bg-danger' :
+                                              contactRequest.status.name() == 'IN_PROGRESS' ? 'bg-warning' :
+                                              contactRequest.status.name() == 'RESPONDED' ? 'bg-info' :
+                                              'bg-success'
+                                          }"
+                                          th:text="${contactRequest.statusDisplay}">Статус</span>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <div class="fw-bold">Дата создания:</div>
+              <div th:text="${#temporals.format(contactRequest.createdAt, 'dd.MM.yyyy HH:mm')}">01.01.2023 12:00</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Сообщение -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="mb-0">Сообщение</h5>
+          </div>
+          <div class="card-body">
+            <div class="bg-light p-3 rounded" style="white-space: pre-wrap;" th:text="${contactRequest.message}">
+              Текст сообщения...
+            </div>
+          </div>
+        </div>
+
+        <!-- Журнал изменений (может быть добавлен в будущем) -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="mb-0">Журнал изменений</h5>
+          </div>
+          <div class="card-body">
+            <p class="text-muted">История изменений статуса заявки.</p>
+            <!-- Здесь будет журнал изменений, если он будет реализован в будущем -->
+            <div class="alert alert-info">
+              Функционал журнала изменений находится в разработке.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Боковая панель -->
+      <div class="col-lg-4">
+        <!-- Обновление статуса -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="mb-0">Обновить статус</h5>
+          </div>
+          <div class="card-body">
+            <form th:action="@{/admin/contact-requests/update-status/{id}(id=${contactRequest.id})}" method="post">
+              <div class="mb-3">
+                <label for="status" class="form-label">Выберите новый статус</label>
+                <select id="status" name="status" class="form-select">
+                  <option th:each="stat : ${statuses}"
+                          th:value="${stat}"
+                          th:text="${stat.displayName}"
+                          th:selected="${stat == contactRequest.status}">Статус</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-primary w-100">Обновить статус</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Быстрые действия -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="mb-0">Быстрые действия</h5>
+          </div>
+          <div class="card-body">
+            <div class="d-grid gap-2">
+              <a th:href="'mailto:' + ${contactRequest.email}" class="btn btn-outline-primary">
+                <i class="fas fa-envelope me-2"></i>Написать на email
+              </a>
+              <a th:if="${contactRequest.phone}" th:href="'tel:' + ${contactRequest.phone}" class="btn btn-outline-primary">
+                <i class="fas fa-phone me-2"></i>Позвонить
+              </a>
+              <button class="btn btn-outline-secondary" onclick="window.print()">
+                <i class="fas fa-print me-2"></i>Распечатать
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Информация о клиенте -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="mb-0">Информация о клиенте</h5>
+          </div>
+          <div class="card-body">
+            <!-- В будущем здесь может быть история взаимодействий с клиентом -->
+            <div class="alert alert-info">
+              <i class="fas fa-info-circle me-2"></i>Историю взаимодействий с клиентом можно будет просмотреть после интеграции с CRM.
+            </div>
+
+            <!-- Кнопки для будущих функций -->
+            <div class="d-grid gap-2 mt-3">
+              <button class="btn btn-outline-secondary" disabled>
+                <i class="fas fa-history me-2"></i>История обращений
+              </button>
+              <button class="btn btn-outline-secondary" disabled>
+                <i class="fas fa-user-plus me-2"></i>Добавить в CRM
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/admin.js}"></script>
+</body>
+</html>
