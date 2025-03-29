@@ -9,7 +9,8 @@ public class ClinikTourApplication {
     public static void main(String[] args) {
         SpringApplication.run(ClinikTourApplication.class, args);
     }
+//   docker-compose up -d --build
+    // Приложение будет доступно по адресу: http://localhost:2817
 
-//search-results.html - проблема с блоками
 
 }
