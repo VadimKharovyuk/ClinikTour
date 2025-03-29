@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Редактирование статьи - Asiamedtour</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css">
+  <style>
+    .ck-editor__editable_inline {
+      min-height: 400px;
+    }
+    .image-preview {
+      max-width: 300px;
+      max-height: 200px;
+      object-fit: contain;
+      border: 1px solid #dee2e6;
+      border-radius: 0.25rem;
+      margin-top: 10px;
+    }
+    .note-editor .dropdown-toggle::after {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+<!-- Навигация -->
+
+
+<!-- Основной контент -->
+<main class="container py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Редактирование статьи</h1>
+    <div>
+      <a th:href="@{/admin/blog/view/{id}(id=${postId})}" class="btn btn-info me-2">
+        <i class="fas fa-eye me-2"></i>Просмотр
+      </a>
+      <a th:href="@{/admin/blog}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-2"></i>К списку
+      </a>
+    </div>
+  </div>
+
+  <!-- Уведомления об успехе/ошибке -->
+  <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+    <i class="fas fa-check-circle me-2"></i>
+    <span th:text="${success}">Операция выполнена успешно</span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
+  </div>
+
+  <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <i class="fas fa-exclamation-circle me-2"></i>
+    <span th:text="${error}">Произошла ошибка</span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
+  </div>
+
+  <!-- Форма редактирования статьи -->
+  <div class="card">
+    <div class="card-body">
+      <form th:action="@{/admin/blog/edit/{id}(id=${postId})}" method="post" th:object="${blogPost}" enctype="multipart/form-data">
+        <div class="mb-3">
+          <label for="title" class="form-label">Заголовок статьи <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" id="title" th:field="*{title}" required>
+          <div class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+        </div>
+
+        <div class="mb-3">
+          <label for="excerpt" class="form-label">Краткое описание</label>
+          <textarea class="form-control" id="excerpt" th:field="*{excerpt}" rows="3"
+                    placeholder="Введите краткое описание статьи (до 500 символов)"></textarea>
+          <div class="text-danger" th:if="${#fields.hasErrors('excerpt')}" th:errors="*{excerpt}"></div>
+          <div class="form-text">Краткое описание будет отображаться в списке статей и поможет читателям понять, о чем статья.</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="imageFile" class="form-label">Изображение статьи</label>
+          <input type="file" class="form-control" id="imageFile" name="imageFile" accept="image/*" onchange="previewImage(this)">
+          <div class="form-text">Загрузите новое изображение, чтобы заменить текущее. Оставьте пустым, чтобы сохранить текущее изображение.</div>
+
+          <!-- Скрытое поле для хранения существующего пути к изображению -->
+          <input type="hidden" th:field="*{imagePath}">
+
+          <!-- Предпросмотр существующего или нового изображения -->
+          <div class="mt-2">
+            <label class="form-label">Текущее изображение:</label>
+            <div>
+              <img th:if="*{imagePath}" th:src="*{imagePath}" id="currentImage" class="image-preview" alt="Текущее изображение">
+              <span th:unless="*{imagePath}" class="text-muted">Изображение не загружено</span>
+            </div>
+            <img id="imagePreview" class="image-preview mt-2 d-none" alt="Предпросмотр нового изображения">
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="content" class="form-label">Содержание статьи <span class="text-danger">*</span></label>
+          <textarea class="form-control" id="content" th:field="*{content}" rows="10" required></textarea>
+          <div class="text-danger" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></div>
+        </div>
+
+        <div class="d-flex justify-content-between">
+          <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+            <i class="fas fa-trash me-2"></i>Удалить статью
+          </button>
+          <div>
+            <button type="button" class="btn btn-secondary me-2" onclick="window.location.href='/admin/blog'">Отмена</button>
+            <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Модальное окно подтверждения удаления -->
+  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Подтверждение удаления</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+        </div>
+        <div class="modal-body">
+          <p>Вы действительно хотите удалить эту статью?</p>
+          <p class="text-danger">Это действие нельзя отменить.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+          <form th:action="@{/admin/blog/delete/{id}(id=${postId})}" method="post">
+            <button type="submit" class="btn btn-danger">Удалить</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+
+<!-- Скрипты -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/lang/summernote-ru-RU.min.js"></script>
+<script th:src="@{/js/admin.js}"></script>
+
+<script>
+  $(document).ready(function() {
+    // Инициализация редактора Summernote
+    $('#content').summernote({
+      lang: 'ru-RU',
+      height: 400,
+      toolbar: [
+        ['style', ['style']],
+        ['font', ['bold', 'italic', 'underline', 'clear']],
+        ['fontname', ['fontname']],
+        ['color', ['color']],
+        ['para', ['ul', 'ol', 'paragraph']],
+        ['table', ['table']],
+        ['insert', ['link', 'picture']],
+        ['view', ['fullscreen', 'codeview', 'help']]
+      ],
+      callbacks: {
+        onImageUpload: function(files) {
+          uploadImage(files[0], this);
+        }
+      }
+    });
+  });
+
+  // Функция для предпросмотра изображения
+  function previewImage(input) {
+    var preview = document.getElementById('imagePreview');
+    var currentImage = document.getElementById('currentImage');
+
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        preview.src = e.target.result;
+        preview.classList.remove('d-none');
+
+        // Скрываем текущее изображение, если оно есть
+        if (currentImage) {
+          currentImage.style.opacity = 0.3;
+        }
+      };
+      reader.readAsDataURL(input.files[0]);
+    } else {
+      preview.classList.add('d-none');
+      // Возвращаем видимость текущему изображению
+      if (currentImage) {
+        currentImage.style.opacity = 1;
+      }
+    }
+  }
+
+  // Функция для загрузки изображений через редактор
+  function uploadImage(file, editor) {
+    var formData = new FormData();
+    formData.append('file', file);
+
+    $.ajax({
+      url: '/admin/blog/upload-image',
+      method: 'POST',
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function(data) {
+        if (data.success) {
+          $(editor).summernote('insertImage', data.url);
+        } else {
+          alert('Ошибка загрузки изображения: ' + data.error);
+        }
+      },
+      error: function() {
+        alert('Произошла ошибка при загрузке изображения.');
+      }
+    });
+  }
+</script>
+</body>
+</html>

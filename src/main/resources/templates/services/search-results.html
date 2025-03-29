@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Результаты поиска | КлиникТур</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <style>
+    /* Улучшенные стили для результатов поиска */
+    .card-img-container {
+      height: 160px;
+      overflow: hidden;
+    }
+
+    .card-img-top {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .featured-img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    .card-body {
+      padding: 1rem;
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .card-text {
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Компактный блок поиска */
+    .search-form-compact {
+      display: flex;
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+
+    .search-form-compact .form-control {
+      height: 42px;
+      font-size: 1rem;
+      border-radius: 4px 0 0 4px;
+    }
+
+    .search-form-compact .btn {
+      border-radius: 0 4px 4px 0;
+      font-size: 1rem;
+      padding: 0.375rem 1rem;
+    }
+
+    /* Увеличенный шрифт для названия страницы */
+    .page-title {
+      font-size: 1.75rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .search-query {
+      font-size: 1.1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    /* Отступ перед футером */
+    .main-content {
+      margin-bottom: 50px;
+    }
+
+    /* Стиль для боковой панели */
+    .sidebar {
+      margin-bottom: 50px;
+    }
+
+    /* Стили для карточек услуг */
+    .service-card {
+      transition: transform 0.2s;
+      height: 100%;
+    }
+
+    .service-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .service-price {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .service-btn {
+      font-size: 0.9rem;
+      padding: 0.25rem 0.75rem;
+    }
+
+    /* Гарантированное положение футера внизу */
+    footer {
+      position: relative;
+      margin-top: 30px;
+      bottom: 0;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+<!-- Header -->
+<header th:replace="~{fragments/header :: header}"></header>
+
+<div class="container py-4 main-content">
+  <div class="row">
+    <!-- Main content -->
+    <div class="col-lg-9 mb-4">
+      <h1 class="page-title">Результаты поиска</h1>
+      <p class="search-query text-muted">Найдено по запросу: <span class="fw-bold" th:text="${search}">запрос</span></p>
+
+      <!-- Оптимизированная форма поиска -->
+      <form action="/services/search" method="get" class="search-form-compact">
+        <input type="text" class="form-control" name="query" value="Онлайн" placeholder="Поиск услуг...">
+        <button class="btn btn-primary" type="submit">Найти</button>
+      </form>
+
+      <!-- Search results -->
+      <div class="row g-3" th:if="${!services.isEmpty()}" style="margin-bottom: 80px;">
+        <div class="col-md-4 mb-3" th:each="service : ${services}">
+          <div class="card shadow-sm service-card h-100">
+            <div class="card-img-container" style="height: 140px;">
+              <img th:if="${service.imagePath}" th:src="${service.imagePath}" class="card-img-top" alt="Изображение услуги">
+              <img th:unless="${service.imagePath}" src="/img/service-placeholder.jpg" class="card-img-top" alt="Изображение услуги">
+            </div>
+            <div class="card-body p-3">
+              <h5 class="card-title" th:text="${service.title}">Название услуги</h5>
+              <p class="card-text text-muted" th:text="${service.shortDescription}">Краткое описание услуги.</p>
+              <div class="d-flex justify-content-between align-items-center mt-2">
+                <span class="text-primary service-price" th:text="${service.formattedPrice}">1 000 ₽</span>
+                <a th:href="@{/services/{id}(id=${service.id})}" class="btn btn-outline-primary service-btn">Подробнее</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- No results message -->
+      <div th:if="${services.isEmpty()}" class="alert alert-info">
+        <p class="mb-2 fs-5">По вашему запросу услуги не найдены. Попробуйте изменить запрос или воспользуйтесь каталогом услуг.</p>
+        <a th:href="@{/services}" class="btn btn-primary">Каталог услуг</a>
+      </div>
+
+      <!-- Return to services -->
+      <div class="mt-4" th:if="${!services.isEmpty()}">
+        <a th:href="@{/services}" class="btn btn-outline-secondary">Вернуться к списку услуг</a>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="col-lg-3 sidebar">
+      <!-- Только блок рекомендуемых услуг -->
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white py-2">
+          <h5 class="mb-0 fs-5">Рекомендуемые услуги</h5>
+        </div>
+        <div class="card-body">
+          <div class="mb-3" th:each="featuredService : ${featuredServices}">
+            <div class="d-flex align-items-center">
+              <div class="me-3" style="width: 60px; height: 60px; overflow: hidden; border-radius: 4px;">
+                <img th:if="${featuredService.imagePath}" th:src="${featuredService.imagePath}" class="featured-img" alt="Изображение услуги">
+                <img th:unless="${featuredService.imagePath}" src="/img/service-placeholder.jpg" class="featured-img" alt="Изображение услуги">
+              </div>
+              <div>
+                <a th:href="@{/services/{id}(id=${featuredService.id})}" class="text-decoration-none fs-6" th:text="${featuredService.title}">Название услуги</a>
+                <p class="text-primary mb-0 fs-6 fw-bold" th:text="${featuredService.formattedPrice}">1 000 ₽</p>
+              </div>
+            </div>
+            <hr th:unless="${featuredServiceStat.last}" class="my-3">
+          </div>
+          <a th:href="@{/services/featured}" class="btn btn-outline-primary w-100 mt-2">Все рекомендуемые</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${post.title + ' - Asiamedtour'}">Просмотр статьи - Asiamedtour</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .blog-content img {
+      max-width: 100%;
+      height: auto;
+    }
+    .blog-header-image {
+      width: 100%;
+      max-height: 400px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+<!-- Навигация -->
+
+
+<!-- Основной контент -->
+<main class="container py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <a th:href="@{/admin/blog}" class="text-decoration-none text-muted small">
+        <i class="fas fa-arrow-left me-1"></i>К списку статей
+      </a>
+      <h1 class="mt-2" th:text="${post.title}">Заголовок статьи</h1>
+    </div>
+    <div>
+      <a th:href="@{/admin/blog/edit/{id}(id=${post.id})}" class="btn btn-primary">
+        <i class="fas fa-edit me-2"></i>Редактировать
+      </a>
+    </div>
+  </div>
+
+  <!-- Информация о статье -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <p><strong>ID статьи:</strong> <span th:text="${post.id}">1</span></p>
+          <p><strong>Дата создания:</strong> <span th:text="${#temporals.format(post.createdAt, 'dd.MM.yyyy HH:mm')}">01.01.2023 12:00</span></p>
+        </div>
+        <div class="col-md-6">
+          <p><strong>Последнее обновление:</strong> <span th:text="${#temporals.format(post.updatedAt, 'dd.MM.yyyy HH:mm')}">01.01.2023 12:00</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Краткое описание -->
+  <div class="card mb-4" th:if="${post.excerpt}">
+    <div class="card-header">
+      <h5 class="mb-0">Краткое описание</h5>
+    </div>
+    <div class="card-body">
+      <p th:text="${post.excerpt}">Краткое описание статьи...</p>
+    </div>
+  </div>
+
+  <!-- Превью статьи (как будет выглядеть на сайте) -->
+  <div class="card mb-4">
+    <div class="card-header">
+      <h5 class="mb-0">Предпросмотр статьи</h5>
+    </div>
+    <div class="card-body">
+      <!-- Изображение статьи -->
+      <div class="mb-4" th:if="${post.imagePath}">
+        <img th:src="${post.imagePath}" class="blog-header-image" th:alt="${post.title}">
+      </div>
+
+      <!-- Содержимое статьи -->
+      <div class="blog-content" th:utext="${post.content}">
+        Содержимое статьи...
+      </div>
+    </div>
+  </div>
+
+  <!-- Кнопки действий -->
+  <div class="d-flex justify-content-between">
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+      <i class="fas fa-trash me-2"></i>Удалить статью
+    </button>
+    <div>
+      <a th:href="@{/admin/blog}" class="btn btn-secondary me-2">
+        <i class="fas fa-arrow-left me-2"></i>К списку
+      </a>
+      <a th:href="@{/admin/blog/edit/{id}(id=${post.id})}" class="btn btn-primary">
+        <i class="fas fa-edit me-2"></i>Редактировать
+      </a>
+    </div>
+  </div>
+
+  <!-- Модальное окно подтверждения удаления -->
+  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Подтверждение удаления</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+        </div>
+        <div class="modal-body">
+          <p>Вы действительно хотите удалить статью "<span th:text="${post.title}"></span>"?</p>
+          <p class="text-danger">Это действие нельзя отменить.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+          <form th:action="@{/admin/blog/delete/{id}(id=${post.id})}" method="post">
+            <button type="submit" class="btn btn-danger">Удалить</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Скрипты -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/admin.js}"></script>
+</body>
+</html>

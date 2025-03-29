@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Блог - Asiamedtour</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <style>
+    .blog-card {
+      transition: transform 0.3s, box-shadow 0.3s;
+      height: 100%;
+    }
+    .blog-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    .blog-card-img {
+      height: 200px;
+      object-fit: cover;
+    }
+    .blog-header {
+      background-color: #345995;
+      color: white;
+      padding: 3rem 0;
+      margin-bottom: 3rem;
+    }
+  </style>
+</head>
+<body>
+<!-- Навигация -->
+<link rel="stylesheet" th:href="@{/css/header.css}">
+<header th:replace="~{fragments/header :: header}"></header>
+
+<!-- Заголовок блога -->
+<section class="blog-header">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-8">
+        <h1 class="display-4 fw-bold">Блог Asiamedtour</h1>
+        <p class="lead">Полезные статьи о медицинском туризме, лечении в зарубежных клиниках и интересные факты о здоровье</p>
+      </div>
+      <div class="col-lg-4 text-end">
+        <img src="/images/Leonardo_Lightning_XL_modern_clinic_3.jpg" alt="Блог" class="img-fluid" style="max-height: 150px;">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Основной контент -->
+<main class="container py-5">
+
+  <!-- Список статей -->
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" th:if="${!pageDto.posts.empty}">
+    <div class="col" th:each="post : ${pageDto.posts}">
+      <div class="card blog-card h-100 shadow-sm">
+        <div class="position-relative">
+          <img th:if="${post.imagePath}" th:src="${post.imagePath}" class="card-img-top blog-card-img"
+               th:alt="${post.title}">
+          <img th:unless="${post.imagePath}" th:src="@{/img/default-blog.jpg}" class="card-img-top blog-card-img"
+               alt="Изображение по умолчанию">
+          <div class="position-absolute bottom-0 start-0 p-2 bg-light">
+            <span class="text-muted small" th:text="${#temporals.format(post.createdAt, 'dd MMMM yyyy')}">01 января 2023</span>
+          </div>
+        </div>
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title" th:text="${post.title}">Заголовок статьи</h5>
+          <p class="card-text flex-grow-1" th:if="${post.excerpt}" th:text="${#strings.abbreviate(post.excerpt, 150)}">
+            Краткое описание статьи...
+          </p>
+          <a th:href="@{/blog/{id}(id=${post.id})}" class="btn btn-primary mt-auto">Читать далее</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Сообщение, если статей нет -->
+  <div class="alert alert-info py-5 text-center" th:if="${pageDto.posts.empty}">
+    <i class="fas fa-info-circle fa-3x mb-3"></i>
+    <h3>Статьи не найдены</h3>
+    <p class="mb-0" th:if="${query != null}">
+      По вашему запросу "<span th:text="${query}"></span>" не найдено ни одной статьи.
+    </p>
+    <p class="mb-0" th:unless="${query != null}">
+      В блоге пока нет статей. Загляните позже!
+    </p>
+  </div>
+
+  <!-- Пагинация -->
+  <div class="mt-5" th:if="${pageDto.totalPages > 1}">
+    <nav aria-label="Навигация по страницам">
+      <ul class="pagination justify-content-center">
+        <li class="page-item" th:classappend="${currentPage == 0 ? 'disabled' : ''}">
+          <a class="page-link" th:href="@{/blog(page=${currentPage - 1}, size=9)}" aria-label="Предыдущая">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+
+        <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+            th:classappend="${i == currentPage ? 'active' : ''}">
+          <a class="page-link" th:href="@{/blog(page=${i}, size=9)}" th:text="${i + 1}">1</a>
+        </li>
+
+        <li class="page-item" th:classappend="${currentPage == totalPages - 1 ? 'disabled' : ''}">
+          <a class="page-link" th:href="@{/blog(page=${currentPage + 1}, size=9)}" aria-label="Следующая">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</main>
+
+<!-- Подвал -->
+<link rel="stylesheet" th:href="@{/css/footer.css}">
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/scripts.js}"></script>
+</body>
+</html>

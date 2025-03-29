@@ -1,0 +1,369 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--  <meta charset="UTF-8">-->
+<!--  <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--  <title>Наши услуги | КлиникТур</title>-->
+<!--  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">-->
+<!--  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>-->
+<!--</head>-->
+<!--<body>-->
+<!--&lt;!&ndash; Header &ndash;&gt;-->
+<!--<div th:replace="fragments/header :: header"></div>-->
+
+<!--<div class="container py-5">-->
+<!--  <div class="row">-->
+<!--    &lt;!&ndash; Main content &ndash;&gt;-->
+<!--    <div class="col-lg-9">-->
+<!--      <h1 class="mb-4">Наши услуги</h1>-->
+
+<!--      &lt;!&ndash; Search and filters &ndash;&gt;-->
+<!--      <div class="card mb-4 bg-light">-->
+<!--        <div class="card-body">-->
+<!--          <div class="row">-->
+<!--            &lt;!&ndash; Search form &ndash;&gt;-->
+<!--            <div class="col-md-6 mb-3 mb-md-0">-->
+<!--              <form th:action="@{/services/search}" method="get">-->
+<!--                <div class="input-group">-->
+<!--                  <input type="text" class="form-control" name="query" th:value="${search}" placeholder="Поиск услуг...">-->
+<!--                  <button class="btn btn-primary" type="submit">Найти</button>-->
+<!--                </div>-->
+<!--              </form>-->
+<!--            </div>-->
+<!--            &lt;!&ndash; Price filter &ndash;&gt;-->
+<!--            <div class="col-md-6">-->
+<!--              <form th:action="@{/services/price-range}" method="get">-->
+<!--                <div class="input-group">-->
+<!--                  <input type="number" class="form-control" name="minPrice" th:value="${minPrice}" placeholder="Мин. цена">-->
+<!--                  <input type="number" class="form-control" name="maxPrice" th:value="${maxPrice}" placeholder="Макс. цена">-->
+<!--                  <button class="btn btn-secondary" type="submit">Фильтр</button>-->
+<!--                </div>-->
+<!--              </form>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+
+<!--      &lt;!&ndash; Services grid &ndash;&gt;-->
+<!--      <div class="row" th:if="${services != null}">-->
+<!--        <div class="col-md-4 mb-4" th:each="service : ${services}">-->
+<!--          <div class="card h-100 shadow-sm">-->
+<!--            <img th:if="${service.imagePath}" th:src="${service.imagePath}" class="card-img-top" alt="Изображение услуги">-->
+<!--            <img th:unless="${service.imagePath}" src="/img/service-placeholder.jpg" class="card-img-top" alt="Изображение услуги">-->
+<!--            <div class="card-body d-flex flex-column">-->
+<!--              <h5 class="card-title" th:text="${service.title}">Название услуги</h5>-->
+<!--              <p class="card-text" th:text="${service.shortDescription}">Краткое описание услуги.</p>-->
+<!--              <div class="mt-auto">-->
+<!--                <p class="card-text text-primary fw-bold" th:text="${service.formattedPrice}">1 000 ₽</p>-->
+<!--                <a th:href="@{/services/{id}(id=${service.id})}" class="btn btn-outline-primary w-100">Подробнее</a>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+
+<!--      &lt;!&ndash; Services paginated grid &ndash;&gt;-->
+<!--      <div class="row" th:if="${servicePage != null}">-->
+<!--        <div class="col-md-4 mb-4" th:each="service : ${servicePage.content}">-->
+<!--          <div class="card h-100 shadow-sm">-->
+<!--            <img th:if="${service.imagePath}" th:src="${service.imagePath}" class="card-img-top" alt="Изображение услуги">-->
+<!--            <img th:unless="${service.imagePath}" src="/img/service-placeholder.jpg" class="card-img-top" alt="Изображение услуги">-->
+<!--            <div class="card-body d-flex flex-column">-->
+<!--              <h5 class="card-title" th:text="${service.title}">Название услуги</h5>-->
+<!--              <p class="card-text" th:text="${service.shortDescription}">Краткое описание услуги.</p>-->
+<!--              <div class="mt-auto">-->
+<!--                <p class="card-text text-primary fw-bold" th:text="${service.formattedPrice}">1 000 ₽</p>-->
+<!--                <a th:href="@{/services/{id}(id=${service.id})}" class="btn btn-outline-primary w-100">Подробнее</a>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+
+<!--      &lt;!&ndash; Pagination &ndash;&gt;-->
+<!--      <div th:if="${servicePage != null}" class="d-flex justify-content-center mt-4">-->
+<!--        <nav aria-label="Навигация по страницам">-->
+<!--          <ul class="pagination">-->
+<!--            <li class="page-item" th:classappend="${currentPage == 0 ? 'disabled' : ''}">-->
+<!--              <a class="page-link" th:href="@{/services(page=0, size=${pageSize}, sort=${sortField})}" aria-label="Первая">-->
+<!--                <span aria-hidden="true">&laquo;&laquo;</span>-->
+<!--              </a>-->
+<!--            </li>-->
+<!--            <li class="page-item" th:classappend="${currentPage == 0 ? 'disabled' : ''}">-->
+<!--              <a class="page-link" th:href="@{/services(page=${currentPage - 1}, size=${pageSize}, sort=${sortField})}" aria-label="Предыдущая">-->
+<!--                <span aria-hidden="true">&laquo;</span>-->
+<!--              </a>-->
+<!--            </li>-->
+
+<!--            <li class="page-item" th:each="i : ${#numbers.sequence(0, servicePage.totalPages - 1)}"-->
+<!--                th:if="${i >= currentPage - 2 and i <= currentPage + 2}"-->
+<!--                th:classappend="${i == currentPage ? 'active' : ''}">-->
+<!--              <a class="page-link" th:href="@{/services(page=${i}, size=${pageSize}, sort=${sortField})}" th:text="${i + 1}">1</a>-->
+<!--            </li>-->
+
+<!--            <li class="page-item" th:classappend="${currentPage == servicePage.totalPages - 1 ? 'disabled' : ''}">-->
+<!--              <a class="page-link" th:href="@{/services(page=${currentPage + 1}, size=${pageSize}, sort=${sortField})}" aria-label="Следующая">-->
+<!--                <span aria-hidden="true">&raquo;</span>-->
+<!--              </a>-->
+<!--            </li>-->
+<!--            <li class="page-item" th:classappend="${currentPage == servicePage.totalPages - 1 ? 'disabled' : ''}">-->
+<!--              <a class="page-link" th:href="@{/services(page=${servicePage.totalPages - 1}, size=${pageSize}, sort=${sortField})}" aria-label="Последняя">-->
+<!--                <span aria-hidden="true">&raquo;&raquo;</span>-->
+<!--              </a>-->
+<!--            </li>-->
+<!--          </ul>-->
+<!--        </nav>-->
+<!--      </div>-->
+
+<!--      &lt;!&ndash; No results message &ndash;&gt;-->
+<!--      <div th:if="${(services != null and services.isEmpty()) or (servicePage != null and servicePage.content.isEmpty())}" class="alert alert-info text-center">-->
+<!--        <p>Услуги не найдены. Попробуйте изменить параметры поиска.</p>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Sidebar &ndash;&gt;-->
+<!--    <div class="col-lg-3">-->
+<!--      <div class="card mb-4 shadow-sm">-->
+<!--        <div class="card-header bg-primary text-white">-->
+<!--          <h5 class="mb-0">Рекомендуемые услуги</h5>-->
+<!--        </div>-->
+<!--        <div class="card-body">-->
+<!--          <div class="mb-3" th:each="featuredService : ${featuredServices}">-->
+<!--            <div class="d-flex align-items-center">-->
+<!--              <img th:if="${featuredService.imagePath}" th:src="${featuredService.imagePath}" class="featured-img me-2" alt="Изображение услуги">-->
+<!--              <img th:unless="${featuredService.imagePath}" src="/img/service-placeholder.jpg" class="featured-img me-2" alt="Изображение услуги">-->
+<!--              <div>-->
+<!--                <a th:href="@{/services/{id}(id=${featuredService.id})}" class="text-decoration-none" th:text="${featuredService.title}">Название услуги</a>-->
+<!--                <p class="text-primary mb-0" th:text="${featuredService.formattedPrice}">1 000 ₽</p>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <hr th:unless="${featuredServiceStat.last}">-->
+<!--          </div>-->
+<!--          <a th:href="@{/services/featured}" class="btn btn-outline-primary btn-sm w-100">Все рекомендуемые услуги</a>-->
+<!--        </div>-->
+<!--      </div>-->
+
+<!--      <div class="card mb-4 shadow-sm">-->
+<!--        <div class="card-header bg-secondary text-white">-->
+<!--          <h5 class="mb-0">Остались вопросы?</h5>-->
+<!--        </div>-->
+<!--        <div class="card-body">-->
+<!--          <p>Свяжитесь с нами для получения бесплатной консультации:</p>-->
+<!--          <a href="tel:+71234567890" class="btn btn-success w-100 mb-2">-->
+<!--            <i class="fas fa-phone me-2"></i> +7 (123) 456-78-90-->
+<!--          </a>-->
+<!--          <a href="/contacts" class="btn btn-outline-secondary w-100">-->
+<!--            <i class="fas fa-envelope me-2"></i> Написать сообщение-->
+<!--          </a>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+<!--&lt;!&ndash; Footer &ndash;&gt;-->
+<!--<link rel="stylesheet" th:href="@{/css/footer.css}">-->
+<!--<footer th:replace="~{fragments/footer :: footer}"></footer>-->
+
+<!--</body>-->
+<!--</html>-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Наши услуги | КлиникТур</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+  <style>
+    /* Стили для корректного отображения изображений в карточках */
+    .card-img-container {
+      height: 200px; /* Фиксированная высота для контейнера изображения */
+      overflow: hidden; /* Обрезаем всё, что выходит за пределы */
+      position: relative;
+    }
+
+    .card-img-top {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Масштабируем изображение с сохранением пропорций и заполнением контейнера */
+    }
+
+    .featured-img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+<!-- Header -->
+<link rel="stylesheet" th:href="@{/css/header.css}">
+<header th:replace="~{fragments/header :: header}"></header>
+
+<div class="container py-5">
+  <div class="row">
+    <!-- Main content -->
+    <div class="col-lg-9">
+      <h1 class="mb-4">Наши услуги</h1>
+
+      <!-- Search and filters -->
+      <div class="card mb-4 bg-light">
+        <div class="card-body">
+          <div class="row">
+            <!-- Search form -->
+            <div class="col-md-6 mb-3 mb-md-0">
+              <form th:action="@{/services/search}" method="get">
+                <div class="input-group">
+                  <input type="text" class="form-control" name="query" th:value="${search}" placeholder="Поиск услуг...">
+                  <button class="btn btn-primary" type="submit">Найти</button>
+                </div>
+              </form>
+            </div>
+            <!-- Price filter -->
+            <div class="col-md-6">
+              <form th:action="@{/services/price-range}" method="get">
+                <div class="input-group">
+                  <input type="number" class="form-control" name="minPrice" th:value="${minPrice}" placeholder="Мин. цена">
+                  <input type="number" class="form-control" name="maxPrice" th:value="${maxPrice}" placeholder="Макс. цена">
+                  <button class="btn btn-secondary" type="submit">Фильтр</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Services grid -->
+      <div class="row" th:if="${services != null}">
+        <div class="col-md-4 mb-4" th:each="service : ${services}">
+          <div class="card h-100 shadow-sm">
+            <div class="card-img-container">
+              <img th:if="${service.imagePath}" th:src="${service.imagePath}" class="card-img-top" alt="Изображение услуги">
+              <img th:unless="${service.imagePath}" src="/img/service-placeholder.jpg" class="card-img-top" alt="Изображение услуги">
+            </div>
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title" th:text="${service.title}">Название услуги</h5>
+              <p class="card-text" th:text="${service.shortDescription}">Краткое описание услуги.</p>
+              <div class="mt-auto">
+                <p class="card-text text-primary fw-bold" th:text="${service.formattedPrice}">1 000 ₽</p>
+                <a th:href="@{/services/{id}(id=${service.id})}" class="btn btn-outline-primary w-100">Подробнее</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Services paginated grid -->
+      <div class="row" th:if="${servicePage != null}">
+        <div class="col-md-4 mb-4" th:each="service : ${servicePage.content}">
+          <div class="card h-100 shadow-sm">
+            <div class="card-img-container">
+              <img th:if="${service.imagePath}" th:src="${service.imagePath}" class="card-img-top" alt="Изображение услуги">
+              <img th:unless="${service.imagePath}" src="/img/service-placeholder.jpg" class="card-img-top" alt="Изображение услуги">
+            </div>
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title" th:text="${service.title}">Название услуги</h5>
+              <p class="card-text" th:text="${service.shortDescription}">Краткое описание услуги.</p>
+              <div class="mt-auto">
+                <p class="card-text text-primary fw-bold" th:text="${service.formattedPrice}">1 000 ₽</p>
+                <a th:href="@{/services/{id}(id=${service.id})}" class="btn btn-outline-primary w-100">Подробнее</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div th:if="${servicePage != null}" class="d-flex justify-content-center mt-4">
+        <nav aria-label="Навигация по страницам">
+          <ul class="pagination">
+            <li class="page-item" th:classappend="${currentPage == 0 ? 'disabled' : ''}">
+              <a class="page-link" th:href="@{/services(page=0, size=${pageSize}, sort=${sortField})}" aria-label="Первая">
+                <span aria-hidden="true">&laquo;&laquo;</span>
+              </a>
+            </li>
+            <li class="page-item" th:classappend="${currentPage == 0 ? 'disabled' : ''}">
+              <a class="page-link" th:href="@{/services(page=${currentPage - 1}, size=${pageSize}, sort=${sortField})}" aria-label="Предыдущая">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, servicePage.totalPages - 1)}"
+                th:if="${i >= currentPage - 2 and i <= currentPage + 2}"
+                th:classappend="${i == currentPage ? 'active' : ''}">
+              <a class="page-link" th:href="@{/services(page=${i}, size=${pageSize}, sort=${sortField})}" th:text="${i + 1}">1</a>
+            </li>
+
+            <li class="page-item" th:classappend="${currentPage == servicePage.totalPages - 1 ? 'disabled' : ''}">
+              <a class="page-link" th:href="@{/services(page=${currentPage + 1}, size=${pageSize}, sort=${sortField})}" aria-label="Следующая">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+            <li class="page-item" th:classappend="${currentPage == servicePage.totalPages - 1 ? 'disabled' : ''}">
+              <a class="page-link" th:href="@{/services(page=${servicePage.totalPages - 1}, size=${pageSize}, sort=${sortField})}" aria-label="Последняя">
+                <span aria-hidden="true">&raquo;&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <!-- No results message -->
+      <div th:if="${(services != null and services.isEmpty()) or (servicePage != null and servicePage.content.isEmpty())}" class="alert alert-info text-center">
+        <p>Услуги не найдены. Попробуйте изменить параметры поиска.</p>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="col-lg-3">
+      <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Рекомендуемые услуги</h5>
+        </div>
+        <div class="card-body">
+          <div class="mb-3" th:each="featuredService : ${featuredServices}">
+            <div class="d-flex align-items-center">
+              <div class="me-2" style="width: 60px; height: 60px; overflow: hidden; border-radius: 4px;">
+                <img th:if="${featuredService.imagePath}" th:src="${featuredService.imagePath}" class="featured-img" alt="Изображение услуги">
+                <img th:unless="${featuredService.imagePath}" src="/img/service-placeholder.jpg" class="featured-img" alt="Изображение услуги">
+              </div>
+              <div>
+                <a th:href="@{/services/{id}(id=${featuredService.id})}" class="text-decoration-none" th:text="${featuredService.title}">Название услуги</a>
+                <p class="text-primary mb-0" th:text="${featuredService.formattedPrice}">1 000 ₽</p>
+              </div>
+            </div>
+            <hr th:unless="${featuredServiceStat.last}">
+          </div>
+          <a th:href="@{/services/featured}" class="btn btn-outline-primary btn-sm w-100">Все рекомендуемые услуги</a>
+        </div>
+      </div>
+
+      <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-secondary text-white">
+          <h5 class="mb-0">Остались вопросы?</h5>
+        </div>
+        <div class="card-body">
+          <p>Свяжитесь с нами для получения бесплатной консультации:</p>
+          <a href="tel:+71234567890" class="btn btn-success w-100 mb-2">
+            <i class="fas fa-phone me-2"></i> +7 (123) 456-78-90
+          </a>
+          <a href="/contacts" class="btn btn-outline-secondary w-100">
+            <i class="fas fa-envelope me-2"></i> Написать сообщение
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<!-- Подвал -->
+<link rel="stylesheet" th:href="@{/css/footer.css}">
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${post.title + ' - Asiamedtour'}">Заголовок статьи - Asiamedtour</title>
+  <meta name="description" th:content="${post.excerpt}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <style>
+    .blog-content {
+      font-size: 1.1rem;
+      line-height: 1.8;
+    }
+    .blog-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 5px;
+      margin: 1.5rem 0;
+    }
+    .blog-content h2, .blog-content h3, .blog-content h4 {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+    .blog-content p {
+      margin-bottom: 1.5rem;
+    }
+    .blog-content ul, .blog-content ol {
+      margin-bottom: 1.5rem;
+      padding-left: 2rem;
+    }
+    .blog-content blockquote {
+      border-left: 4px solid #0d6efd;
+      padding-left: 1rem;
+      font-style: italic;
+      color: #555;
+      margin: 1.5rem 0;
+    }
+    .blog-header-image {
+      width: 100%;
+      max-height: 500px;
+      object-fit: cover;
+      border-radius: 5px;
+      margin-bottom: 2rem;
+    }
+    .blog-meta {
+      color: #6c757d;
+      margin-bottom: 2rem;
+    }
+    .share-buttons {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid #dee2e6;
+    }
+    .related-post-card {
+      transition: transform 0.3s;
+      height: 100%;
+    }
+    .related-post-card:hover {
+      transform: translateY(-5px);
+    }
+    .related-post-img {
+      height: 150px;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+<!-- Навигация -->
+<link rel="stylesheet" th:href="@{/css/header.css}">
+<header th:replace="~{fragments/header :: header}"></header>
+
+<!-- Основной контент -->
+<main class="container py-5">
+  <div class="row">
+    <!-- Хлебные крошки -->
+    <div class="col-12 mb-4">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a th:href="@{/}" class="text-decoration-none">Главная</a></li>
+          <li class="breadcrumb-item"><a th:href="@{/blog}" class="text-decoration-none">Блог</a></li>
+          <li class="breadcrumb-item active" aria-current="page" th:text="${post.title}">Заголовок статьи</li>
+        </ol>
+      </nav>
+    </div>
+
+    <!-- Основной контент статьи -->
+    <div class="col-lg-8">
+      <article>
+        <h1 class="mb-3" th:text="${post.title}">Заголовок статьи</h1>
+
+        <!-- Метаданные -->
+        <div class="blog-meta d-flex align-items-center mb-4">
+          <i class="far fa-calendar-alt me-2"></i>
+          <span th:text="${#temporals.format(post.createdAt, 'dd MMMM yyyy')}">01 января 2023</span>
+          <span class="mx-3">•</span>
+          <i class="far fa-clock me-2"></i>
+          <span>Время чтения: <span id="readingTime">5 мин</span></span>
+        </div>
+
+        <!-- Изображение статьи -->
+        <div th:if="${post.imagePath}">
+          <img th:src="${post.imagePath}" class="blog-header-image" th:alt="${post.title}">
+        </div>
+
+        <!-- Краткое описание -->
+        <div th:if="${post.excerpt}" class="mb-4">
+          <div class="card bg-light">
+            <div class="card-body">
+              <p class="mb-0 lead" th:text="${post.excerpt}">Краткое описание статьи...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Содержимое статьи -->
+        <div class="blog-content" th:utext="${post.content}">
+          Содержимое статьи...
+        </div>
+
+        <!-- Кнопки для шеринга -->
+        <div class="share-buttons">
+          <h5 class="mb-3">Поделиться статьей:</h5>
+          <div class="d-flex gap-2">
+            <a href="#" onclick="shareOnFacebook(); return false;" class="btn btn-outline-primary">
+              <i class="fab fa-facebook-f me-2"></i>Facebook
+            </a>
+            <a href="#" onclick="shareOnTwitter(); return false;" class="btn btn-outline-info">
+              <i class="fab fa-twitter me-2"></i>Twitter
+            </a>
+            <a href="#" onclick="shareOnTelegram(); return false;" class="btn btn-outline-info">
+              <i class="fab fa-telegram me-2"></i>Telegram
+            </a>
+            <a href="#" onclick="shareOnWhatsApp(); return false;" class="btn btn-outline-success">
+              <i class="fab fa-whatsapp me-2"></i>WhatsApp
+            </a>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <!-- Боковая панель -->
+    <div class="col-lg-4 mt-5 mt-lg-0">
+      <div class="sticky-lg-top" style="top: 90px;">
+
+
+        <!-- Последние статьи -->
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0">Вам также может быть интересно</h5>
+          </div>
+          <div class="card-body p-0">
+            <div class="list-group list-group-flush">
+              <div th:each="recentPost : ${recentPosts}"
+                   th:if="${recentPost.id != post.id}" class="list-group-item p-3">
+                <div class="row g-0">
+                  <div class="col-4">
+                    <img th:if="${recentPost.imagePath}" th:src="${recentPost.imagePath}"
+                         class="img-fluid rounded" th:alt="${recentPost.title}">
+                    <img th:unless="${recentPost.imagePath}" th:src="@{/img/default-blog-thumb.jpg}"
+                         class="img-fluid rounded" alt="Изображение по умолчанию">
+                  </div>
+                  <div class="col-8 ps-3">
+                    <h6 class="mb-1">
+                      <a th:href="@{/blog/{id}(id=${recentPost.id})}" class="text-decoration-none"
+                         th:text="${#strings.abbreviate(recentPost.title, 50)}">Заголовок статьи</a>
+                    </h6>
+                    <small class="text-muted"
+                           th:text="${#temporals.format(recentPost.createdAt, 'dd.MM.yyyy')}">01.01.2023</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer bg-white text-center">
+              <a th:href="@{/blog}" class="btn btn-outline-primary btn-sm">Все статьи</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Подвал -->
+<link rel="stylesheet" th:href="@{/css/footer.css}">
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/scripts.js}"></script>
+<script>
+  // Расчет примерного времени чтения
+  document.addEventListener('DOMContentLoaded', function() {
+    const content = document.querySelector('.blog-content');
+    const text = content.textContent || content.innerText;
+    const wordCount = text.split(/\s+/).length;
+    const readingTime = Math.max(1, Math.ceil(wordCount / 200)); // Средняя скорость чтения 200 слов/мин
+    document.getElementById('readingTime').textContent = readingTime + ' мин';
+  });
+
+  // Функции для шеринга в соцсетях
+  function shareOnFacebook() {
+    const url = encodeURIComponent(window.location.href);
+    window.open('https://www.facebook.com/sharer/sharer.php?u=' + url, '_blank');
+  }
+
+  function shareOnTwitter() {
+    const url = encodeURIComponent(window.location.href);
+    const title = encodeURIComponent(document.title);
+    window.open('https://twitter.com/intent/tweet?url=' + url + '&text=' + title, '_blank');
+  }
+
+  function shareOnTelegram() {
+    const url = encodeURIComponent(window.location.href);
+    const title = encodeURIComponent(document.title);
+    window.open('https://t.me/share/url?url=' + url + '&text=' + title, '_blank');
+  }
+
+  function shareOnWhatsApp() {
+    const url = encodeURIComponent(window.location.href);
+    const title = encodeURIComponent(document.title);
+    window.open('https://api.whatsapp.com/send?text=' + title + ' ' + url, '_blank');
+  }
+</script>
+</body>
+</html>
