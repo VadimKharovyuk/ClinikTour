@@ -177,7 +177,6 @@ public class ClinicAdminController {
                         return branch;
                     })
                     .collect(Collectors.toList());
-
             // Сохраняем новые связи
             if (!newBranches.isEmpty()) {
                 branchesService.saveAll(newBranches);

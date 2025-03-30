@@ -183,9 +183,9 @@
 
     <div class="row g-4">
       <div th:each="clinic : ${topClinics}" class="col-md-6 col-lg-4">
-        <div class="card">
+        <div class="card h-100">
           <img th:src="${clinic.imagePath}" th:alt="${clinic.name}" class="card-img-top">
-          <div class="card-body">
+          <div class="card-body d-flex flex-column">
             <h3 class="h5 card-title" th:text="${clinic.name}">Название клиники</h3>
             <p class="card-text mb-3" th:text="${clinic.shortDescription}">Краткое описание клиники...</p>
 
@@ -195,14 +195,11 @@
             </div>
 
             <div class="mb-4">
-                                <span th:each="dept, stat : ${clinic.departmentNames}" class="badge bg-light text-dark me-1 mb-1"
-                                      th:text="${dept}">Отделение</span>
-              <span th:if="${clinic.totalDepartmentsCount > clinic.displayedDepartmentsCount}"
-                    class="badge bg-primary me-1 mb-1"
-                    th:text="${'+' + (clinic.totalDepartmentsCount - clinic.displayedDepartmentsCount)}">+3</span>
+              <span th:each="dept, stat : ${clinic.departmentNames}" class="badge bg-light text-dark me-1 mb-1" th:text="${dept}">Отделение</span>
+              <span th:if="${clinic.totalDepartmentsCount > clinic.displayedDepartmentsCount}" class="badge bg-primary me-1 mb-1" th:text="${'+' + (clinic.totalDepartmentsCount - clinic.displayedDepartmentsCount)}">+3</span>
             </div>
 
-            <a th:href="@{/clinics/{id}(id=${clinic.id})}" class="btn btn-outline w-100">Подробнее</a>
+            <a th:href="@{/clinics/{id}(id=${clinic.id})}" class="btn btn-outline w-100 mt-auto">Подробнее</a>
           </div>
         </div>
       </div>

@@ -102,10 +102,6 @@
                 <span th:text="${clinic.address}">Адрес клиники</span>
               </p>
 
-<!--              <p class="card-text small text-muted" th:if="${clinic.shortDescription != null && !clinic.shortDescription.isEmpty()}"-->
-<!--                 th:text="${#strings.length(clinic.shortDescription) > 100 ? #strings.substring(clinic.shortDescription, 0, 100) + '...' : clinic.shortDescription}">-->
-<!--                Краткое описание клиники...-->
-<!--              </p>-->
             </div>
             <div class="card-footer bg-white border-top-0">
               <a th:href="@{/clinics/{id}(id=${clinic.id})}" class="btn btn-primary w-100">Подробнее</a>
@@ -142,10 +138,10 @@
                 <span th:text="${doctor.clinic.name}">Название клиники</span>
               </p>
 
-              <p class="card-text small text-muted mt-2" th:if="${doctor.shortBio != null && !doctor.shortBio.isEmpty()}"
-                 th:text="${#strings.length(doctor.shortBio) > 100 ? #strings.substring(doctor.shortBio, 0, 100) + '...' : doctor.shortBio}">
-                Краткая биография...
-              </p>
+<!--              <p class="card-text small text-muted mt-2" th:if="${doctor.shortBio != null && !doctor.shortBio.isEmpty()}"-->
+<!--                 th:text="${#strings.length(doctor.shortBio) > 100 ? #strings.substring(doctor.shortBio, 0, 100) + '...' : doctor.shortBio}">-->
+<!--                Краткая биография...-->
+<!--              </p>-->
             </div>
             <div class="card-footer bg-white border-top-0">
               <a th:href="@{/doctors/{id}(id=${doctor.id})}" class="btn btn-primary w-100">Подробнее</a>

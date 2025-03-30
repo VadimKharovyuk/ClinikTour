@@ -49,6 +49,7 @@ public class DepartmentAdminController {
         return "admin/departments/form";
     }
 
+
     @GetMapping("/edit/{id}")
     public String editDepartmentForm(@PathVariable Long id, Model model) {
         departmentService.getDepartmentDtoById(id).ifPresent(department -> {
