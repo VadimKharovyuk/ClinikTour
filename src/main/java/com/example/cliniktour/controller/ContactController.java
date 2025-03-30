@@ -51,58 +51,58 @@ public class ContactController {
         return "redirect:/contact";
     }
 
-    /**
-     * Обработка форм обратной связи с различных страниц
-     */
-    @PostMapping("/consultations/request")
-    public String requestConsultation(
-            @RequestParam String fullName,
-            @RequestParam String email,
-            @RequestParam String phone,
-            @RequestParam String message,
-            @RequestParam(required = false) Long clinicId,
-            @RequestParam(required = false) Long departmentId,
-            @RequestParam(required = false) Long doctorId,
-            RedirectAttributes redirectAttributes) {
-
-        try {
-            // Разделяем полное имя на имя и фамилию (если возможно)
-            String firstName = fullName;
-            String lastName = "";
-            if (fullName.contains(" ")) {
-                String[] nameParts = fullName.split(" ", 2);
-                firstName = nameParts[0];
-                lastName = nameParts[1];
-            }
-
-            // Добавляем информацию о клинике/отделении/враче в сообщение
-            StringBuilder messageBuilder = new StringBuilder(message);
-            if (clinicId != null) {
-                messageBuilder.append("\n\nЗапрос связан с клиникой ID: ").append(clinicId);
-            }
-            if (departmentId != null) {
-                messageBuilder.append("\n\nЗапрос связан с отделением ID: ").append(departmentId);
-            }
-            if (doctorId != null) {
-                messageBuilder.append("\n\nЗапрос связан с врачом ID: ").append(doctorId);
-            }
-
-            contactRequestService.createContactRequest(firstName, lastName, email, phone, messageBuilder.toString());
-            redirectAttributes.addFlashAttribute("success", "Ваша заявка на консультацию успешно отправлена! Наш специалист свяжется с вами в ближайшее время.");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Произошла ошибка при отправке заявки. Пожалуйста, попробуйте еще раз.");
-        }
-
-        // Определяем страницу для возврата
-        String returnUrl = "/contact";
-        if (clinicId != null) {
-            returnUrl = "/clinics/" + clinicId;
-        } else if (departmentId != null) {
-            returnUrl = "/departments/" + departmentId;
-        } else if (doctorId != null) {
-            returnUrl = "/doctors/" + doctorId;
-        }
-
-        return "redirect:" + returnUrl;
-    }
+//    /**
+//     * Обработка форм обратной связи с различных страниц
+//     */
+//    @PostMapping("/consultations/request")
+//    public String requestConsultation(
+//            @RequestParam String fullName,
+//            @RequestParam String email,
+//            @RequestParam String phone,
+//            @RequestParam String message,
+//            @RequestParam(required = false) Long clinicId,
+//            @RequestParam(required = false) Long departmentId,
+//            @RequestParam(required = false) Long doctorId,
+//            RedirectAttributes redirectAttributes) {
+//
+//        try {
+//            // Разделяем полное имя на имя и фамилию (если возможно)
+//            String firstName = fullName;
+//            String lastName = "";
+//            if (fullName.contains(" ")) {
+//                String[] nameParts = fullName.split(" ", 2);
+//                firstName = nameParts[0];
+//                lastName = nameParts[1];
+//            }
+//
+//            // Добавляем информацию о клинике/отделении/враче в сообщение
+//            StringBuilder messageBuilder = new StringBuilder(message);
+//            if (clinicId != null) {
+//                messageBuilder.append("\n\nЗапрос связан с клиникой ID: ").append(clinicId);
+//            }
+//            if (departmentId != null) {
+//                messageBuilder.append("\n\nЗапрос связан с отделением ID: ").append(departmentId);
+//            }
+//            if (doctorId != null) {
+//                messageBuilder.append("\n\nЗапрос связан с врачом ID: ").append(doctorId);
+//            }
+//
+//            contactRequestService.createContactRequest(firstName, lastName, email, phone, messageBuilder.toString());
+//            redirectAttributes.addFlashAttribute("success", "Ваша заявка на консультацию успешно отправлена! Наш специалист свяжется с вами в ближайшее время.");
+//        } catch (Exception e) {
+//            redirectAttributes.addFlashAttribute("error", "Произошла ошибка при отправке заявки. Пожалуйста, попробуйте еще раз.");
+//        }
+//
+//        // Определяем страницу для возврата
+//        String returnUrl = "/contact";
+//        if (clinicId != null) {
+//            returnUrl = "/clinics/" + clinicId;
+//        } else if (departmentId != null) {
+//            returnUrl = "/departments/" + departmentId;
+//        } else if (doctorId != null) {
+//            returnUrl = "/doctors/" + doctorId;
+//        }
+//
+//        return "redirect:" + returnUrl;
+//    }
 }

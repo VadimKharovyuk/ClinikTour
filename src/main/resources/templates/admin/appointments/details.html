@@ -1,0 +1,587 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--  <meta charset="UTF-8">-->
+<!--  <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--  <title>Информация о записи - Asiamedtour</title>-->
+<!--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">-->
+<!--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">-->
+<!--  <link rel="stylesheet" th:href="@{/css/admin.css}">-->
+<!--  <link rel="stylesheet" th:href="@{/css/admin-sidebar.css}">-->
+<!--</head>-->
+<!--<body>-->
+<!--&lt;!&ndash; Боковое меню &ndash;&gt;-->
+<!--<div th:replace="~{/fragments/sidebar :: sidebar}"></div>-->
+
+<!--&lt;!&ndash; Основной контент &ndash;&gt;-->
+<!--<main class="main-content">-->
+<!--  <div class="container-fluid">-->
+<!--    <div class="d-flex justify-content-between align-items-center mb-4">-->
+<!--      <h1 class="h3">Информация о записи #<span th:text="${appt.id}">1</span></h1>-->
+<!--      <div>-->
+<!--        <a th:href="@{/admin/appointments}" class="btn btn-outline-secondary me-2">-->
+<!--          <i class="fas fa-arrow-left me-2"></i>Назад к списку-->
+<!--        </a>-->
+<!--        <a th:href="@{/admin/appointments/{id}/delete(id=${appt.id})}"-->
+<!--           class="btn btn-danger"-->
+<!--           onclick="return confirm('Вы уверены, что хотите удалить эту запись?');">-->
+<!--          <i class="fas fa-trash me-2"></i>Удалить запись-->
+<!--        </a>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Сообщения об успехе/ошибке &ndash;&gt;-->
+<!--    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">-->
+<!--      <span th:text="${success}"></span>-->
+<!--      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
+<!--    </div>-->
+<!--    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">-->
+<!--      <span th:text="${error}"></span>-->
+<!--      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
+<!--    </div>-->
+
+<!--    <div class="card">-->
+<!--      <div class="card-body">-->
+<!--        <div class="row mb-4">-->
+<!--          <div class="col-md-6">-->
+<!--            <h5 class="card-title">Тип записи</h5>-->
+<!--            <p class="card-text">-->
+<!--              <span th:if="${appt.doctor != null}" class="badge bg-info fs-6">Запись к врачу</span>-->
+<!--              <span th:if="${appt.clinic != null}" class="badge bg-success fs-6">Консультация клиники</span>-->
+<!--            </p>-->
+<!--          </div>-->
+<!--          <div class="col-md-6">-->
+<!--            <h5 class="card-title">Создано</h5>-->
+<!--            <p class="card-text" th:text="${#temporals.format(appt.createdAt, 'dd.MM.yyyy HH:mm')}">01.01.2023 12:00</p>-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--        <h4 class="border-bottom pb-2 mb-3">Информация о пациенте</h4>-->
+<!--        <div class="row mb-4">-->
+<!--          <div class="col-md-4">-->
+<!--            <h5 class="card-title">ФИО</h5>-->
+<!--            <p class="card-text" th:text="${appt.fullName}">Иван Иванов</p>-->
+<!--          </div>-->
+<!--          <div class="col-md-4">-->
+<!--            <h5 class="card-title">Телефон</h5>-->
+<!--            <p class="card-text" th:text="${appt.phone}">+7 999 123 45 67</p>-->
+<!--          </div>-->
+<!--          <div class="col-md-4">-->
+<!--            <h5 class="card-title">Email</h5>-->
+<!--            <p class="card-text" th:text="${appt.email}">example@mail.com</p>-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--        <h4 class="border-bottom pb-2 mb-3">Информация о записи</h4>-->
+<!--        <div class="row mb-4">-->
+<!--          <div class="col-md-4" th:if="${appt.date != null}">-->
+<!--            <h5 class="card-title">Дата приёма</h5>-->
+<!--            <p class="card-text" th:text="${#temporals.format(appt.date, 'dd.MM.yyyy')}">01.01.2023</p>-->
+<!--          </div>-->
+
+<!--          <div class="col-md-8" th:if="${appt.doctor != null}">-->
+<!--            <h5 class="card-title">Доктор</h5>-->
+<!--            <p class="card-text">-->
+<!--              <a th:href="@{/doctors/{id}(id=${appt.doctor.id})}"-->
+<!--                 th:text="${appt.doctor.fullName}">Доктор Иванов-->
+<!--              </a>-->
+<!--              <span th:if="${appt.doctor.specialization}"-->
+<!--                    th:text="'(' + ${appt.doctor.specialization} + ')'">-->
+<!--                      (Хирург)-->
+<!--                </span>-->
+<!--            </p>-->
+<!--          </div>-->
+
+<!--          <div class="col-md-8" th:if="${appt.clinic != null}">-->
+<!--            <h5 class="card-title">Клиника</h5>-->
+<!--            <p class="card-text">-->
+<!--              <a th:href="@{/admin/clinics/{id}(id=${appt.clinic.id})}"-->
+<!--                 th:text="${appt.clinic.name}">Название клиники-->
+<!--              </a>-->
+<!--              <span th:if="${appt.clinic.address}"-->
+<!--                    th:text="'(' + ${appt.clinic.address} + ')'">-->
+<!--                      (Адрес клиники)-->
+<!--                </span>-->
+<!--            </p>-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--        <div class="row mb-4" th:if="${appt.message}">-->
+<!--          <div class="col-12">-->
+<!--            <h5 class="card-title">Сообщение пациента</h5>-->
+<!--            <div class="p-3 bg-light rounded">-->
+<!--              <p class="card-text mb-0" th:text="${appt.message}">Текст сообщения от пациента</p>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--        <h4 class="border-bottom pb-2 mb-3">Дополнительная информация</h4>-->
+<!--        <div class="row">-->
+<!--          <div class="col-md-6">-->
+<!--            <h5 class="card-title">Согласие на обработку данных</h5>-->
+<!--            <p class="card-text">-->
+<!--                <span th:if="${appt.privacyAgreed}" class="text-success">-->
+<!--                  <i class="fas fa-check-circle"></i> Получено-->
+<!--                </span>-->
+<!--              <span th:unless="${appt.privacyAgreed}" class="text-danger">-->
+<!--                  <i class="fas fa-times-circle"></i> Не получено-->
+<!--                </span>-->
+<!--            </p>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</main>-->
+
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>-->
+<!--<script th:src="@{/js/admin.js}"></script>-->
+<!--</body>-->
+<!--</html>-->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Информация о записи - Asiamedtour</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+  <link rel="stylesheet" th:href="@{/css/admin-sidebar.css}">
+  <style>
+    :root {
+      --sidebar-width: 280px;
+      --topbar-height: 60px;
+      --primary-color: #0d6efd;
+      --secondary-color: #6c757d;
+      --success-color: #28a745;
+      --warning-color: #ffc107;
+      --danger-color: #dc3545;
+    }
+
+    body {
+      min-height: 100vh;
+      background-color: #f8f9fa;
+    }
+
+    /* Сайдбар */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: var(--sidebar-width);
+      background-color: #212529;
+      padding-top: var(--topbar-height);
+      z-index: 100;
+      transition: all 0.3s;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      overflow-y: auto;
+    }
+
+    .sidebar .nav-link {
+      color: rgba(255, 255, 255, 0.75);
+      padding: 1rem 1.5rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+    }
+
+    .sidebar .nav-link:hover {
+      color: #fff;
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .sidebar .nav-link.active {
+      color: #fff;
+      background-color: var(--primary-color);
+    }
+
+    .sidebar .nav-link i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+    }
+
+    /* Верхняя навигация */
+    .navbar {
+      height: var(--topbar-height);
+      z-index: 101;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 0 1rem;
+      background-color: #fff;
+    }
+
+    /* Основной контент */
+    .main-content {
+      margin-left: var(--sidebar-width);
+      padding: 25px;
+      padding-top: calc(var(--topbar-height) + 25px);
+      min-height: 100vh;
+    }
+
+    /* Адаптивность */
+    @media (max-width: 991.98px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.show {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+<!-- Верхняя навигация -->
+<nav class="navbar navbar-expand-lg fixed-top">
+  <div class="container-fluid">
+    <button class="navbar-toggler me-2" type="button" id="sidebarToggle">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <a class="navbar-brand me-auto" href="/admin/dashboard">
+      Asiamedtour | Админ-панель
+    </a>
+
+    <div class="dropdown">
+      <button class="btn btn-link dropdown-toggle text-decoration-none" type="button" id="userDropdown" data-bs-toggle="dropdown">
+        <i class="fas fa-user-circle me-1"></i> Администратор
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li><a class="dropdown-item" href="/"><i class="fas fa-home me-2"></i>Вернуться на сайт</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" href="/admin/logout"><i class="fas fa-sign-out-alt me-2"></i>Выйти</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Боковая навигация -->
+<nav class="sidebar" id="sidebar">
+  <div class="pt-4">
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link" href="/admin/dashboard">
+          <i class="fas fa-tachometer-alt"></i> Дашборд
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/admin/clinics">
+          <i class="fas fa-hospital"></i> Клиники
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/admin/departments">
+          <i class="fas fa-stethoscope"></i> Отделения
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/admin/doctors">
+          <i class="fas fa-user-md"></i> Врачи
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/admin/services">
+          <i class="fas fa-clipboard-list"></i> Услуги
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" href="/admin/appointments">
+          <i class="fas fa-calendar-check"></i> Записи на прием
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/admin/contact-requests">
+          <i class="fas fa-envelope"></i> Заявки
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/admin/settings">
+          <i class="fas fa-cog"></i> Настройки
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/admin/logout">
+          <i class="fas fa-sign-out-alt"></i> Выйти
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Основной контент -->
+<main class="main-content">
+  <div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="h3 mb-0 text-gray-800">
+        <i class="fas fa-info-circle me-2"></i>Информация о записи #<span th:text="${appt.id}">1</span>
+      </h1>
+      <div>
+        <a th:href="@{/admin/appointments}" class="btn btn-outline-secondary me-2">
+          <i class="fas fa-arrow-left me-2"></i>Назад к списку
+        </a>
+        <a th:href="@{/admin/appointments/{id}/delete(id=${appt.id})}"
+           class="btn btn-danger"
+           onclick="return confirm('Вы уверены, что хотите удалить эту запись?');">
+          <i class="fas fa-trash me-2"></i>Удалить запись
+        </a>
+      </div>
+    </div>
+
+    <!-- Сообщения об успехе/ошибке -->
+    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+      <span th:text="${success}"></span>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+      <span th:text="${error}"></span>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div class="row">
+      <!-- Левая колонка - Основная информация -->
+      <div class="col-lg-8">
+        <div class="card mb-4">
+          <div class="card-header bg-white">
+            <h5 class="card-title mb-0">Основная информация</h5>
+          </div>
+          <div class="card-body">
+            <div class="row mb-4">
+              <div class="col-md-6">
+                <h6 class="fw-bold">Тип записи:</h6>
+                <p>
+                                    <span th:if="${appt.doctor != null}" class="badge bg-info fs-6">
+                                        <i class="fas fa-user-md me-1"></i> Запись к врачу
+                                    </span>
+                  <span th:if="${appt.clinic != null}" class="badge bg-success fs-6">
+                                        <i class="fas fa-hospital me-1"></i> Консультация клиники
+                                    </span>
+                </p>
+              </div>
+              <div class="col-md-6">
+                <h6 class="fw-bold">Создано:</h6>
+                <p>
+                  <i class="fas fa-clock me-1 text-muted"></i>
+                  <span th:text="${#temporals.format(appt.createdAt, 'dd.MM.yyyy HH:mm')}">01.01.2023 12:00</span>
+                </p>
+              </div>
+            </div>
+
+            <h5 class="border-bottom pb-2 mb-3">Информация о пациенте</h5>
+            <div class="row mb-4">
+              <div class="col-md-4">
+                <h6 class="fw-bold"><i class="fas fa-user me-1 text-primary"></i> ФИО:</h6>
+                <p th:text="${appt.fullName}">Иван Иванов</p>
+              </div>
+              <div class="col-md-4">
+                <h6 class="fw-bold"><i class="fas fa-phone me-1 text-primary"></i> Телефон:</h6>
+                <p>
+                  <a th:href="'tel:' + ${appt.phone}" th:text="${appt.phone}">+7 999 123 45 67</a>
+                </p>
+              </div>
+              <div class="col-md-4">
+                <h6 class="fw-bold"><i class="fas fa-envelope me-1 text-primary"></i> Email:</h6>
+                <p>
+                  <a th:href="'mailto:' + ${appt.email}" th:text="${appt.email}">example@mail.com</a>
+                </p>
+              </div>
+            </div>
+
+            <h5 class="border-bottom pb-2 mb-3">Информация о приеме</h5>
+            <div class="row mb-4">
+              <div class="col-md-4" th:if="${appt.date != null}">
+                <h6 class="fw-bold"><i class="fas fa-calendar-alt me-1 text-primary"></i> Дата приёма:</h6>
+                <p th:text="${#temporals.format(appt.date, 'dd.MM.yyyy')}">01.01.2023</p>
+              </div>
+
+              <div class="col-md-8" th:if="${appt.doctor != null}">
+                <h6 class="fw-bold"><i class="fas fa-user-md me-1 text-primary"></i> Доктор:</h6>
+                <p>
+                  <a th:href="@{/admin/doctors/edit/{id}(id=${appt.doctor.id})}"
+                     th:text="${appt.doctor.fullName}" class="text-decoration-none">
+                    Доктор Иванов
+                  </a>
+                  <span th:if="${appt.doctor.specialization}"
+                        th:text="'(' + ${appt.doctor.specialization} + ')'" class="text-muted">
+                                          (Хирург)
+                                    </span>
+                </p>
+              </div>
+
+              <div class="col-md-8" th:if="${appt.clinic != null}">
+                <h6 class="fw-bold"><i class="fas fa-hospital me-1 text-primary"></i> Клиника:</h6>
+                <p>
+                  <a th:href="@{/admin/clinics/edit/{id}(id=${appt.clinic.id})}"
+                     th:text="${appt.clinic.name}" class="text-decoration-none">
+                    Название клиники
+                  </a>
+                  <span th:if="${appt.clinic.address}"
+                        th:text="'(' + ${appt.clinic.address} + ')'" class="text-muted">
+                                          (Адрес клиники)
+                                    </span>
+                </p>
+              </div>
+            </div>
+
+            <div class="row mb-4" th:if="${appt.message}">
+              <div class="col-12">
+                <h6 class="fw-bold"><i class="fas fa-comment me-1 text-primary"></i> Сообщение пациента:</h6>
+                <div class="p-3 bg-light rounded">
+                  <p class="card-text mb-0" th:text="${appt.message}">Текст сообщения от пациента</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <h6 class="fw-bold">Согласие на обработку данных:</h6>
+                <p>
+                                    <span th:if="${appt.privacyAgreed}" class="text-success">
+                                        <i class="fas fa-check-circle me-1"></i> Получено
+                                    </span>
+                  <span th:unless="${appt.privacyAgreed}" class="text-danger">
+                                        <i class="fas fa-times-circle me-1"></i> Не получено
+                                    </span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Правая колонка - Дополнительные действия и информация -->
+      <div class="col-lg-4">
+        <!-- Блок действий -->
+        <div class="card mb-4">
+          <div class="card-header bg-white">
+            <h5 class="card-title mb-0">Действия</h5>
+          </div>
+          <div class="card-body">
+            <div class="d-grid gap-2">
+              <a th:href="'mailto:' + ${appt.email}" class="btn btn-outline-primary">
+                <i class="fas fa-envelope me-2"></i>Написать пациенту
+              </a>
+              <a th:href="'tel:' + ${appt.phone}" class="btn btn-outline-info">
+                <i class="fas fa-phone me-2"></i>Позвонить пациенту
+              </a>
+              <a th:href="@{/admin/appointments/{id}/delete(id=${appt.id})}"
+                 class="btn btn-outline-danger"
+                 onclick="return confirm('Вы уверены, что хотите удалить эту запись?');">
+                <i class="fas fa-trash-alt me-2"></i>Удалить запись
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Блок статистики -->
+        <div class="card mb-4">
+          <div class="card-header bg-white">
+            <h5 class="card-title mb-0">Статистика</h5>
+          </div>
+          <div class="card-body">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Дата создания
+                <span class="badge bg-primary rounded-pill"
+                      th:text="${#temporals.format(appt.createdAt, 'dd.MM.yyyy')}">01.01.2023</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Время создания
+                <span class="badge bg-secondary rounded-pill"
+                      th:text="${#temporals.format(appt.createdAt, 'HH:mm')}">12:00</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center"
+                  th:if="${appt.doctor != null}">
+                Тип записи
+                <span class="badge bg-info rounded-pill">К врачу</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center"
+                  th:if="${appt.clinic != null}">
+                Тип записи
+                <span class="badge bg-success rounded-pill">Консультация</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Блок связанной информации -->
+        <div class="card" th:if="${doctorAppointments != null && doctorAppointments > 1 && appt.doctor != null}">
+          <div class="card-header bg-white">
+            <h5 class="card-title mb-0">Другие записи</h5>
+          </div>
+          <div class="card-body">
+            <p>
+              <i class="fas fa-info-circle me-1 text-primary"></i>
+              К этому врачу есть еще
+              <strong th:text="${doctorAppointments - 1}">5</strong>
+              записей.
+            </p>
+            <a th:href="@{/admin/appointments(doctorId=${appt.doctor.id})}" class="btn btn-sm btn-outline-primary">
+              <i class="fas fa-list me-1"></i>Просмотреть все
+            </a>
+          </div>
+        </div>
+
+        <div class="card" th:if="${clinicAppointments != null && clinicAppointments > 1 && appt.clinic != null}">
+          <div class="card-header bg-white">
+            <h5 class="card-title mb-0">Другие консультации</h5>
+          </div>
+          <div class="card-body">
+            <p>
+              <i class="fas fa-info-circle me-1 text-primary"></i>
+              В этой клинике есть еще
+              <strong th:text="${clinicAppointments - 1}">3</strong>
+              консультаций.
+            </p>
+            <a th:href="@{/admin/appointments(clinicId=${appt.clinic.id})}" class="btn btn-sm btn-outline-primary">
+              <i class="fas fa-list me-1"></i>Просмотреть все
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Переключение сайдбара на мобильных устройствах
+  document.addEventListener('DOMContentLoaded', function() {
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebar = document.getElementById('sidebar');
+
+    if (sidebarToggle) {
+      sidebarToggle.addEventListener('click', function() {
+        sidebar.classList.toggle('show');
+      });
+    }
+
+    // Закрытие сайдбара при клике вне его на мобильных устройствах
+    document.addEventListener('click', function(event) {
+      const isClickInsideSidebar = sidebar.contains(event.target);
+      const isClickOnToggle = sidebarToggle.contains(event.target);
+
+      if (!isClickInsideSidebar && !isClickOnToggle && sidebar.classList.contains('show')) {
+        sidebar.classList.remove('show');
+      }
+    });
+
+    // Активация текущего пункта меню
+    const currentPath = window.location.pathname;
+    document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+      if (link.getAttribute('href') === currentPath) {
+        link.classList.add('active');
+      } else if (currentPath.includes('/admin/appointments') && link.getAttribute('href') === '/admin/appointments') {
+        link.classList.add('active');
+      }
+    });
+  });
+</script>
+</body>
+</html>
