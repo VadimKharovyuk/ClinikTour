@@ -13,15 +13,11 @@ public class ClinikTourApplication {
     // Приложение будет доступно по адресу: http://localhost:2817
 
 
-    //add dto for форма заполнения для докторов / клиники
-
-    //Последние заявки админ по id не открывает http://localhost:2817/admin/contact-requests/1
-    //исправить мапинг
 
 
     //добавить админов создать модель админ
 
-    //http://localhost:2817/services - добавить url сontact
+
 
 
 }
