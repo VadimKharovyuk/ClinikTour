@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${admin.id != null ? 'Редактирование администратора' : 'Добавление администратора'}"></title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+  <div class="row mb-3">
+    <div class="col">
+      <h2 th:text="${admin.id != null ? 'Редактирование администратора' : 'Добавление администратора'}"></h2>
+    </div>
+    <div class="col-auto">
+      <a th:href="@{/admin/admins}" class="btn btn-secondary">Назад к списку</a>
+    </div>
+  </div>
+
+  <!-- Alerts -->
+  <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <span th:text="${error}"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <form th:action="@{/admin/admins/save}" th:object="${admin}" method="post">
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="mb-3">
+          <label for="username" class="form-label">Логин</label>
+          <input type="text" class="form-control" id="username" th:field="*{username}" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="password" class="form-label">Пароль</label>
+          <input type="password" class="form-control" id="password" th:field="*{password}" required>
+          <div class="form-text" th:if="${admin.id != null}">
+            Оставьте поле пустым, если не хотите менять пароль
+          </div>
+        </div>
+
+        <div class="mb-3 form-check">
+          <input type="checkbox" class="form-check-input" id="active" th:field="*{active}">
+          <label class="form-check-label" for="active">Активен</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
