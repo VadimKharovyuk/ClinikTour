@@ -51,10 +51,11 @@ public class ContactController {
         return "redirect:/contact";
     }
 
+//
 //    /**
 //     * Обработка форм обратной связи с различных страниц
 //     */
-//    @PostMapping("/consultations/request")
+//    @PostMapping("/consultations/submit")
 //    public String requestConsultation(
 //            @RequestParam String fullName,
 //            @RequestParam String email,

@@ -1,4 +1,4 @@
-package com.example.cliniktour.controller;
+package com.example.cliniktour.controller.admin;
 import com.example.cliniktour.model.Admin;
 import com.example.cliniktour.service.AdminService;
 import jakarta.servlet.http.HttpSession;

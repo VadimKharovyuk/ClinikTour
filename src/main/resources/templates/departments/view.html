@@ -215,8 +215,9 @@
     <div class="card-header bg-primary text-white">
       <h3 class="mb-0">Получить консультацию</h3>
     </div>
+
     <div class="card-body">
-      <form th:action="@{/consultations/request}" method="post">
+      <form th:action="@{/consultations/submit}" method="post">
         <input type="hidden" name="departmentId" th:value="${department.id}">
 
         <div class="row mb-3">

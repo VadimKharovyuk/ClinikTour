@@ -1,10 +1,8 @@
-package com.example.cliniktour.controller;
+package com.example.cliniktour.controller.admin;
 
 import com.example.cliniktour.dto.ClinicDto;
-import com.example.cliniktour.mapper.ClinicMapper;
 import com.example.cliniktour.model.Branches;
 import com.example.cliniktour.model.Clinic;
-import com.example.cliniktour.model.Department;
 import com.example.cliniktour.service.BranchesService;
 import com.example.cliniktour.service.ClinicService;
 import com.example.cliniktour.service.DepartmentService;

@@ -34,4 +34,16 @@ public class Appointment {
     @JoinColumn(name = "clinic_id")
     private Clinic clinic;
 
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
+
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
+
+
+
 }

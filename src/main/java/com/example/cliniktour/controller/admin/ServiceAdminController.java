@@ -1,4 +1,4 @@
-package com.example.cliniktour.controller;
+package com.example.cliniktour.controller.admin;
 
 import com.example.cliniktour.dto.ServiceDto;
 import com.example.cliniktour.service.ServiceService;

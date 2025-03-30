@@ -95,6 +95,7 @@ public class DepartmentController {
             return "departments/view";
         }
 
+
         return "redirect:/departments";
     }
 

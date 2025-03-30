@@ -1,9 +1,11 @@
 package com.example.cliniktour.mapper;
 
 import com.example.cliniktour.dto.ClinicConsultationDTO;
+import com.example.cliniktour.dto.ConsultationRequestDto;
 import com.example.cliniktour.dto.DoctorAppointmentDTO;
 import com.example.cliniktour.model.Appointment;
 import com.example.cliniktour.model.Clinic;
+import com.example.cliniktour.model.Department;
 import com.example.cliniktour.model.Doctor;
 import org.springframework.stereotype.Component;
 
@@ -33,6 +35,19 @@ public class AppointmentMapper {
                 .message(dto.getMessage())
                 .privacyAgreed(dto.isAgree())
                 .clinic(clinic)
+                .createdAt(LocalDateTime.now())
+                .build();
+    }
+
+    public Appointment toConsultationAppointment(ConsultationRequestDto dto, Clinic clinic, Department department) {
+        return Appointment.builder()
+                .fullName(dto.getFullName())
+                .phone(dto.getPhone())
+                .email(dto.getEmail())
+                .message(dto.getMessage())
+                .privacyAgreed(dto.isAgree())
+                .clinic(clinic)
+                .department(department)
                 .createdAt(LocalDateTime.now())
                 .build();
     }

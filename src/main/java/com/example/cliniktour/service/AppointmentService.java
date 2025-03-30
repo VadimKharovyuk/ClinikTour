@@ -1,13 +1,16 @@
 package com.example.cliniktour.service;
 
 import com.example.cliniktour.dto.ClinicConsultationDTO;
+import com.example.cliniktour.dto.ConsultationRequestDto;
 import com.example.cliniktour.dto.DoctorAppointmentDTO;
 import com.example.cliniktour.mapper.AppointmentMapper;
 import com.example.cliniktour.model.Appointment;
 import com.example.cliniktour.model.Clinic;
+import com.example.cliniktour.model.Department;
 import com.example.cliniktour.model.Doctor;
 import com.example.cliniktour.repository.AppointmentRepository;
 import com.example.cliniktour.repository.ClinicRepository;
+import com.example.cliniktour.repository.DepartmentRepository;
 import com.example.cliniktour.repository.DoctorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +28,7 @@ public class AppointmentService {
     private final DoctorRepository doctorRepository;
     private final ClinicRepository clinicRepository;
     private final AppointmentMapper appointmentMapper;
+    private final DepartmentRepository departmentRepository;
 
     @Transactional
     public Appointment createDoctorAppointment(DoctorAppointmentDTO dto) {
@@ -122,5 +126,27 @@ public class AppointmentService {
     public int countTodayAppointments() {
         LocalDate today = LocalDate.now();
         return appointmentRepository.countByDate(today);
+    }
+
+    @Transactional
+    public Appointment createConsultationRequest(ConsultationRequestDto dto) {
+        Clinic clinic = null;
+        Department department = null;
+
+        // Получаем клинику, если ID предоставлен
+        if (dto.getPreferredClinic() != null) {
+            clinic = clinicRepository.findById(dto.getPreferredClinic())
+                    .orElseThrow(() -> new RuntimeException("Клиника не найдена"));
+        }
+
+        // Получаем отделение, если ID предоставлен
+        if (dto.getDepartmentId() != null) {
+            department = departmentRepository.findById(dto.getDepartmentId())
+                    .orElseThrow(() -> new RuntimeException("Отделение не найдено"));
+        }
+
+        // Используем новый метод маппера для создания заявки
+        Appointment appointment = appointmentMapper.toConsultationAppointment(dto, clinic, department);
+        return appointmentRepository.save(appointment);
     }
 }
