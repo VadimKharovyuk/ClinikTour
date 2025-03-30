@@ -11,8 +11,9 @@
   <link rel="stylesheet" th:href="@{/css/admin.css}">
 </head>
 <body>
-<!-- Боковое меню и верхняя навигация (могут быть вынесены во фрагменты) -->
+
 <div th:replace="~{/fragments/sidebar :: sidebar}"></div>
+<link rel="stylesheet" th:href="@{/css/admin-sidebar.css}">
 
 <!-- Основной контент -->
 <main class="main-content">
