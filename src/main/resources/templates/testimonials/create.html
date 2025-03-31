@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Оставить отзыв - Asiamedtour</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #2563eb;
+      --primary-dark: #1e40af;
+      --secondary-color: #f0f9ff;
+      --accent-color: #4f46e5;
+      --text-color: #1e293b;
+      --text-muted: #64748b;
+      --border-radius: 12px;
+      --transition: all 0.3s ease;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      color: var(--text-color);
+      line-height: 1.7;
+      background-color: #f8fafc;
+    }
+
+    .testimonial-form-section {
+      padding: 80px 0;
+    }
+
+    .testimonial-form-card {
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      padding: 30px;
+    }
+
+    .form-section-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .form-section-header h1 {
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--primary-color);
+    }
+
+    .form-section-header p {
+      max-width: 700px;
+      margin: 0 auto;
+      color: var(--text-muted);
+    }
+
+    .form-label {
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .form-control, .form-select {
+      padding: 12px;
+      border-radius: var(--border-radius);
+      border: 1px solid #e2e8f0;
+      transition: var(--transition);
+    }
+
+    .form-control:focus, .form-select:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.25);
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      border-radius: var(--border-radius);
+      padding: 12px 24px;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      border-color: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .form-text {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    .rating-input {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+    }
+
+    .rating-input input {
+      display: none;
+    }
+
+    .rating-input label {
+      font-size: 1.5rem;
+      color: #ddd;
+      cursor: pointer;
+      margin: 0 2px;
+      transition: var(--transition);
+    }
+
+    .rating-input label:hover,
+    .rating-input label:hover ~ label,
+    .rating-input input:checked ~ label {
+      color: #ffc107;
+    }
+
+    .is-invalid {
+      border-color: #dc3545 !important;
+    }
+
+    .invalid-feedback {
+      display: block;
+    }
+
+    .required-field::after {
+      content: " *";
+      color: #dc3545;
+    }
+
+    .photo-preview {
+      width: 150px;
+      height: 150px;
+      border-radius: var(--border-radius);
+      object-fit: cover;
+      border: 1px solid #e2e8f0;
+      display: none;
+      margin-top: 10px;
+    }
+
+    .alert {
+      border-radius: var(--border-radius);
+    }
+  </style>
+</head>
+<body>
+
+<link rel="stylesheet" th:href="@{/css/header.css}">
+<header th:replace="~{fragments/header :: header}"></header>
+
+
+<!-- Верхняя часть страницы с формой -->
+<section class="testimonial-form-section">
+  <div class="container">
+    <!-- Заголовок формы -->
+    <div class="form-section-header">
+      <h1>Оставить отзыв о лечении</h1>
+      <p>Поделитесь своим опытом лечения в наших клиниках. Ваш отзыв поможет другим пациентам сделать правильный выбор.</p>
+    </div>
+
+    <!-- Алерты для сообщений об ошибках или успехе -->
+    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+      <i class="fas fa-exclamation-circle me-2"></i>
+      <span th:text="${errorMessage}">Произошла ошибка при отправке отзыва.</span>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+      <i class="fas fa-check-circle me-2"></i>
+      <span th:text="${successMessage}">Отзыв успешно отправлен!</span>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <div class="testimonial-form-card">
+          <!-- Форма создания отзыва -->
+          <form th:action="@{/testimonials/create}" th:object="${testimonialForm}" method="post" enctype="multipart/form-data">
+            <div class="row g-4">
+              <!-- Личная информация -->
+              <div class="col-md-6">
+                <label for="clientName" class="form-label required-field">Ваше имя</label>
+                <input type="text" class="form-control" id="clientName" th:field="*{clientName}"
+                       th:classappend="${#fields.hasErrors('clientName')} ? 'is-invalid'"
+                       placeholder="Введите ваше имя">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('clientName')}" th:errors="*{clientName}">
+                  Пожалуйста, укажите ваше имя
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="clientEmail" class="form-label">Email</label>
+                <input type="email" class="form-control" id="clientEmail" th:field="*{clientEmail}"
+                       th:classappend="${#fields.hasErrors('clientEmail')} ? 'is-invalid'"
+                       placeholder="Введите ваш email">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('clientEmail')}" th:errors="*{clientEmail}">
+                  Пожалуйста, укажите корректный email
+                </div>
+                <small class="form-text">Не будет отображаться публично</small>
+              </div>
+
+              <div class="col-md-6">
+                <label for="clientCountry" class="form-label">Страна</label>
+                <input type="text" class="form-control" id="clientCountry" th:field="*{clientCountry}"
+                       th:classappend="${#fields.hasErrors('clientCountry')} ? 'is-invalid'"
+                       placeholder="Введите вашу страну">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('clientCountry')}" th:errors="*{clientCountry}">
+                  Некорректное название страны
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="clientCity" class="form-label">Город</label>
+                <input type="text" class="form-control" id="clientCity" th:field="*{clientCity}"
+                       th:classappend="${#fields.hasErrors('clientCity')} ? 'is-invalid'"
+                       placeholder="Введите ваш город">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('clientCity')}" th:errors="*{clientCity}">
+                  Некорректное название города
+                </div>
+              </div>
+
+              <!-- Информация о лечении -->
+              <div class="col-md-6">
+                <label for="clinicId" class="form-label required-field">Клиника</label>
+                <select class="form-select" id="clinicId" th:field="*{clinicId}"
+                        th:classappend="${#fields.hasErrors('clinicId')} ? 'is-invalid'">
+                  <option value="">Выберите клинику</option>
+                  <!-- Здесь должен быть список клиник из модели -->
+                  <option th:each="clinic : ${clinics}" th:value="${clinic.id}" th:text="${clinic.name}">
+                    Название клиники
+                  </option>
+                </select>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('clinicId')}" th:errors="*{clinicId}">
+                  Пожалуйста, выберите клинику
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="treatmentType" class="form-label">Тип лечения</label>
+                <input type="text" class="form-control" id="treatmentType" th:field="*{treatmentType}"
+                       th:classappend="${#fields.hasErrors('treatmentType')} ? 'is-invalid'"
+                       placeholder="Например: Стоматология, Кардиология">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('treatmentType')}" th:errors="*{treatmentType}">
+                  Некорректный тип лечения
+                </div>
+              </div>
+
+              <div class="col-12">
+                <label class="form-label required-field">Оценка (от 1 до 5 звезд)</label>
+                <div class="rating-input">
+                  <input type="radio" id="star5" name="rating" value="5" th:field="*{rating}">
+                  <label for="star5"><i class="fas fa-star"></i></label>
+                  <input type="radio" id="star4" name="rating" value="4" th:field="*{rating}">
+                  <label for="star4"><i class="fas fa-star"></i></label>
+                  <input type="radio" id="star3" name="rating" value="3" th:field="*{rating}">
+                  <label for="star3"><i class="fas fa-star"></i></label>
+                  <input type="radio" id="star2" name="rating" value="2" th:field="*{rating}">
+                  <label for="star2"><i class="fas fa-star"></i></label>
+                  <input type="radio" id="star1" name="rating" value="1" th:field="*{rating}">
+                  <label for="star1"><i class="fas fa-star"></i></label>
+                </div>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('rating')}" th:errors="*{rating}">
+                  Пожалуйста, поставьте оценку
+                </div>
+              </div>
+
+              <div class="col-12">
+                <label for="reviewText" class="form-label required-field">Ваш отзыв</label>
+                <textarea class="form-control" id="reviewText" rows="5" th:field="*{reviewText}"
+                          th:classappend="${#fields.hasErrors('reviewText')} ? 'is-invalid'"
+                          placeholder="Расскажите о своем опыте лечения..."></textarea>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('reviewText')}" th:errors="*{reviewText}">
+                  Пожалуйста, напишите текст отзыва
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="photo" class="form-label">Ваше фото (опционально)</label>
+                <input type="file" class="form-control" id="photo" name="photo" accept="image/*"
+                       onchange="previewPhoto(this)">
+                <small class="form-text">Максимальный размер 5 МБ</small>
+                <img id="photoPreview" class="photo-preview" src="#" alt="Предпросмотр фото">
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label required-field">Рекомендуете ли вы эту клинику?</label>
+                <div class="d-flex mt-2">
+                  <div class="form-check me-4">
+                    <input class="form-check-input" type="radio" id="recommend-yes" th:field="*{wouldRecommend}" value="true">
+                    <label class="form-check-label" for="recommend-yes">
+                      <i class="fas fa-thumbs-up text-success me-1"></i> Да, рекомендую
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" id="recommend-no" th:field="*{wouldRecommend}" value="false">
+                    <label class="form-check-label" for="recommend-no">
+                      <i class="fas fa-thumbs-down text-danger me-1"></i> Нет, не рекомендую
+                    </label>
+                  </div>
+                </div>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('wouldRecommend')}" th:errors="*{wouldRecommend}">
+                  Пожалуйста, укажите рекомендуете ли вы клинику
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="consent" required>
+                  <label class="form-check-label" for="consent">
+                    Я соглашаюсь с <a href="/privacy" target="_blank">условиями обработки персональных данных</a> и публикацией моего отзыва на сайте
+                  </label>
+                </div>
+              </div>
+
+              <div class="col-12 mt-4 text-center">
+                <button type="submit" class="btn btn-primary px-5">
+                  <i class="fas fa-paper-plane me-2"></i>Отправить отзыв
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Предпросмотр загруженного фото
+  function previewPhoto(input) {
+    var preview = document.getElementById('photoPreview');
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+      };
+      reader.readAsDataURL(input.files[0]);
+    } else {
+      preview.style.display = 'none';
+    }
+  }
+</script>
+</body>
+</html>

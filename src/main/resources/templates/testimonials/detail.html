@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Просмотр отзыва - Asiamedtour</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary-color: #f0f9ff;
+            --accent-color: #4f46e5;
+            --text-color: #1e293b;
+            --text-muted: #64748b;
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            color: var(--text-color);
+            line-height: 1.7;
+            background-color: #f8fafc;
+        }
+
+        .testimonial-detail-section {
+            padding: 80px 0;
+        }
+
+        .testimonial-detail-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            position: relative;
+        }
+
+        .detail-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .detail-header h1 {
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--primary-color);
+        }
+
+        .rating-stars {
+            color: #ffc107;
+            font-size: 1.5rem;
+            margin: 20px 0;
+        }
+
+        .client-photo {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+
+        .avatar-placeholder {
+            width: 120px;
+            height: 120px;
+            font-size: 2.5rem;
+            font-weight: bold;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .testimonial-meta {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+        }
+
+        .testimonial-date {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        .testimonial-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            white-space: pre-line;
+        }
+
+        .testimonial-recommend {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 16px;
+            background-color: rgba(25, 135, 84, 0.1);
+            color: #198754;
+            border-radius: 30px;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .testimonial-not-recommend {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 16px;
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+            border-radius: 30px;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .badge-info {
+            background-color: rgba(13, 110, 253, 0.1);
+            color: var(--primary-color);
+            padding: 10px 16px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            border-radius: var(--border-radius);
+            padding: 12px 24px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            border-radius: var(--border-radius);
+            padding: 12px 24px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+<link rel="stylesheet" th:href="@{/css/header.css}">
+<header th:replace="~{fragments/header :: header}"></header>
+
+<section class="testimonial-detail-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="detail-header">
+                    <h1>Отзыв о клинике</h1>
+                    <p class="lead">Подробная информация об опыте лечения в клинике</p>
+                </div>
+
+                <div class="testimonial-detail-card">
+                    <!-- Информация о клиенте и клинике -->
+                    <div class="text-center">
+                        <!-- Фото клиента -->
+                        <img th:if="${testimonial.clientPhotoUrl != null}" th:src="${testimonial.clientPhotoUrl}"
+                             alt="Фото клиента" class="client-photo">
+                        <div th:unless="${testimonial.clientPhotoUrl != null}"
+                             class="avatar-placeholder bg-primary text-white">
+                            <span th:text="${#strings.substring(testimonial.clientName, 0, 1).toUpperCase()}">А</span>
+                        </div>
+
+                        <!-- Имя клиента -->
+                        <h2 class="mb-2" th:text="${testimonial.clientName}">Имя клиента</h2>
+
+                        <!-- Местоположение клиента -->
+                        <div class="testimonial-meta">
+                            <span th:if="${testimonial.clientCity != null}" th:text="${testimonial.clientCity}">Город</span>
+                            <span th:if="${testimonial.clientCity != null && testimonial.clientCountry != null}">, </span>
+                            <span th:if="${testimonial.clientCountry != null}" th:text="${testimonial.clientCountry}">Страна</span>
+                        </div>
+
+                        <!-- Рейтинг звездами -->
+                        <div class="rating-stars">
+                            <i th:each="i : ${#numbers.sequence(1, 5)}"
+                               th:class="${i <= testimonial.rating ? 'fas fa-star' : 'far fa-star'}"></i>
+                        </div>
+
+                        <!-- Рекомендация -->
+                        <div th:if="${testimonial.wouldRecommend}" class="testimonial-recommend">
+                            <i class="fas fa-thumbs-up me-2"></i> Рекомендует эту клинику
+                        </div>
+                        <div th:unless="${testimonial.wouldRecommend}" class="testimonial-not-recommend">
+                            <i class="fas fa-thumbs-down me-2"></i> Не рекомендует эту клинику
+                        </div>
+
+                        <!-- Дата отзыва -->
+                        <div class="testimonial-date">
+                            <i class="far fa-calendar-alt me-1"></i>
+                            <span th:text="${#temporals.format(testimonial.createdAt, 'dd MMMM yyyy')}">01 января 2023</span>
+                        </div>
+                    </div>
+
+                    <!-- Основной текст отзыва -->
+                    <div class="testimonial-content" th:text="${testimonial.reviewText}">
+                        Текст отзыва...
+                    </div>
+
+                    <!-- Дополнительная информация -->
+                    <div class="mb-4">
+                            <span class="badge-info" th:if="${testimonial.clinicName != null}">
+                                <i class="fas fa-hospital me-2"></i>
+                                <span th:text="${testimonial.clinicName}">Название клиники</span>
+                            </span>
+                        <span class="badge-info" th:if="${testimonial.treatmentType != null}">
+                                <i class="fas fa-procedures me-2"></i>
+                                <span th:text="${testimonial.treatmentType}">Тип лечения</span>
+                            </span>
+                    </div>
+
+                    <!-- Кнопки навигации -->
+                    <div class="d-flex justify-content-between mt-5">
+                        <a th:href="@{/testimonials}" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-left me-2"></i>К списку отзывов
+                        </a>
+                        <a th:if="${testimonial.clinicId != null}" th:href="@{/clinics/{id}(id=${testimonial.clinicId})}" class="btn btn-primary">
+                            <i class="fas fa-hospital me-2"></i>К странице клиники
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

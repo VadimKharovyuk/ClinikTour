@@ -1,11 +1,14 @@
 package com.example.cliniktour.controller;
 
 import com.example.cliniktour.dto.ClinicDto;
+import com.example.cliniktour.dto.testimonial.TestimonialDetailDTO;
 import com.example.cliniktour.model.Branches;
 import com.example.cliniktour.model.Clinic;
+import com.example.cliniktour.model.Testimonial;
 import com.example.cliniktour.service.ClinicService;
 import com.example.cliniktour.service.DepartmentService;
 import com.example.cliniktour.service.DoctorService;
+import com.example.cliniktour.service.TestimonialService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +29,7 @@ public class ClinicController {
     private final ClinicService clinicService;
     private final DepartmentService departmentService;
     private final DoctorService doctorService;
+    private final TestimonialService testimonialService;
 
     /**
      * Отображение списка всех клиник с пагинацией и фильтрацией
@@ -79,8 +83,8 @@ public class ClinicController {
         model.addAttribute("departments", departmentService.getAllDepartments());
 
         // Добавляем список городов и стран (должны быть реализованы соответствующие методы)
-        // model.addAttribute("cities", clinicService.getAllCities());
-        // model.addAttribute("countries", clinicService.getAllCountries());
+         model.addAttribute("cities", clinicService.getAllCities());
+         model.addAttribute("countries", clinicService.getAllCountries());
 
         return "clinics/list";
     }
@@ -92,12 +96,16 @@ public class ClinicController {
     public String viewClinic(@PathVariable Long id, Model model) {
         Optional<Clinic> clinicOpt = clinicService.getClinicById(id);
 
+
         if (clinicOpt.isPresent()) {
             Clinic clinic = clinicOpt.get();
             model.addAttribute("clinic", clinic);
 
             // Получаем врачей, работающих в этой клинике
             model.addAttribute("doctors", doctorService.getDoctorsByClinicId(id));
+
+            TestimonialDetailDTO testimonial = testimonialService.getTestimonialById(id);
+            model.addAttribute("testimonial", testimonial);
 
             // Получаем отделения клиники
             if (clinic.getBranches() != null) {

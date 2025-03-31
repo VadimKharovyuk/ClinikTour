@@ -60,7 +60,9 @@
           <h5 class="card-title">Связаться с клиникой</h5>
           <p class="card-text">Для получения дополнительной информации или записи на консультацию, свяжитесь с нами:</p>
           <a href="#contact-form" class="btn btn-primary w-100 mb-2">Оставить заявку</a>
-          <a href="tel:+123456789" class="btn btn-outline-primary w-100">Позвонить</a>
+          <a th:href="@{/testimonials/{id}(id=${testimonial.id})}"  class="btn btn-outline-primary w-100">Отзывы о клинике</a>
+
+
         </div>
       </div>
     </div>

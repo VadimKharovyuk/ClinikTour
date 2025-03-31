@@ -1,81 +1,386 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<body>-->
+<!--&lt;!&ndash; Фрагмент футера &ndash;&gt;-->
+<!--<footer th:fragment="footer" class="footer">-->
+<!--  <div class="container">-->
+<!--    <div class="row g-4 mb-5">-->
+<!--      <div class="col-lg-4 mb-4 mb-lg-0">-->
+<!--        <p class="mb-4">Мы делаем медицинский туризм доступным, безопасным и комфортным для наших пациентов.</p>-->
+<!--        <div class="d-flex">-->
+<!--          <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>-->
+<!--          <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>-->
+<!--          <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>-->
+<!--          <a href="#" class="social-icon"><i class="fab fa-whatsapp"></i></a>-->
+<!--          <a href="#" class="social-icon"><i class="fab fa-telegram"></i></a>-->
+<!--        </div>-->
+<!--      </div>-->
+
+<!--      <div class="col-md-4 col-lg-2">-->
+<!--        <h5 class="fw-bold mb-4">О нас</h5>-->
+<!--        <ul class="list-unstyled">-->
+<!--          <li class="mb-2"><a href="/about">О компании</a></li>-->
+<!--&lt;!&ndash;          <li class="mb-2"><a href="/team">Наша команда</a></li>&ndash;&gt;-->
+<!--          <li class="mb-2"><a href="/testimonials">Отзывы</a></li>-->
+<!--          <li class="mb-2"><a href="/blog">Блог</a></li>-->
+<!--        </ul>-->
+<!--      </div>-->
+
+<!--      <div class="col-md-4 col-lg-2">-->
+<!--        <h5 class="fw-bold mb-4">Пациентам</h5>-->
+<!--        <ul class="list-unstyled">-->
+<!--          <li class="mb-2"><a href="/clinics">Клиники</a></li>-->
+<!--          <li class="mb-2"><a href="/departments">Отделения</a></li>-->
+<!--          <li class="mb-2"><a href="/doctors">Врачи</a></li>-->
+<!--          <li class="mb-2"><a href="/services">Услуги</a></li>-->
+<!--        </ul>-->
+<!--      </div>-->
+
+<!--      <div class="col-md-4 col-lg-4">-->
+<!--        <h5 class="fw-bold mb-4">Контакты</h5>-->
+<!--        <ul class="list-unstyled">-->
+<!--          <li class="mb-3">-->
+<!--            <div class="d-flex">-->
+<!--              <i class="fas fa-map-marker-alt me-3 mt-1"></i>-->
+<!--              <span>Стамбул, Турция<br>Ataşehir, D-100</span>-->
+<!--            </div>-->
+<!--          </li>-->
+<!--          <li class="mb-3">-->
+<!--            <div class="d-flex">-->
+<!--              <i class="fas fa-phone-alt me-3 mt-1"></i>-->
+<!--              <span>+90 532 123 45 67</span>-->
+<!--            </div>-->
+<!--          </li>-->
+<!--          <li class="mb-3">-->
+<!--            <div class="d-flex">-->
+<!--              <i class="fas fa-envelope me-3 mt-1"></i>-->
+<!--              <span>info@Luckytour.com</span>-->
+<!--            </div>-->
+<!--          </li>-->
+<!--        </ul>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    <hr class="border-light opacity-25 my-4">-->
+
+<!--    <div class="row align-items-center">-->
+<!--      <div class="col-md-6 text-center text-md-start">-->
+<!--        <p class="mb-0">&copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2023</span> Luckytour. Все права защищены.</p>-->
+<!--      </div>-->
+<!--      <div class="col-md-6 text-center text-md-end mt-3 mt-md-0">-->
+<!--        <ul class="list-inline mb-0">-->
+<!--          <li class="list-inline-item"><a href="/contact">Частые вопросы</a></li>-->
+<!--          <li class="list-inline-item"><a href="/privacy">Конфиденциальность</a></li>-->
+<!--          <li class="list-inline-item"><a href="/terms">Условия</a></li>-->
+<!--        </ul>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</footer>-->
+<!--</body>-->
+<!--</html>-->
+
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 <!-- Фрагмент футера -->
 <footer th:fragment="footer" class="footer">
   <div class="container">
-    <div class="row g-4 mb-5">
-      <div class="col-lg-4 mb-4 mb-lg-0">
-        <p class="mb-4">Мы делаем медицинский туризм доступным, безопасным и комфортным для наших пациентов.</p>
-        <div class="d-flex">
-          <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-          <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-          <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
-          <a href="#" class="social-icon"><i class="fab fa-whatsapp"></i></a>
-          <a href="#" class="social-icon"><i class="fab fa-telegram"></i></a>
+    <div class="footer-top">
+      <div class="row g-4 mb-5">
+        <div class="col-lg-4 mb-4 mb-lg-0">
+          <a href="/" class="footer-logo d-inline-block mb-4">
+            <span class="h3 fw-bold">Asia<span class="text-accent">med</span>tour</span>
+          </a>
+          <p class="mb-4">Мы делаем медицинский туризм доступным, безопасным и комфортным для наших пациентов.</p>
+          <div class="d-flex">
+            <a href="#" class="social-icon" title="Facebook">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#" class="social-icon" title="Instagram">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#" class="social-icon" title="Twitter">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" class="social-icon" title="WhatsApp">
+              <i class="fab fa-whatsapp"></i>
+            </a>
+            <a href="#" class="social-icon" title="Telegram">
+              <i class="fab fa-telegram"></i>
+            </a>
+          </div>
         </div>
-      </div>
 
-      <div class="col-md-4 col-lg-2">
-        <h5 class="fw-bold mb-4">О нас</h5>
-        <ul class="list-unstyled">
-          <li class="mb-2"><a href="/about">О компании</a></li>
-<!--          <li class="mb-2"><a href="/team">Наша команда</a></li>-->
-          <li class="mb-2"><a href="/testimonials">Отзывы</a></li>
-          <li class="mb-2"><a href="/blog">Блог</a></li>
-        </ul>
-      </div>
+        <div class="col-md-4 col-lg-2">
+          <h5 class="footer-heading">О нас</h5>
+          <ul class="footer-links">
+            <li><a href="/about">О компании</a></li>
+            <li><a href="/testimonials">Отзывы</a></li>
+            <li><a href="/blog">Блог</a></li>
+          </ul>
+        </div>
 
-      <div class="col-md-4 col-lg-2">
-        <h5 class="fw-bold mb-4">Пациентам</h5>
-        <ul class="list-unstyled">
-          <li class="mb-2"><a href="/clinics">Клиники</a></li>
-          <li class="mb-2"><a href="/departments">Отделения</a></li>
-          <li class="mb-2"><a href="/doctors">Врачи</a></li>
-          <li class="mb-2"><a href="/services">Услуги</a></li>
-        </ul>
-      </div>
+        <div class="col-md-4 col-lg-2">
+          <h5 class="footer-heading">Пациентам</h5>
+          <ul class="footer-links">
+            <li><a href="/clinics">Клиники</a></li>
+            <li><a href="/departments">Отделения</a></li>
+            <li><a href="/doctors">Врачи</a></li>
+            <li><a href="/services">Услуги</a></li>
+          </ul>
+        </div>
 
-      <div class="col-md-4 col-lg-4">
-        <h5 class="fw-bold mb-4">Контакты</h5>
-        <ul class="list-unstyled">
-          <li class="mb-3">
-            <div class="d-flex">
-              <i class="fas fa-map-marker-alt me-3 mt-1"></i>
-              <span>Стамбул, Турция<br>Ataşehir, D-100</span>
-            </div>
-          </li>
-          <li class="mb-3">
-            <div class="d-flex">
-              <i class="fas fa-phone-alt me-3 mt-1"></i>
-              <span>+90 532 123 45 67</span>
-            </div>
-          </li>
-          <li class="mb-3">
-            <div class="d-flex">
-              <i class="fas fa-envelope me-3 mt-1"></i>
-              <span>info@Luckytour.com</span>
-            </div>
-          </li>
-        </ul>
+        <div class="col-md-4 col-lg-4">
+          <h5 class="footer-heading">Контакты</h5>
+          <ul class="contact-list">
+            <li>
+              <div class="contact-item">
+                <div class="contact-icon">
+                  <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <div class="contact-text">
+                  <span>Стамбул, Турция<br>Ataşehir, D-100</span>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="contact-item">
+                <div class="contact-icon">
+                  <i class="fas fa-phone-alt"></i>
+                </div>
+                <div class="contact-text">
+                  <a href="tel:+905321234567">+90 532 123 45 67</a>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="contact-item">
+                <div class="contact-icon">
+                  <i class="fas fa-envelope"></i>
+                </div>
+                <div class="contact-text">
+                  <a href="mailto:info@Luckytour.com">info@Luckytour.com</a>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
 
-    <hr class="border-light opacity-25 my-4">
+    <hr class="footer-divider">
 
-    <div class="row align-items-center">
-      <div class="col-md-6 text-center text-md-start">
-        <p class="mb-0">&copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2023</span> Luckytour. Все права защищены.</p>
-      </div>
-      <div class="col-md-6 text-center text-md-end mt-3 mt-md-0">
-        <ul class="list-inline mb-0">
-          <li class="list-inline-item"><a href="/contact">Частые вопросы</a></li>
-          <li class="list-inline-item"><a href="/privacy">Конфиденциальность</a></li>
-          <li class="list-inline-item"><a href="/terms">Условия</a></li>
-        </ul>
+    <div class="footer-bottom">
+      <div class="row align-items-center">
+        <div class="col-md-6 text-center text-md-start">
+          <p class="copyright">&copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2023</span> Luckytour. Все права защищены.</p>
+        </div>
+        <div class="col-md-6 text-center text-md-end mt-3 mt-md-0">
+          <ul class="footer-policy-links">
+            <li><a href="/contact">Частые вопросы</a></li>
+            <li><a href="/privacy">Конфиденциальность</a></li>
+            <li><a href="/terms">Условия</a></li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
+
+  <style>
+    :root {
+      --primary-color: #2563eb;
+      --primary-dark: #1e40af;
+      --secondary-color: #f0f9ff;
+      --accent-color: #4f46e5;
+      --text-color: #1e293b;
+      --text-muted: #64748b;
+      --footer-bg: #f8fafc;
+      --footer-text: #64748b;
+      --footer-link: #1e293b;
+      --footer-link-hover: #2563eb;
+      --border-radius: 12px;
+      --transition: all 0.3s ease;
+    }
+
+    .footer {
+      background-color: var(--footer-bg);
+      color: var(--footer-text);
+      padding: 80px 0 40px;
+      font-size: 0.95rem;
+    }
+
+    .footer-top {
+      margin-bottom: 20px;
+    }
+
+    .text-accent {
+      color: var(--accent-color);
+    }
+
+    .footer-heading {
+      position: relative;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--text-color);
+      margin-bottom: 25px;
+      padding-bottom: 10px;
+    }
+
+    .footer-heading:after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 40px;
+      height: 2px;
+      background-color: var(--primary-color);
+    }
+
+    .footer-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .footer-links li {
+      margin-bottom: 12px;
+    }
+
+    .footer-links a {
+      color: var(--footer-link);
+      text-decoration: none;
+      transition: var(--transition);
+      position: relative;
+      padding-left: 0;
+    }
+
+    .footer-links a:hover {
+      color: var(--footer-link-hover);
+      padding-left: 5px;
+    }
+
+    .contact-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .contact-list li {
+      margin-bottom: 20px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .contact-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background-color: rgba(37, 99, 235, 0.1);
+      color: var(--primary-color);
+      border-radius: 50%;
+      margin-right: 15px;
+      flex-shrink: 0;
+      transition: var(--transition);
+    }
+
+    .contact-item:hover .contact-icon {
+      background-color: var(--primary-color);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .contact-text {
+      color: var(--footer-link);
+    }
+
+    .contact-text a {
+      color: var(--footer-link);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .contact-text a:hover {
+      color: var(--footer-link-hover);
+    }
+
+    .social-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background-color: white;
+      color: var(--footer-link);
+      border-radius: 50%;
+      margin-right: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .social-icon:hover {
+      background-color: var(--primary-color);
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 15px rgba(37, 99, 235, 0.15);
+    }
+
+    .footer-divider {
+      border-color: rgba(203, 213, 225, 0.5);
+      margin: 30px 0;
+    }
+
+    .copyright {
+      color: var(--footer-text);
+      margin-bottom: 0;
+    }
+
+    .footer-policy-links {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .footer-policy-links li {
+      margin-left: 20px;
+    }
+
+    .footer-policy-links a {
+      color: var(--footer-link);
+      text-decoration: none;
+      transition: var(--transition);
+      font-size: 0.9rem;
+    }
+
+    .footer-policy-links a:hover {
+      color: var(--footer-link-hover);
+    }
+
+    @media (max-width: 767px) {
+      .footer {
+        padding: 60px 0 30px;
+      }
+
+      .footer-policy-links {
+        justify-content: center;
+        margin-top: 15px;
+      }
+
+      .footer-policy-links li {
+        margin: 0 10px;
+      }
+    }
+  </style>
 </footer>
 </body>
 </html>

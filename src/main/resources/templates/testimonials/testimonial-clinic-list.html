@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Отзывы о клинике</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    .testimonial-card {
+      transition: all 0.3s ease;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    .testimonial-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .avatar-placeholder {
+      width: 60px;
+      height: 60px;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .rating-stars {
+      color: #ffc107;
+    }
+
+    .rating-stars i {
+      margin-right: 2px;
+    }
+
+    .testimonial-card .card {
+      border: none;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .testimonial-meta {
+      font-size: 0.85rem;
+    }
+
+    .testimonial-recommend {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      background-color: rgba(25, 135, 84, 0.1);
+      color: #198754;
+      border-radius: 20px;
+      font-size: 0.85rem;
+    }
+
+    .testimonial-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .clinic-name {
+      display: inline-block;
+      padding: 4px 10px;
+      background-color: rgba(13, 110, 253, 0.1);
+      color: #0d6efd;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      margin-right: 8px;
+    }
+
+    .treatment-type {
+      display: inline-block;
+      padding: 4px 10px;
+      background-color: rgba(108, 117, 125, 0.1);
+      color: #6c757d;
+      border-radius: 20px;
+      font-size: 0.85rem;
+    }
+
+    .testimonial-date {
+      color: #6c757d;
+      font-size: 0.85rem;
+    }
+
+    .testimonial-section-header {
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .testimonial-section-header h2 {
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .testimonial-section-header p {
+      max-width: 700px;
+      margin: 0 auto;
+      color: #6c757d;
+    }
+
+    .no-testimonials {
+      text-align: center;
+      padding: 30px;
+      background-color: #f8f9fa;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<link rel="stylesheet" th:href="@{/css/header.css}">
+<header th:replace="~{fragments/header :: header}"></header>
+
+
+<div class="container py-5">
+  <div class="testimonial-section-header">
+    <h2 th:text="${'Отзывы о клинике ' + (testimonials.size() > 0 ? testimonials.get(0).getClinicName() : '')}">Отзывы о клинике</h2>
+    <p>Отзывы наших пациентов, которые прошли лечение в данной клинике</p>
+  </div>
+
+  <!-- Если отзывов нет -->
+  <div th:if="${testimonials.isEmpty()}" class="no-testimonials">
+    <i class="fas fa-comment-slash fa-3x mb-3 text-muted"></i>
+    <h3>Отзывов пока нет</h3>
+    <p class="mb-4">Будьте первым, кто оставит отзыв о данной клинике</p>
+    <a th:href="@{/testimonials/create}" class="btn btn-primary">Оставить отзыв</a>
+  </div>
+
+  <!-- Список отзывов -->
+  <div th:if="${!testimonials.isEmpty()}" class="row">
+    <div class="col-12" th:each="testimonial : ${testimonials}">
+      <div class="testimonial-card">
+        <div class="card">
+          <div class="card-body">
+            <div class="testimonial-header mb-3">
+              <div class="d-flex">
+                <!-- Аватар (фото) клиента -->
+                <div class="me-3">
+                  <img th:if="${testimonial.clientPhotoUrl != null}" th:src="${testimonial.clientPhotoUrl}"
+                       alt="Фото клиента" class="rounded-circle"
+                       style="width: 60px; height: 60px; object-fit: cover;">
+                  <div th:unless="${testimonial.clientPhotoUrl != null}"
+                       class="avatar-placeholder rounded-circle bg-primary text-white d-flex align-items-center justify-content-center">
+                    <span th:text="${#strings.substring(testimonial.clientName, 0, 1).toUpperCase()}">А</span>
+                  </div>
+                </div>
+
+                <!-- Информация о клиенте -->
+                <div>
+                  <h5 class="card-title mb-1" th:text="${testimonial.clientName}">Имя клиента</h5>
+                  <div class="testimonial-meta mb-2">
+                    <span th:if="${testimonial.clientCity != null}" th:text="${testimonial.clientCity}">Город</span>
+                    <span th:if="${testimonial.clientCity != null && testimonial.clientCountry != null}">, </span>
+                    <span th:if="${testimonial.clientCountry != null}" th:text="${testimonial.clientCountry}">Страна</span>
+                  </div>
+
+                  <!-- Рейтинг звездами -->
+                  <div class="rating-stars">
+                    <i th:each="i : ${#numbers.sequence(1, 5)}"
+                       th:class="${i <= testimonial.rating ? 'fas fa-star' : 'far fa-star'}"></i>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Дата отзыва -->
+              <div class="testimonial-date" th:text="${#temporals.format(testimonial.createdAt, 'dd.MM.yyyy')}">
+                01.01.2023
+              </div>
+            </div>
+
+            <!-- Текст отзыва -->
+            <p class="card-text" th:text="${testimonial.reviewText}">
+              Текст отзыва пациента о клинике и полученном лечении...
+            </p>
+
+            <!-- Дополнительная информация об отзыве -->
+            <div class="d-flex justify-content-between align-items-center mt-4">
+              <div>
+                                    <span class="treatment-type" th:if="${testimonial.treatmentType != null}"
+                                          th:text="${testimonial.treatmentType}">Тип лечения</span>
+              </div>
+
+              <!-- Рекомендация -->
+              <div th:if="${testimonial.wouldRecommend}" class="testimonial-recommend">
+                <i class="fas fa-thumbs-up me-2"></i> Рекомендует
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Кнопка для добавления своего отзыва -->
+    <div class="col-12 text-center mt-3">
+      <a th:href="@{/testimonials/create}" class="btn btn-primary">
+        <i class="fas fa-pen me-2"></i>Оставить отзыв
+      </a>
+
+      <!-- Если есть ID клиники, добавляем ссылку на все отзывы клиники -->
+      <a th:if="${clinicId != null}" th:href="@{/clinics/{id}(id=${clinicId})}" class="btn btn-outline-primary ms-2">
+        <i class="fas fa-hospital me-2"></i>К странице клиники
+      </a>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

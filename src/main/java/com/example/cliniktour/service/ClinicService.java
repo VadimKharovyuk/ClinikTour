@@ -25,6 +25,11 @@ public class ClinicService {
     private final ClinicMapper clinicMapper;
     private final ImgurService imgurService;
 
+
+    public List<ClinicDto> getAllClinicsList() {
+        List<Clinic> clinics = clinicRepository.findAll();
+        return clinicMapper.toDtoList(clinics);
+    }
     /**
      * Получение страницы клиник с преобразованием в DTO
      */
@@ -146,5 +151,29 @@ public class ClinicService {
     public List<ClinicDto> getLatestClinics(int limit) {
         List<Clinic> clinics = clinicRepository.findLatestClinics(PageRequest.of(0, limit));
         return clinicMapper.toDtoList(clinics);
+    }
+
+    /**
+     * Получение списка всех уникальных городов из клиник
+     */
+    public List<String> getAllCities() {
+        return clinicRepository.findAll().stream()
+                .map(Clinic::getCity)
+                .filter(city -> city != null && !city.isEmpty())
+                .distinct()
+                .sorted()
+                .toList();
+    }
+
+    /**
+     * Получение списка всех уникальных стран из клиник
+     */
+    public List<String> getAllCountries() {
+        return clinicRepository.findAll().stream()
+                .map(Clinic::getCountry)
+                .filter(country -> country != null && !country.isEmpty())
+                .distinct()
+                .sorted()
+                .toList();
     }
 }
