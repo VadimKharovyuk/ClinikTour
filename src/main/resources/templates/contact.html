@@ -1,35 +1,560 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--  <meta charset="UTF-8">-->
+<!--  <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--  <title>Контакты - Asiamedtour</title>-->
+<!--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">-->
+<!--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">-->
+<!--  <link rel="stylesheet" th:href="@{/css/styles.css}">-->
+<!--</head>-->
+<!--<body>-->
+<!--&lt;!&ndash; Навигация &ndash;&gt;-->
+<!--<link rel="stylesheet" th:href="@{/css/header.css}">-->
+<!--<header th:replace="~{fragments/header :: header}"></header>-->
+
+<!--&lt;!&ndash; Основной контент &ndash;&gt;-->
+<!--<main>-->
+<!--  &lt;!&ndash; Верхний баннер с картой &ndash;&gt;-->
+<!--  <div class="bg-primary text-white py-5">-->
+<!--    <div class="container">-->
+<!--      <div class="row align-items-center">-->
+<!--        <div class="col-lg-6 mb-4 mb-lg-0">-->
+<!--          <h1 class="display-4 fw-bold mb-3">Свяжитесь с нами</h1>-->
+<!--          <p class="lead">Наша команда готова ответить на все ваши вопросы о медицинском туризме и помочь с организацией лечения за рубежом.</p>-->
+<!--        </div>-->
+<!--        <div class="col-lg-6">-->
+<!--          <div class="rounded shadow overflow-hidden">-->
+<!--            &lt;!&ndash; Встроенная карта (при желании можно заменить на Google Maps или Yandex Maps) &ndash;&gt;-->
+<!--            <iframe-->
+<!--                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3011.5132944457236!2d29.105315876583868!3d40.99164082082592!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cac8e8dba44019%3A0x7919a8d8b3150c09!2sAta%C5%9Fehir%2C%20D-100%20G%C3%BCney%20Yanyolu%2C%2034746%20Ata%C5%9Fehir%2F%C4%B0stanbul%2C%20Turkey!5e0!3m2!1sen!2sus!4v1711706841182!5m2!1sen!2sus"-->
+<!--                    width="100%"-->
+<!--                    height="350"-->
+<!--                    style="border:0;"-->
+<!--                    allowfullscreen=""-->
+<!--                    loading="lazy"-->
+<!--                    referrerpolicy="no-referrer-when-downgrade">-->
+<!--            </iframe>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; Секция с контактной информацией и формой &ndash;&gt;-->
+<!--  <div class="container py-5">-->
+<!--    &lt;!&ndash; Алерты для сообщений &ndash;&gt;-->
+<!--    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">-->
+<!--      <span th:text="${success}">Сообщение успешно отправлено!</span>-->
+<!--      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
+<!--    </div>-->
+<!--    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">-->
+<!--      <span th:text="${error}">Произошла ошибка при отправке сообщения.</span>-->
+<!--      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
+<!--    </div>-->
+
+<!--    <div class="row">-->
+<!--      &lt;!&ndash; Контактная информация &ndash;&gt;-->
+<!--      <div class="col-lg-4 mb-4 mb-lg-0">-->
+<!--        <h2 class="h3 mb-4">Наши контакты</h2>-->
+
+<!--        <div class="d-flex mb-4">-->
+<!--          <div class="flex-shrink-0 bg-primary text-white rounded-circle p-3 me-3">-->
+<!--            <i class="fas fa-map-marker-alt"></i>-->
+<!--          </div>-->
+<!--          <div>-->
+<!--            <h3 class="h5">Адрес</h3>-->
+<!--            <p class="mb-0">Стамбул, Турция<br>Ataşehir, D-100</p>-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--        <div class="d-flex mb-4">-->
+<!--          <div class="flex-shrink-0 bg-primary text-white rounded-circle p-3 me-3">-->
+<!--            <i class="fas fa-phone"></i>-->
+<!--          </div>-->
+<!--          <div>-->
+<!--            <h3 class="h5">Телефон</h3>-->
+<!--            <p class="mb-0">-->
+<!--              <a href="tel:+905321234567" class="text-decoration-none">+90 532 123 45 67</a>-->
+<!--            </p>-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--        <div class="d-flex mb-4">-->
+<!--          <div class="flex-shrink-0 bg-primary text-white rounded-circle p-3 me-3">-->
+<!--            <i class="fas fa-envelope"></i>-->
+<!--          </div>-->
+<!--          <div>-->
+<!--            <h3 class="h5">Email</h3>-->
+<!--            <p class="mb-0">-->
+<!--              <a href="mailto:info@asiamedtour.com" class="text-decoration-none">info@asiamedtour.com</a>-->
+<!--            </p>-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--        <div class="d-flex mb-4">-->
+<!--          <div class="flex-shrink-0 bg-primary text-white rounded-circle p-3 me-3">-->
+<!--            <i class="fas fa-clock"></i>-->
+<!--          </div>-->
+<!--          <div>-->
+<!--            <h3 class="h5">Часы работы</h3>-->
+<!--            <p class="mb-0">Пн-Пт: 9:00 - 18:00<br>Сб: 10:00 - 15:00<br>Вс: выходной</p>-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Социальные сети &ndash;&gt;-->
+<!--        <h3 class="h5 mb-3">Мы в социальных сетях</h3>-->
+<!--        <div class="d-flex gap-2 mb-4">-->
+<!--          <a href="#" class="btn btn-outline-primary rounded-circle">-->
+<!--            <i class="fab fa-facebook-f"></i>-->
+<!--          </a>-->
+<!--          <a href="#" class="btn btn-outline-primary rounded-circle">-->
+<!--            <i class="fab fa-instagram"></i>-->
+<!--          </a>-->
+<!--          <a href="#" class="btn btn-outline-primary rounded-circle">-->
+<!--            <i class="fab fa-twitter"></i>-->
+<!--          </a>-->
+<!--          <a href="#" class="btn btn-outline-primary rounded-circle">-->
+<!--            <i class="fab fa-whatsapp"></i>-->
+<!--          </a>-->
+<!--          <a href="#" class="btn btn-outline-primary rounded-circle">-->
+<!--            <i class="fab fa-telegram"></i>-->
+<!--          </a>-->
+<!--        </div>-->
+<!--      </div>-->
+
+<!--      &lt;!&ndash; Контактная форма &ndash;&gt;-->
+<!--      <div class="col-lg-8">-->
+<!--        <div class="card shadow-sm">-->
+<!--          <div class="card-header bg-primary text-white">-->
+<!--            <h2 class="h3 mb-0">Свяжитесь с нами</h2>-->
+<!--          </div>-->
+<!--          <div class="card-body">-->
+<!--            <p class="mb-4">Заполните форму ниже, и наши специалисты свяжутся с вами в ближайшее время для консультации и ответа на вопросы.</p>-->
+
+<!--            <form th:action="@{/contact/submit}" method="post">-->
+<!--              <div class="row g-3">-->
+<!--                <div class="col-md-6">-->
+<!--                  <label for="firstName" class="form-label">Имя <span class="text-danger">*</span></label>-->
+<!--                  <input type="text" class="form-control" id="firstName" name="firstName"-->
+<!--                         th:value="${firstName}" required>-->
+<!--                </div>-->
+<!--                <div class="col-md-6">-->
+<!--                  <label for="lastName" class="form-label">Фамилия <span class="text-danger">*</span></label>-->
+<!--                  <input type="text" class="form-control" id="lastName" name="lastName"-->
+<!--                         th:value="${lastName}" required>-->
+<!--                </div>-->
+<!--                <div class="col-md-6">-->
+<!--                  <label for="email" class="form-label">Email <span class="text-danger">*</span></label>-->
+<!--                  <input type="email" class="form-control" id="email" name="email"-->
+<!--                         th:value="${email}" required>-->
+<!--                </div>-->
+<!--                <div class="col-md-6">-->
+<!--                  <label for="phone" class="form-label">Телефон <span class="text-danger">*</span></label>-->
+<!--                  <input type="tel" class="form-control" id="phone" name="phone"-->
+<!--                         th:value="${phone}" required>-->
+<!--                </div>-->
+<!--                <div class="col-12">-->
+<!--                  <label for="message" class="form-label">Сообщение <span class="text-danger">*</span></label>-->
+<!--                  <textarea class="form-control" id="message" name="message" rows="5"-->
+<!--                            th:text="${message}" required></textarea>-->
+<!--                </div>-->
+<!--                <div class="col-12">-->
+<!--                  <div class="form-check">-->
+<!--                    <input class="form-check-input" type="checkbox" id="privacy" required>-->
+<!--                    <label class="form-check-label" for="privacy">-->
+<!--                      Я согласен на обработку персональных данных и принимаю <a href="/privacy" target="_blank">политику конфиденциальности</a>-->
+<!--                    </label>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--                <div class="col-12">-->
+<!--                  <button type="submit" class="btn btn-primary">Отправить сообщение</button>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </form>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; Секция с часто задаваемыми вопросами &ndash;&gt;-->
+<!--  <div class="bg-light py-5">-->
+<!--    <div class="container">-->
+<!--      <h2 class="text-center mb-5">Часто задаваемые вопросы</h2>-->
+
+<!--      <div class="row justify-content-center">-->
+<!--        <div class="col-lg-10">-->
+<!--          <div class="accordion" id="faqAccordion">-->
+<!--            <div class="accordion-item">-->
+<!--              <h3 class="accordion-header" id="faqHeading1">-->
+<!--                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse1" aria-expanded="true" aria-controls="faqCollapse1">-->
+<!--                  Как организовать лечение за границей?-->
+<!--                </button>-->
+<!--              </h3>-->
+<!--              <div id="faqCollapse1" class="accordion-collapse collapse show" aria-labelledby="faqHeading1" data-bs-parent="#faqAccordion">-->
+<!--                <div class="accordion-body">-->
+<!--                  <p>Организация лечения за границей через наш сервис проходит в несколько этапов:</p>-->
+<!--                  <ol>-->
+<!--                    <li>Заполните форму на сайте или свяжитесь с нами напрямую</li>-->
+<!--                    <li>Наши специалисты проанализируют вашу медицинскую документацию и предложат оптимальные варианты лечения</li>-->
+<!--                    <li>Мы организуем консультацию с зарубежным специалистом (очную или дистанционную)</li>-->
+<!--                    <li>После согласования плана лечения мы помогаем с оформлением визы, бронированием жилья и трансфера</li>-->
+<!--                    <li>Во время лечения вам предоставляется переводчик и постоянная поддержка нашего специалиста</li>-->
+<!--                  </ol>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+
+<!--            <div class="accordion-item">-->
+<!--              <h3 class="accordion-header" id="faqHeading2">-->
+<!--                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse2" aria-expanded="false" aria-controls="faqCollapse2">-->
+<!--                  Сколько стоит лечение за рубежом?-->
+<!--                </button>-->
+<!--              </h3>-->
+<!--              <div id="faqCollapse2" class="accordion-collapse collapse" aria-labelledby="faqHeading2" data-bs-parent="#faqAccordion">-->
+<!--                <div class="accordion-body">-->
+<!--                  <p>Стоимость лечения зависит от многих факторов: страны, клиники, типа заболевания, необходимых процедур и длительности лечения. Мы предоставляем детальный расчет стоимости лечения после анализа медицинских документов.</p>-->
+<!--                  <p>В стоимость обычно входят:</p>-->
+<!--                  <ul>-->
+<!--                    <li>Консультации специалистов</li>-->
+<!--                    <li>Диагностические процедуры</li>-->
+<!--                    <li>Само лечение или операция</li>-->
+<!--                    <li>Пребывание в стационаре</li>-->
+<!--                    <li>Необходимые лекарства</li>-->
+<!--                  </ul>-->
+<!--                  <p>Дополнительные расходы могут включать перелет, проживание вне клиники, питание, услуги переводчика и т.д.</p>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+
+<!--            <div class="accordion-item">-->
+<!--              <h3 class="accordion-header" id="faqHeading3">-->
+<!--                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse3" aria-expanded="false" aria-controls="faqCollapse3">-->
+<!--                  Какие документы нужны для лечения за границей?-->
+<!--                </button>-->
+<!--              </h3>-->
+<!--              <div id="faqCollapse3" class="accordion-collapse collapse" aria-labelledby="faqHeading3" data-bs-parent="#faqAccordion">-->
+<!--                <div class="accordion-body">-->
+<!--                  <p>Для организации лечения за границей необходимы следующие документы:</p>-->
+<!--                  <ul>-->
+<!--                    <li>Загранпаспорт (срок действия не менее 6 месяцев после предполагаемого возвращения)</li>-->
+<!--                    <li>Медицинская документация (выписки, заключения, результаты обследований, снимки)</li>-->
+<!--                    <li>Документы для оформления визы (различаются в зависимости от страны)</li>-->
+<!--                  </ul>-->
+<!--                  <p>Наши специалисты помогут вам подготовить все необходимые документы и проконсультируют по каждому этапу.</p>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+
+<!--            <div class="accordion-item">-->
+<!--              <h3 class="accordion-header" id="faqHeading4">-->
+<!--                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse4" aria-expanded="false" aria-controls="faqCollapse4">-->
+<!--                  Нужен ли переводчик во время лечения?-->
+<!--                </button>-->
+<!--              </h3>-->
+<!--              <div id="faqCollapse4" class="accordion-collapse collapse" aria-labelledby="faqHeading4" data-bs-parent="#faqAccordion">-->
+<!--                <div class="accordion-body">-->
+<!--                  <p>Да, наличие переводчика крайне важно для эффективной коммуникации с медицинским персоналом. Мы предоставляем услуги профессиональных переводчиков, специализирующихся в медицинской терминологии, которые сопровождают пациентов на всех этапах лечения.</p>-->
+<!--                  <p>Переводчик помогает:</p>-->
+<!--                  <ul>-->
+<!--                    <li>Во время консультаций с врачами</li>-->
+<!--                    <li>При заполнении медицинских форм</li>-->
+<!--                    <li>При прохождении диагностических процедур</li>-->
+<!--                    <li>В решении бытовых вопросов во время пребывания в стране</li>-->
+<!--                  </ul>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+
+<!--            <div class="accordion-item">-->
+<!--              <h3 class="accordion-header" id="faqHeading5">-->
+<!--                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse5" aria-expanded="false" aria-controls="faqCollapse5">-->
+<!--                  Как долго длится организация лечения?-->
+<!--                </button>-->
+<!--              </h3>-->
+<!--              <div id="faqCollapse5" class="accordion-collapse collapse" aria-labelledby="faqHeading5" data-bs-parent="#faqAccordion">-->
+<!--                <div class="accordion-body">-->
+<!--                  <p>Сроки организации лечения зависят от нескольких факторов:</p>-->
+<!--                  <ul>-->
+<!--                    <li>Срочности лечения (в экстренных случаях процесс ускоряется)</li>-->
+<!--                    <li>Выбранной страны и клиники</li>-->
+<!--                    <li>Времени на оформление визы</li>-->
+<!--                    <li>Доступности выбранных специалистов</li>-->
+<!--                  </ul>-->
+<!--                  <p>В среднем, на организацию планового лечения требуется от 2 до 4 недель. В экстренных случаях мы можем организовать лечение в течение нескольких дней.</p>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+
+<!--      <div class="text-center mt-5">-->
+<!--        <p>Не нашли ответ на свой вопрос?</p>-->
+<!--        <a href="#" class="btn btn-primary" onclick="document.getElementById('firstName').focus(); return false;">Задайте его нам</a>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</main>-->
+
+<!--&lt;!&ndash; Подвал &ndash;&gt;-->
+<!--<link rel="stylesheet" th:href="@{/css/footer.css}">-->
+<!--<footer th:replace="~{fragments/footer :: footer}"></footer>-->
+
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>-->
+<!--<script th:src="@{/js/scripts.js}"></script>-->
+<!--</body>-->
+<!--</html>-->
+
+
+
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Контакты - Asiamedtour</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #2563eb;
+      --primary-dark: #1e40af;
+      --secondary-color: #f0f9ff;
+      --accent-color: #4f46e5;
+      --text-color: #1e293b;
+      --text-muted: #64748b;
+      --border-radius: 12px;
+      --transition: all 0.3s ease;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      color: var(--text-color);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* Навигация */
+    .navbar {
+      background-color: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+      padding: 20px 0;
+      transition: var(--transition);
+    }
+
+    /* Header banner */
+    .contact-banner {
+      position: relative;
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      padding: 100px 0 80px;
+      color: white;
+      overflow: hidden;
+    }
+
+    .contact-banner::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB4PSIwIiB5PSIwIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSgzMCkiPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIyIiBoZWlnaHQ9IjIiIGZpbGw9IiNmZmZmZmYiIG9wYWNpdHk9IjAuMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==');
+      opacity: 0.6;
+    }
+
+    .contact-banner-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .map-container {
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      height: 400px;
+    }
+
+    /* Контактная информация */
+    .contact-card {
+      border-radius: var(--border-radius);
+      transition: var(--transition);
+      border: none;
+      overflow: hidden;
+    }
+
+    .contact-icon {
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background-color: rgba(37, 99, 235, 0.1);
+      color: var(--primary-color);
+      font-size: 1.2rem;
+      transition: var(--transition);
+    }
+
+    .contact-item {
+      transition: var(--transition);
+      padding: 1rem;
+      border-radius: var(--border-radius);
+      margin-bottom: 1.5rem;
+    }
+
+    .contact-item:hover {
+      background-color: white;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      transform: translateY(-5px);
+    }
+
+    .contact-item:hover .contact-icon {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    /* Социальные сети */
+    .social-icon {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background-color: white;
+      color: var(--primary-color);
+      border: 1px solid rgba(37, 99, 235, 0.2);
+      transition: var(--transition);
+      margin-right: 0.5rem;
+    }
+
+    .social-icon:hover {
+      background-color: var(--primary-color);
+      color: white;
+      transform: translateY(-3px);
+    }
+
+    /* Форма обратной связи */
+    .form-card {
+      border: none;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    .form-card-header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 1.5rem;
+      border-bottom: none;
+    }
+
+    .form-control {
+      padding: 0.8rem 1rem;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--border-radius);
+      transition: var(--transition);
+    }
+
+    .form-control:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.25);
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      border-radius: var(--border-radius);
+      padding: 0.8rem 1.5rem;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      border-color: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    /* FAQ секция */
+    .faq-section {
+      background-color: #f8fafc;
+      padding: 5rem 0;
+    }
+
+    .accordion-item {
+      border: none;
+      margin-bottom: 1rem;
+      border-radius: var(--border-radius) !important;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    }
+
+    .accordion-button {
+      padding: 1.2rem 1.5rem;
+      font-weight: 600;
+      background-color: white;
+      box-shadow: none !important;
+    }
+
+    .accordion-button:not(.collapsed) {
+      color: var(--primary-color);
+      background-color: rgba(37, 99, 235, 0.03);
+    }
+
+    .accordion-button:focus {
+      box-shadow: none;
+      border-color: rgba(37, 99, 235, 0.1);
+    }
+
+    .accordion-button::after {
+      background-size: 1rem;
+      transition: var(--transition);
+    }
+
+    .accordion-body {
+      padding: 1.5rem;
+      background-color: white;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 991px) {
+      .contact-banner {
+        padding: 80px 0 60px;
+        text-align: center;
+      }
+
+      .map-container {
+        margin-top: 2rem;
+      }
+    }
+  </style>
 </head>
 <body>
 <!-- Навигация -->
-<link rel="stylesheet" th:href="@{/css/header.css}">
 <header th:replace="~{fragments/header :: header}"></header>
 
 <!-- Основной контент -->
 <main>
   <!-- Верхний баннер с картой -->
-  <div class="bg-primary text-white py-5">
+  <section class="contact-banner">
     <div class="container">
       <div class="row align-items-center">
-        <div class="col-lg-6 mb-4 mb-lg-0">
-          <h1 class="display-4 fw-bold mb-3">Свяжитесь с нами</h1>
-          <p class="lead">Наша команда готова ответить на все ваши вопросы о медицинском туризме и помочь с организацией лечения за рубежом.</p>
+        <div class="col-lg-6 mb-4 mb-lg-0 contact-banner-content">
+          <h6 class="text-white-50 text-uppercase fw-bold mb-3">Контакты</h6>
+          <h1 class="display-4 fw-bold mb-4">Свяжитесь с нами</h1>
+          <p class="lead mb-0">Наша команда готова ответить на все ваши вопросы о медицинском туризме и помочь с организацией лечения за рубежом.</p>
         </div>
-        <div class="col-lg-6">
-          <div class="rounded shadow overflow-hidden">
-            <!-- Встроенная карта (при желании можно заменить на Google Maps или Yandex Maps) -->
+        <div class="col-lg-6 contact-banner-content">
+          <div class="map-container">
             <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3011.5132944457236!2d29.105315876583868!3d40.99164082082592!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cac8e8dba44019%3A0x7919a8d8b3150c09!2sAta%C5%9Fehir%2C%20D-100%20G%C3%BCney%20Yanyolu%2C%2034746%20Ata%C5%9Fehir%2F%C4%B0stanbul%2C%20Turkey!5e0!3m2!1sen!2sus!4v1711706841182!5m2!1sen!2sus"
                     width="100%"
-                    height="350"
+                    height="400"
                     style="border:0;"
                     allowfullscreen=""
                     loading="lazy"
@@ -39,149 +564,161 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- Секция с контактной информацией и формой -->
-  <div class="container py-5">
-    <!-- Алерты для сообщений -->
-    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
-      <span th:text="${success}">Сообщение успешно отправлено!</span>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
-      <span th:text="${error}">Произошла ошибка при отправке сообщения.</span>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-
-    <div class="row">
-      <!-- Контактная информация -->
-      <div class="col-lg-4 mb-4 mb-lg-0">
-        <h2 class="h3 mb-4">Наши контакты</h2>
-
-        <div class="d-flex mb-4">
-          <div class="flex-shrink-0 bg-primary text-white rounded-circle p-3 me-3">
-            <i class="fas fa-map-marker-alt"></i>
-          </div>
-          <div>
-            <h3 class="h5">Адрес</h3>
-            <p class="mb-0">Стамбул, Турция<br>Ataşehir, D-100</p>
-          </div>
-        </div>
-
-        <div class="d-flex mb-4">
-          <div class="flex-shrink-0 bg-primary text-white rounded-circle p-3 me-3">
-            <i class="fas fa-phone"></i>
-          </div>
-          <div>
-            <h3 class="h5">Телефон</h3>
-            <p class="mb-0">
-              <a href="tel:+905321234567" class="text-decoration-none">+90 532 123 45 67</a>
-            </p>
-          </div>
-        </div>
-
-        <div class="d-flex mb-4">
-          <div class="flex-shrink-0 bg-primary text-white rounded-circle p-3 me-3">
-            <i class="fas fa-envelope"></i>
-          </div>
-          <div>
-            <h3 class="h5">Email</h3>
-            <p class="mb-0">
-              <a href="mailto:info@asiamedtour.com" class="text-decoration-none">info@asiamedtour.com</a>
-            </p>
-          </div>
-        </div>
-
-        <div class="d-flex mb-4">
-          <div class="flex-shrink-0 bg-primary text-white rounded-circle p-3 me-3">
-            <i class="fas fa-clock"></i>
-          </div>
-          <div>
-            <h3 class="h5">Часы работы</h3>
-            <p class="mb-0">Пн-Пт: 9:00 - 18:00<br>Сб: 10:00 - 15:00<br>Вс: выходной</p>
-          </div>
-        </div>
-
-        <!-- Социальные сети -->
-        <h3 class="h5 mb-3">Мы в социальных сетях</h3>
-        <div class="d-flex gap-2 mb-4">
-          <a href="#" class="btn btn-outline-primary rounded-circle">
-            <i class="fab fa-facebook-f"></i>
-          </a>
-          <a href="#" class="btn btn-outline-primary rounded-circle">
-            <i class="fab fa-instagram"></i>
-          </a>
-          <a href="#" class="btn btn-outline-primary rounded-circle">
-            <i class="fab fa-twitter"></i>
-          </a>
-          <a href="#" class="btn btn-outline-primary rounded-circle">
-            <i class="fab fa-whatsapp"></i>
-          </a>
-          <a href="#" class="btn btn-outline-primary rounded-circle">
-            <i class="fab fa-telegram"></i>
-          </a>
-        </div>
+  <section class="py-5">
+    <div class="container">
+      <!-- Алерты для сообщений -->
+      <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${success}">Сообщение успешно отправлено!</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span th:text="${error}">Произошла ошибка при отправке сообщения.</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
 
-      <!-- Контактная форма -->
-      <div class="col-lg-8">
-        <div class="card shadow-sm">
-          <div class="card-header bg-primary text-white">
-            <h2 class="h3 mb-0">Свяжитесь с нами</h2>
-          </div>
-          <div class="card-body">
-            <p class="mb-4">Заполните форму ниже, и наши специалисты свяжутся с вами в ближайшее время для консультации и ответа на вопросы.</p>
+      <div class="row g-4">
+        <!-- Контактная информация -->
+        <div class="col-lg-4">
+          <div class="p-4 rounded-4 h-100 bg-light">
+            <h2 class="h3 fw-bold mb-4">Наши контакты</h2>
 
-            <form th:action="@{/contact/submit}" method="post">
-              <div class="row g-3">
-                <div class="col-md-6">
-                  <label for="firstName" class="form-label">Имя <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control" id="firstName" name="firstName"
-                         th:value="${firstName}" required>
-                </div>
-                <div class="col-md-6">
-                  <label for="lastName" class="form-label">Фамилия <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control" id="lastName" name="lastName"
-                         th:value="${lastName}" required>
-                </div>
-                <div class="col-md-6">
-                  <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
-                  <input type="email" class="form-control" id="email" name="email"
-                         th:value="${email}" required>
-                </div>
-                <div class="col-md-6">
-                  <label for="phone" class="form-label">Телефон <span class="text-danger">*</span></label>
-                  <input type="tel" class="form-control" id="phone" name="phone"
-                         th:value="${phone}" required>
-                </div>
-                <div class="col-12">
-                  <label for="message" class="form-label">Сообщение <span class="text-danger">*</span></label>
-                  <textarea class="form-control" id="message" name="message" rows="5"
-                            th:text="${message}" required></textarea>
-                </div>
-                <div class="col-12">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="privacy" required>
-                    <label class="form-check-label" for="privacy">
-                      Я согласен на обработку персональных данных и принимаю <a href="/privacy" target="_blank">политику конфиденциальности</a>
-                    </label>
+            <div class="contact-item d-flex align-items-center">
+              <div class="contact-icon me-3">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <div>
+                <h3 class="h6 fw-bold mb-1">Адрес</h3>
+                <p class="mb-0 text-muted">Стамбул, Турция<br>Ataşehir, D-100</p>
+              </div>
+            </div>
+
+            <div class="contact-item d-flex align-items-center">
+              <div class="contact-icon me-3">
+                <i class="fas fa-phone-alt"></i>
+              </div>
+              <div>
+                <h3 class="h6 fw-bold mb-1">Телефон</h3>
+                <p class="mb-0">
+                  <a href="tel:+905321234567" class="text-decoration-none text-muted">+90 532 123 45 67</a>
+                </p>
+              </div>
+            </div>
+
+            <div class="contact-item d-flex align-items-center">
+              <div class="contact-icon me-3">
+                <i class="fas fa-envelope"></i>
+              </div>
+              <div>
+                <h3 class="h6 fw-bold mb-1">Email</h3>
+                <p class="mb-0">
+                  <a href="mailto:info@asiamedtour.com" class="text-decoration-none text-muted">info@asiamedtour.com</a>
+                </p>
+              </div>
+            </div>
+
+            <div class="contact-item d-flex align-items-center">
+              <div class="contact-icon me-3">
+                <i class="fas fa-clock"></i>
+              </div>
+              <div>
+                <h3 class="h6 fw-bold mb-1">Часы работы</h3>
+                <p class="mb-0 text-muted">Пн-Пт: 9:00 - 18:00<br>Сб: 10:00 - 15:00<br>Вс: выходной</p>
+              </div>
+            </div>
+
+            <!-- Социальные сети -->
+            <div class="mt-4">
+              <h3 class="h6 fw-bold mb-3">Мы в социальных сетях</h3>
+              <div class="d-flex">
+                <a href="#" class="social-icon" title="Facebook">
+                  <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#" class="social-icon" title="Instagram">
+                  <i class="fab fa-instagram"></i>
+                </a>
+                <a href="#" class="social-icon" title="Twitter">
+                  <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#" class="social-icon" title="WhatsApp">
+                  <i class="fab fa-whatsapp"></i>
+                </a>
+                <a href="#" class="social-icon" title="Telegram">
+                  <i class="fab fa-telegram"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Контактная форма -->
+        <div class="col-lg-8">
+          <div class="form-card h-100">
+            <div class="form-card-header">
+              <h2 class="h3 fw-bold mb-0">Отправьте нам сообщение</h2>
+            </div>
+            <div class="card-body p-4">
+              <p class="mb-4">Заполните форму ниже, и наши специалисты свяжутся с вами в ближайшее время для консультации и ответа на вопросы.</p>
+
+              <form th:action="@{/contact/submit}" method="post">
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label for="firstName" class="form-label">Имя <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="firstName" name="firstName"
+                           th:value="${firstName}" required placeholder="Введите ваше имя">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="lastName" class="form-label">Фамилия <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="lastName" name="lastName"
+                           th:value="${lastName}" required placeholder="Введите вашу фамилию">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                    <input type="email" class="form-control" id="email" name="email"
+                           th:value="${email}" required placeholder="your@email.com">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="phone" class="form-label">Телефон <span class="text-danger">*</span></label>
+                    <input type="tel" class="form-control" id="phone" name="phone"
+                           th:value="${phone}" required placeholder="+7 (___) ___-__-__">
+                  </div>
+                  <div class="col-12">
+                    <label for="message" class="form-label">Сообщение <span class="text-danger">*</span></label>
+                    <textarea class="form-control" id="message" name="message" rows="5"
+                              th:text="${message}" required placeholder="Опишите ваш вопрос или запрос..."></textarea>
+                  </div>
+                  <div class="col-12">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="privacy" required>
+                      <label class="form-check-label" for="privacy">
+                        Я согласен на обработку персональных данных и принимаю <a href="/privacy" target="_blank">политику конфиденциальности</a>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <button type="submit" class="btn btn-primary">
+                      <i class="fas fa-paper-plane me-2"></i>Отправить сообщение
+                    </button>
                   </div>
                 </div>
-                <div class="col-12">
-                  <button type="submit" class="btn btn-primary">Отправить сообщение</button>
-                </div>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- Секция с часто задаваемыми вопросами -->
-  <div class="bg-light py-5">
+  <section class="faq-section">
     <div class="container">
-      <h2 class="text-center mb-5">Часто задаваемые вопросы</h2>
+      <div class="text-center mb-5">
+        <h6 class="text-primary fw-bold text-uppercase mb-2">FAQ</h6>
+        <h2 class="h2 fw-bold">Часто задаваемые вопросы</h2>
+        <p class="text-muted mx-auto" style="max-width: 600px;">Ответы на наиболее распространенные вопросы о медицинском туризме и нашем сервисе</p>
+      </div>
 
       <div class="row justify-content-center">
         <div class="col-lg-10">
@@ -291,18 +828,28 @@
       </div>
 
       <div class="text-center mt-5">
-        <p>Не нашли ответ на свой вопрос?</p>
-        <a href="#" class="btn btn-primary" onclick="document.getElementById('firstName').focus(); return false;">Задайте его нам</a>
+        <div class="d-inline-block p-4 bg-white rounded-4 shadow-sm">
+          <p class="mb-3">Не нашли ответ на свой вопрос?</p>
+          <a href="#" class="btn btn-primary" onclick="document.getElementById('firstName').focus(); return false;">
+            <i class="fas fa-question-circle me-2"></i>Задайте его нам
+          </a>
+        </div>
       </div>
     </div>
-  </div>
+  </section>
 </main>
 
 <!-- Подвал -->
-<link rel="stylesheet" th:href="@{/css/footer.css}">
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-<script th:src="@{/js/scripts.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Простой скрипт для анимации формы при фокусе
+  document.querySelectorAll('.form-control').forEach(input => {
+    input.addEventListener('focus', function() {
+      this.parentElement.classList.add('was-validated');
+    });
+  });
+</script>
 </body>
 </html>

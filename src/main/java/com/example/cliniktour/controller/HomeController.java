@@ -34,6 +34,6 @@ public class HomeController {
         List<Department> popularDepartments = departmentService.getPopularDepartments(10);
         model.addAttribute("popularDepartments", popularDepartments);
 
-        return "home";
+        return "homeV1";
     }
 }

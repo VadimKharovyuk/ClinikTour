@@ -10,12 +10,22 @@ public class ClinikTourApplication {
         SpringApplication.run(ClinikTourApplication.class, args);
     }
 //   docker-compose up -d --build
+  //   ./mvnw clean package
+
+
     // Приложение будет доступно по адресу: http://localhost:2817
 
+    //______________________________________
+    //http://localhost:2817/doctors/1
+    //Специализация и навыки
+    //Специализация и навыки врача...
+    //Публикации и достижения
+    //Публикации и достижения врача...
 
 
 
-   //home Популярные клиники  кнопка ПОДРОБНЕЕ прыгает
+
+
 
 
 
