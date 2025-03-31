@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Просмотр отзыва - Администрирование</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #2563eb;
+      --primary-dark: #1e40af;
+      --secondary-color: #f0f9ff;
+      --accent-color: #4f46e5;
+      --text-color: #1e293b;
+      --text-muted: #64748b;
+      --border-radius: 12px;
+      --transition: all 0.3s ease;
+    }
+
+    body {
+      background-color: #f8fafc;
+      color: var(--text-color);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    .admin-container {
+      padding: 30px 0;
+    }
+
+    .admin-header {
+      margin-bottom: 30px;
+    }
+
+    .admin-card {
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      margin-bottom: 20px;
+      transition: var(--transition);
+      border: none;
+    }
+
+    .admin-card-header {
+      padding: 15px 20px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .admin-card-body {
+      padding: 20px;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      border-radius: var(--border-radius);
+      padding: 8px 16px;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      border-color: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline-primary {
+      color: var(--primary-color);
+      background-color: transparent;
+      border-color: var(--primary-color);
+      border-radius: var(--border-radius);
+      padding: 8px 16px;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .btn-outline-primary:hover {
+      background-color: var(--primary-color);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .btn-danger {
+      border-radius: var(--border-radius);
+      padding: 8px 16px;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .btn-danger:hover {
+      transform: translateY(-2px);
+    }
+
+    .rating-stars {
+      color: #ffc107;
+      font-size: 1.2rem;
+      margin: 15px 0;
+    }
+
+    .client-photo {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: var(--border-radius);
+      margin-bottom: 20px;
+    }
+
+    .detail-section {
+      margin-bottom: 30px;
+    }
+
+    .detail-label {
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: var(--text-muted);
+    }
+
+    .detail-value {
+      margin-bottom: 15px;
+    }
+
+    .badge-outline {
+      border: 1px solid currentColor;
+      background-color: transparent;
+      font-weight: 500;
+      padding: 5px 10px;
+      border-radius: 20px;
+    }
+
+    .recommend-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .recommend-yes {
+      background-color: rgba(25, 135, 84, 0.1);
+      color: #198754;
+    }
+
+    .recommend-no {
+      background-color: rgba(220, 53, 69, 0.1);
+      color: #dc3545;
+    }
+  </style>
+</head>
+<body>
+<div class="container admin-container">
+  <!-- Хлебные крошки -->
+  <nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/admin">Панель управления</a></li>
+      <li class="breadcrumb-item"><a href="/admin/testimonials">Отзывы</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Просмотр отзыва</li>
+    </ol>
+  </nav>
+
+  <!-- Заголовок страницы -->
+  <div class="admin-header d-flex justify-content-between align-items-center">
+    <h1 class="h2">Просмотр отзыва</h1>
+    <div>
+      <a href="/admin/testimonials" class="btn btn-outline-primary">
+        <i class="fas fa-arrow-left me-2"></i> Вернуться к списку
+      </a>
+    </div>
+  </div>
+
+  <!-- Алерты для сообщений -->
+  <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+    <i class="fas fa-check-circle me-2"></i>
+    <span th:text="${successMessage}">Операция выполнена успешно</span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+
+  <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <i class="fas fa-exclamation-circle me-2"></i>
+    <span th:text="${errorMessage}">Произошла ошибка</span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+
+  <div th:if="${warningMessage}" class="alert alert-warning alert-dismissible fade show" role="alert">
+    <i class="fas fa-exclamation-triangle me-2"></i>
+    <span th:text="${warningMessage}">Предупреждение</span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+
+  <!-- Основная информация -->
+  <div class="row">
+    <!-- Левая колонка - информация о клиенте -->
+    <div class="col-lg-4">
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <h5 class="mb-0">Информация о клиенте</h5>
+        </div>
+        <div class="admin-card-body text-center">
+          <!-- Фото клиента -->
+          <div th:if="${testimonial.clientPhotoUrl != null}">
+            <img th:src="${testimonial.clientPhotoUrl}" alt="Фото клиента" class="client-photo">
+
+            <!-- Кнопка удаления фото -->
+            <form th:action="@{/admin/testimonials/{id}/delete-photo(id=${testimonial.id})}" method="post">
+              <button type="submit" class="btn btn-outline-danger btn-sm mt-2 mb-4"
+                      onclick="return confirm('Вы уверены, что хотите удалить фото?')">
+                <i class="fas fa-trash-alt me-1"></i> Удалить фото
+              </button>
+            </form>
+          </div>
+
+          <div th:unless="${testimonial.clientPhotoUrl != null}" class="mb-4">
+            <div class="d-inline-flex bg-primary text-white rounded-circle align-items-center justify-content-center mb-3"
+                 style="width: 100px; height: 100px; font-size: 2rem;">
+              <span th:text="${#strings.substring(testimonial.clientName, 0, 1).toUpperCase()}">А</span>
+            </div>
+            <p class="text-muted">Фото отсутствует</p>
+          </div>
+
+          <!-- Данные клиента -->
+          <h3 class="h4 mb-3" th:text="${testimonial.clientName}">Имя клиента</h3>
+
+          <div class="detail-section text-start">
+            <div th:if="${testimonial.clientEmail != null}">
+              <div class="detail-label">Email</div>
+              <div class="detail-value">
+                <a th:href="'mailto:' + ${testimonial.clientEmail}" th:text="${testimonial.clientEmail}">
+                  email@example.com
+                </a>
+              </div>
+            </div>
+
+            <div th:if="${testimonial.clientCountry != null || testimonial.clientCity != null}">
+              <div class="detail-label">Местоположение</div>
+              <div class="detail-value">
+                <span th:if="${testimonial.clientCity != null}" th:text="${testimonial.clientCity}">Город</span>
+                <span th:if="${testimonial.clientCity != null && testimonial.clientCountry != null}">, </span>
+                <span th:if="${testimonial.clientCountry != null}" th:text="${testimonial.clientCountry}">Страна</span>
+              </div>
+            </div>
+
+            <div>
+              <div class="detail-label">Дата отзыва</div>
+              <div class="detail-value" th:text="${#temporals.format(testimonial.createdAt, 'dd MMMM yyyy, HH:mm')}">
+                01 января 2023, 12:34
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Правая колонка - содержание отзыва -->
+    <div class="col-lg-8">
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <h5 class="mb-0">Содержание отзыва</h5>
+        </div>
+        <div class="admin-card-body">
+          <!-- Клиника и рейтинг -->
+          <div class="mb-4">
+            <div class="detail-label">Клиника</div>
+            <div class="detail-value">
+                                <span class="badge-outline text-primary" th:text="${testimonial.clinicName}">
+                                    Название клиники
+                                </span>
+            </div>
+
+            <div class="detail-label">Тип лечения</div>
+            <div class="detail-value">
+                                <span th:if="${testimonial.treatmentType != null}" class="badge-outline text-secondary"
+                                      th:text="${testimonial.treatmentType}">
+                                    Тип лечения
+                                </span>
+              <span th:unless="${testimonial.treatmentType != null}" class="text-muted">
+                                    Не указано
+                                </span>
+            </div>
+
+            <div class="detail-label">Рейтинг</div>
+            <div class="rating-stars">
+              <i th:each="i : ${#numbers.sequence(1, 5)}"
+                 th:class="${i <= testimonial.rating ? 'fas fa-star' : 'far fa-star'}"></i>
+              <span class="ms-2 text-muted" th:text="${testimonial.rating + ' из 5'}">5 из 5</span>
+            </div>
+
+            <div class="detail-label">Рекомендация</div>
+            <div class="detail-value">
+              <div th:if="${testimonial.wouldRecommend}" class="recommend-badge recommend-yes">
+                <i class="fas fa-thumbs-up me-2"></i> Рекомендует эту клинику
+              </div>
+              <div th:unless="${testimonial.wouldRecommend}" class="recommend-badge recommend-no">
+                <i class="fas fa-thumbs-down me-2"></i> Не рекомендует эту клинику
+              </div>
+            </div>
+          </div>
+
+          <!-- Текст отзыва -->
+          <div class="mb-4">
+            <div class="detail-label">Текст отзыва</div>
+            <div class="detail-value p-3 bg-light rounded">
+              <div style="white-space: pre-line;" th:text="${testimonial.reviewText}">
+                Текст отзыва...
+              </div>
+            </div>
+          </div>
+
+          <!-- Кнопки действий -->
+          <div class="d-flex justify-content-end mt-4">
+            <a th:href="@{/testimonials/{id}(id=${testimonial.id})}" target="_blank" class="btn btn-outline-primary me-2">
+              <i class="fas fa-external-link-alt me-1"></i> Просмотр на сайте
+            </a>
+            <form th:action="@{/admin/testimonials/{id}/delete(id=${testimonial.id})}" method="post">
+              <button type="submit" class="btn btn-danger"
+                      onclick="return confirm('Вы уверены, что хотите удалить этот отзыв?')">
+                <i class="fas fa-trash-alt me-1"></i> Удалить отзыв
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
