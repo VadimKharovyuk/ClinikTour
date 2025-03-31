@@ -123,7 +123,7 @@ public class TestimonialController {
     public String getTestimonialsByClinicFragment(
             @PathVariable Long clinicId,
             Model model) {
-        List<TestimonialListDTO> clinicTestimonials = testimonialService.getTestimonialsByClinic(clinicId);
+        List<TestimonialListDTO> clinicTestimonials = testimonialService.getTestimonialsByClinicId(clinicId);
         model.addAttribute("testimonials", clinicTestimonials);
         model.addAttribute("clinicId", clinicId);
 

@@ -2,6 +2,7 @@ package com.example.cliniktour.controller;
 
 import com.example.cliniktour.dto.ClinicDto;
 import com.example.cliniktour.dto.testimonial.TestimonialDetailDTO;
+import com.example.cliniktour.dto.testimonial.TestimonialListDTO;
 import com.example.cliniktour.model.Branches;
 import com.example.cliniktour.model.Clinic;
 import com.example.cliniktour.model.Testimonial;
@@ -104,8 +105,9 @@ public class ClinicController {
             // Получаем врачей, работающих в этой клинике
             model.addAttribute("doctors", doctorService.getDoctorsByClinicId(id));
 
-            TestimonialDetailDTO testimonial = testimonialService.getTestimonialById(id);
-            model.addAttribute("testimonial", testimonial);
+            // Используем множественное число для списка отзывов
+            List<TestimonialListDTO> testimonials = testimonialService.getTestimonialsByClinicId(id);
+            model.addAttribute("testimonials", testimonials);
 
             // Получаем отделения клиники
             if (clinic.getBranches() != null) {

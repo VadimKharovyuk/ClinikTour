@@ -49,6 +49,7 @@
       </div>
     </div>
 
+
     <!-- Изображение клиники -->
     <div class="col-lg-4">
       <div class="card shadow-sm">
@@ -60,7 +61,8 @@
           <h5 class="card-title">Связаться с клиникой</h5>
           <p class="card-text">Для получения дополнительной информации или записи на консультацию, свяжитесь с нами:</p>
           <a href="#contact-form" class="btn btn-primary w-100 mb-2">Оставить заявку</a>
-          <a th:href="@{/testimonials/{id}(id=${testimonial.id})}"  class="btn btn-outline-primary w-100">Отзывы о клинике</a>
+          <!-- Если нужно просто перейти к отзывам клиники по ID клиники -->
+          <a th:href="@{/testimonials/clinic-fragment/{id}(id=${clinic.id})}" class="btn btn-outline-primary w-100">Отзывы о клинике</a>
 
 
         </div>

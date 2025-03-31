@@ -19,7 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -37,8 +39,6 @@ public class TestimonialService {
      */
     @Transactional
     public TestimonialDetailDTO createTestimonial(TestimonialCreateDTO dto, MultipartFile photoFile) {
-        log.info("Создание нового отзыва от клиента: {}", dto.getClientName());
-
         Clinic clinic = clinicRepository.findById(dto.getClinicId())
                 .orElseThrow(() -> {
                     log.warn("Попытка создать отзыв для несуществующей клиники с ID: {}", dto.getClinicId());
@@ -83,11 +83,31 @@ public class TestimonialService {
      */
     @Transactional(readOnly = true)
     public List<TestimonialListDTO> getTestimonialsByClinic(Long clinicId) {
-        log.info("Получение отзывов для клиники с ID: {}", clinicId);
-
         return testimonialRepository.findByClinicIdOrderByCreatedAtDesc(clinicId)
                 .stream()
                 .map(testimonialMapper::toListDto)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Возвращает список отзывов для конкретной клиники
+     */
+    @Transactional(readOnly = true)
+    public List<TestimonialListDTO> getTestimonialsByClinicId(Long clinicId) {
+        log.info("Получение отзывов для клиники с ID: {}", clinicId);
+
+        List<Testimonial> testimonials = testimonialRepository.findByClinicIdOrderByCreatedAtDesc(clinicId);
+
+        return testimonials.stream()
+                .map(testimonial -> {
+                    try {
+                        return testimonialMapper.toListDto(testimonial);
+                    } catch (Exception e) {
+                        log.warn("Ошибка при маппинге отзыва ID {}: {}", testimonial.getId(), e.getMessage());
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
@@ -98,15 +118,21 @@ public class TestimonialService {
     public TestimonialDetailDTO getTestimonialById(Long id) {
         log.info("Получение отзыва с ID: {}", id);
 
-        Testimonial testimonial = testimonialRepository.findById(id)
-                .orElseThrow(() -> {
-                    log.warn("Попытка получить несуществующий отзыв с ID: {}", id);
-                    return new EntityNotFoundException("Отзыв с ID " + id + " не найден");
-                });
+        try {
+            Testimonial testimonial = testimonialRepository.findById(id)
+                    .orElseThrow(() -> {
+                        log.warn("Попытка получить несуществующий отзыв с ID: {}", id);
+                        return new EntityNotFoundException("Отзыв с ID " + id + " не найден");
+                    });
 
-        return testimonialMapper.toDetailDto(testimonial);
+            return testimonialMapper.toDetailDto(testimonial);
+        } catch (EntityNotFoundException e) {
+            throw e; // Пробрасываем дальше для обработки в контроллере
+        } catch (Exception e) {
+            log.error("Ошибка при получении отзыва с ID {}: {}", id, e.getMessage());
+            throw new RuntimeException("Не удалось получить данные отзыва", e);
+        }
     }
-
 
 
     /**
@@ -114,8 +140,6 @@ public class TestimonialService {
      */
     @Transactional
     public void deleteTestimonial(Long id) {
-        log.info("Удаление отзыва с ID: {}", id);
-
         Testimonial testimonial = testimonialRepository.findById(id)
                 .orElseThrow(() -> {
                     log.warn("Попытка удалить несуществующий отзыв с ID: {}", id);
@@ -124,7 +148,6 @@ public class TestimonialService {
 
         // Удаляем фото, если оно есть
         if (testimonial.getClientPhotoDeleteHash() != null) {
-            log.info("Удаление фото отзыва с ID: {}", id);
             boolean deleted = imgurService.deleteImage(testimonial.getClientPhotoDeleteHash());
             if (!deleted) {
                 log.warn("Не удалось удалить фото отзыва с ID: {}", id);
@@ -132,7 +155,7 @@ public class TestimonialService {
         }
 
         testimonialRepository.delete(testimonial);
-        log.info("Отзыв с ID: {} успешно удален", id);
+
     }
 
     /**
@@ -140,8 +163,6 @@ public class TestimonialService {
      */
     @Transactional
     public boolean deleteTestimonialPhoto(Long id) {
-        log.info("Удаление фото у отзыва с ID: {}", id);
-
         Testimonial testimonial = testimonialRepository.findById(id)
                 .orElseThrow(() -> {
                     log.warn("Попытка удалить фото у несуществующего отзыва с ID: {}", id);
