@@ -1,3 +1,229 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--  <meta charset="UTF-8">-->
+<!--  <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--  <title th:text="${post.title + ' - Asiamedtour'}">Заголовок статьи - Asiamedtour</title>-->
+<!--  <meta name="description" th:content="${post.excerpt}">-->
+<!--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">-->
+<!--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">-->
+<!--  <link rel="stylesheet" th:href="@{/css/styles.css}">-->
+<!--  <style>-->
+<!--    .blog-content {-->
+<!--      font-size: 1.1rem;-->
+<!--      line-height: 1.8;-->
+<!--    }-->
+<!--    .blog-content img {-->
+<!--      max-width: 100%;-->
+<!--      height: auto;-->
+<!--      border-radius: 5px;-->
+<!--      margin: 1.5rem 0;-->
+<!--    }-->
+<!--    .blog-content h2, .blog-content h3, .blog-content h4 {-->
+<!--      margin-top: 2rem;-->
+<!--      margin-bottom: 1rem;-->
+<!--    }-->
+<!--    .blog-content p {-->
+<!--      margin-bottom: 1.5rem;-->
+<!--    }-->
+<!--    .blog-content ul, .blog-content ol {-->
+<!--      margin-bottom: 1.5rem;-->
+<!--      padding-left: 2rem;-->
+<!--    }-->
+<!--    .blog-content blockquote {-->
+<!--      border-left: 4px solid #0d6efd;-->
+<!--      padding-left: 1rem;-->
+<!--      font-style: italic;-->
+<!--      color: #555;-->
+<!--      margin: 1.5rem 0;-->
+<!--    }-->
+<!--    .blog-header-image {-->
+<!--      width: 100%;-->
+<!--      max-height: 500px;-->
+<!--      object-fit: cover;-->
+<!--      border-radius: 5px;-->
+<!--      margin-bottom: 2rem;-->
+<!--    }-->
+<!--    .blog-meta {-->
+<!--      color: #6c757d;-->
+<!--      margin-bottom: 2rem;-->
+<!--    }-->
+<!--    .share-buttons {-->
+<!--      margin-top: 3rem;-->
+<!--      padding-top: 2rem;-->
+<!--      border-top: 1px solid #dee2e6;-->
+<!--    }-->
+<!--    .related-post-card {-->
+<!--      transition: transform 0.3s;-->
+<!--      height: 100%;-->
+<!--    }-->
+<!--    .related-post-card:hover {-->
+<!--      transform: translateY(-5px);-->
+<!--    }-->
+<!--    .related-post-img {-->
+<!--      height: 150px;-->
+<!--      object-fit: cover;-->
+<!--    }-->
+<!--  </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--&lt;!&ndash; Навигация &ndash;&gt;-->
+<!--<link rel="stylesheet" th:href="@{/css/header.css}">-->
+<!--<header th:replace="~{fragments/header :: header}"></header>-->
+
+<!--&lt;!&ndash; Основной контент &ndash;&gt;-->
+<!--<main class="container py-5">-->
+<!--  <div class="row">-->
+<!--    &lt;!&ndash; Хлебные крошки &ndash;&gt;-->
+<!--    <div class="col-12 mb-4">-->
+<!--      <nav aria-label="breadcrumb">-->
+<!--        <ol class="breadcrumb">-->
+<!--          <li class="breadcrumb-item"><a th:href="@{/}" class="text-decoration-none">Главная</a></li>-->
+<!--          <li class="breadcrumb-item"><a th:href="@{/blog}" class="text-decoration-none">Блог</a></li>-->
+<!--          <li class="breadcrumb-item active" aria-current="page" th:text="${post.title}">Заголовок статьи</li>-->
+<!--        </ol>-->
+<!--      </nav>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Основной контент статьи &ndash;&gt;-->
+<!--    <div class="col-lg-8">-->
+<!--      <article>-->
+<!--        <h1 class="mb-3" th:text="${post.title}">Заголовок статьи</h1>-->
+
+<!--        &lt;!&ndash; Метаданные &ndash;&gt;-->
+<!--        <div class="blog-meta d-flex align-items-center mb-4">-->
+<!--          <i class="far fa-calendar-alt me-2"></i>-->
+<!--          <span th:text="${#temporals.format(post.createdAt, 'dd MMMM yyyy')}">01 января 2023</span>-->
+<!--          <span class="mx-3">•</span>-->
+<!--          <i class="far fa-clock me-2"></i>-->
+<!--          <span>Время чтения: <span id="readingTime">5 мин</span></span>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Изображение статьи &ndash;&gt;-->
+<!--        <div th:if="${post.imagePath}">-->
+<!--          <img th:src="${post.imagePath}" class="blog-header-image" th:alt="${post.title}">-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Краткое описание &ndash;&gt;-->
+<!--        <div th:if="${post.excerpt}" class="mb-4">-->
+<!--          <div class="card bg-light">-->
+<!--            <div class="card-body">-->
+<!--              <p class="mb-0 lead" th:text="${post.excerpt}">Краткое описание статьи...</p>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Содержимое статьи &ndash;&gt;-->
+<!--        <div class="blog-content" th:utext="${post.content}">-->
+<!--          Содержимое статьи...-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Кнопки для шеринга &ndash;&gt;-->
+<!--        <div class="share-buttons">-->
+<!--          <h5 class="mb-3">Поделиться статьей:</h5>-->
+<!--          <div class="d-flex gap-2">-->
+<!--            <a href="#" onclick="shareOnFacebook(); return false;" class="btn btn-outline-primary">-->
+<!--              <i class="fab fa-facebook-f me-2"></i>Facebook-->
+<!--            </a>-->
+<!--            <a href="#" onclick="shareOnTwitter(); return false;" class="btn btn-outline-info">-->
+<!--              <i class="fab fa-twitter me-2"></i>Twitter-->
+<!--            </a>-->
+<!--            <a href="#" onclick="shareOnTelegram(); return false;" class="btn btn-outline-info">-->
+<!--              <i class="fab fa-telegram me-2"></i>Telegram-->
+<!--            </a>-->
+<!--            <a href="#" onclick="shareOnWhatsApp(); return false;" class="btn btn-outline-success">-->
+<!--              <i class="fab fa-whatsapp me-2"></i>WhatsApp-->
+<!--            </a>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </article>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Боковая панель &ndash;&gt;-->
+<!--    <div class="col-lg-4 mt-5 mt-lg-0">-->
+<!--      <div class="sticky-lg-top" style="top: 90px;">-->
+
+
+<!--        &lt;!&ndash; Последние статьи &ndash;&gt;-->
+<!--        <div class="card">-->
+<!--          <div class="card-header">-->
+<!--            <h5 class="mb-0">Вам также может быть интересно</h5>-->
+<!--          </div>-->
+<!--          <div class="card-body p-0">-->
+<!--            <div class="list-group list-group-flush">-->
+<!--              <div th:each="recentPost : ${recentPosts}"-->
+<!--                   th:if="${recentPost.id != post.id}" class="list-group-item p-3">-->
+<!--                <div class="row g-0">-->
+<!--                  <div class="col-4">-->
+<!--                    <img th:if="${recentPost.imagePath}" th:src="${recentPost.imagePath}"-->
+<!--                         class="img-fluid rounded" th:alt="${recentPost.title}">-->
+<!--                    <img th:unless="${recentPost.imagePath}" th:src="@{/img/default-blog-thumb.jpg}"-->
+<!--                         class="img-fluid rounded" alt="Изображение по умолчанию">-->
+<!--                  </div>-->
+<!--                  <div class="col-8 ps-3">-->
+<!--                    <h6 class="mb-1">-->
+<!--                      <a th:href="@{/blog/{id}(id=${recentPost.id})}" class="text-decoration-none"-->
+<!--                         th:text="${#strings.abbreviate(recentPost.title, 50)}">Заголовок статьи</a>-->
+<!--                    </h6>-->
+<!--                    <small class="text-muted"-->
+<!--                           th:text="${#temporals.format(recentPost.createdAt, 'dd.MM.yyyy')}">01.01.2023</small>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="card-footer bg-white text-center">-->
+<!--              <a th:href="@{/blog}" class="btn btn-outline-primary btn-sm">Все статьи</a>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</main>-->
+
+<!--&lt;!&ndash; Подвал &ndash;&gt;-->
+<!--<link rel="stylesheet" th:href="@{/css/footer.css}">-->
+<!--<footer th:replace="~{fragments/footer :: footer}"></footer>-->
+
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>-->
+<!--<script th:src="@{/js/scripts.js}"></script>-->
+<!--<script>-->
+<!--  // Расчет примерного времени чтения-->
+<!--  document.addEventListener('DOMContentLoaded', function() {-->
+<!--    const content = document.querySelector('.blog-content');-->
+<!--    const text = content.textContent || content.innerText;-->
+<!--    const wordCount = text.split(/\s+/).length;-->
+<!--    const readingTime = Math.max(1, Math.ceil(wordCount / 200)); // Средняя скорость чтения 200 слов/мин-->
+<!--    document.getElementById('readingTime').textContent = readingTime + ' мин';-->
+<!--  });-->
+
+<!--  // Функции для шеринга в соцсетях-->
+<!--  function shareOnFacebook() {-->
+<!--    const url = encodeURIComponent(window.location.href);-->
+<!--    window.open('https://www.facebook.com/sharer/sharer.php?u=' + url, '_blank');-->
+<!--  }-->
+
+<!--  function shareOnTwitter() {-->
+<!--    const url = encodeURIComponent(window.location.href);-->
+<!--    const title = encodeURIComponent(document.title);-->
+<!--    window.open('https://twitter.com/intent/tweet?url=' + url + '&text=' + title, '_blank');-->
+<!--  }-->
+
+<!--  function shareOnTelegram() {-->
+<!--    const url = encodeURIComponent(window.location.href);-->
+<!--    const title = encodeURIComponent(document.title);-->
+<!--    window.open('https://t.me/share/url?url=' + url + '&text=' + title, '_blank');-->
+<!--  }-->
+
+<!--  function shareOnWhatsApp() {-->
+<!--    const url = encodeURIComponent(window.location.href);-->
+<!--    const title = encodeURIComponent(document.title);-->
+<!--    window.open('https://api.whatsapp.com/send?text=' + title + ' ' + url, '_blank');-->
+<!--  }-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -5,81 +231,429 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title th:text="${post.title + ' - Asiamedtour'}">Заголовок статьи - Asiamedtour</title>
   <meta name="description" th:content="${post.excerpt}">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <link rel="stylesheet" th:href="@{/css/styles.css}">
   <style>
-    .blog-content {
-      font-size: 1.1rem;
-      line-height: 1.8;
+    :root {
+      --primary-color: #2563eb;
+      --primary-dark: #1e40af;
+      --primary-light: #3b82f6;
+      --secondary-color: #f0f9ff;
+      --accent-color: #4f46e5;
+      --text-color: #1e293b;
+      --text-muted: #64748b;
+      --border-radius: 12px;
+      --transition: all 0.3s ease;
     }
-    .blog-content img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 5px;
-      margin: 1.5rem 0;
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      color: var(--text-color);
+      line-height: 1.7;
+      background-color: #f8fafc;
     }
-    .blog-content h2, .blog-content h3, .blog-content h4 {
-      margin-top: 2rem;
-      margin-bottom: 1rem;
+
+    /* Хлебные крошки */
+    .breadcrumb {
+      padding: 0;
+      margin-bottom: 30px;
+      background-color: transparent;
     }
-    .blog-content p {
-      margin-bottom: 1.5rem;
+
+    .breadcrumb-item a {
+      color: var(--text-muted);
+      transition: var(--transition);
+      text-decoration: none;
     }
-    .blog-content ul, .blog-content ol {
-      margin-bottom: 1.5rem;
-      padding-left: 2rem;
+
+    .breadcrumb-item a:hover {
+      color: var(--primary-color);
     }
-    .blog-content blockquote {
-      border-left: 4px solid #0d6efd;
-      padding-left: 1rem;
-      font-style: italic;
-      color: #555;
-      margin: 1.5rem 0;
+
+    .breadcrumb-item.active {
+      color: var(--text-color);
+      font-weight: 500;
     }
-    .blog-header-image {
+
+    .breadcrumb-item+.breadcrumb-item::before {
+      content: '\f054';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    /* Главный блок статьи */
+    .article-container {
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      margin-bottom: 40px;
+    }
+
+    .article-header {
+      padding: 40px 40px 0;
+    }
+
+    .article-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      line-height: 1.3;
+      margin-bottom: 25px;
+      color: var(--text-color);
+    }
+
+    .article-meta {
+      display: flex;
+      align-items: center;
+      color: var(--text-muted);
+      margin-bottom: 30px;
+      font-size: 0.95rem;
+    }
+
+    .article-meta-item {
+      display: flex;
+      align-items: center;
+      margin-right: 25px;
+    }
+
+    .article-meta-item i {
+      color: var(--primary-color);
+      margin-right: 8px;
+    }
+
+    /* Изображение статьи */
+    .article-featured-image {
       width: 100%;
       max-height: 500px;
       object-fit: cover;
-      border-radius: 5px;
-      margin-bottom: 2rem;
     }
-    .blog-meta {
-      color: #6c757d;
-      margin-bottom: 2rem;
+
+    .article-image-container {
+      margin-bottom: 40px;
+      position: relative;
     }
+
+    .article-category {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background-color: var(--primary-color);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+    }
+
+    /* Тело статьи */
+    .article-body {
+      padding: 0 40px 40px;
+    }
+
+    .article-excerpt {
+      background-color: var(--secondary-color);
+      border-radius: var(--border-radius);
+      padding: 25px;
+      margin-bottom: 30px;
+      border-left: 4px solid var(--primary-color);
+    }
+
+    .article-excerpt p {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--text-color);
+      margin: 0;
+      line-height: 1.7;
+    }
+
+    .blog-content {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: var(--text-color);
+    }
+
+    .blog-content p {
+      margin-bottom: 1.8rem;
+    }
+
+    .blog-content h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-top: 2.5rem;
+      margin-bottom: 1.2rem;
+      color: var(--text-color);
+    }
+
+    .blog-content h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-top: 2.2rem;
+      margin-bottom: 1.2rem;
+      color: var(--text-color);
+    }
+
+    .blog-content h4 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      color: var(--text-color);
+    }
+
+    .blog-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: var(--border-radius);
+      margin: 2rem 0;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .blog-content ul, .blog-content ol {
+      margin-bottom: 1.8rem;
+      padding-left: 2.5rem;
+    }
+
+    .blog-content ul li, .blog-content ol li {
+      margin-bottom: 0.8rem;
+    }
+
+    .blog-content blockquote {
+      border-left: 4px solid var(--primary-color);
+      padding: 1.5rem 2rem;
+      background-color: var(--secondary-color);
+      margin: 2rem 0;
+      border-radius: 0 var(--border-radius) var(--border-radius) 0;
+      font-style: italic;
+    }
+
+    .blog-content blockquote p:last-child {
+      margin-bottom: 0;
+    }
+
+    .blog-content a {
+      color: var(--primary-color);
+      text-decoration: none;
+      border-bottom: 1px solid var(--primary-light);
+      transition: var(--transition);
+    }
+
+    .blog-content a:hover {
+      color: var(--primary-dark);
+      border-bottom-color: var(--primary-dark);
+    }
+
+    /* Кнопки шеринга */
+    .share-container {
+      border-top: 1px solid #e2e8f0;
+      padding-top: 30px;
+      margin-top: 40px;
+    }
+
+    .share-heading {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--text-color);
+    }
+
     .share-buttons {
-      margin-top: 3rem;
-      padding-top: 2rem;
-      border-top: 1px solid #dee2e6;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
     }
-    .related-post-card {
-      transition: transform 0.3s;
-      height: 100%;
+
+    .share-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 20px;
+      border-radius: 30px;
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+      border: none;
     }
-    .related-post-card:hover {
-      transform: translateY(-5px);
+
+    .share-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      color: white;
     }
-    .related-post-img {
-      height: 150px;
+
+    .share-button i {
+      margin-right: 8px;
+    }
+
+    .share-facebook {
+      background-color: #1877f2;
+    }
+
+    .share-twitter {
+      background-color: #1da1f2;
+    }
+
+    .share-telegram {
+      background-color: #0088cc;
+    }
+
+    .share-whatsapp {
+      background-color: #25d366;
+    }
+
+    /* Боковая панель */
+    .sidebar-container {
+      position: sticky;
+      top: 100px;
+    }
+
+    .sidebar-card {
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+
+    .sidebar-header {
+      padding: 18px 25px;
+      background-color: var(--secondary-color);
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .sidebar-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin: 0;
+      color: var(--text-color);
+    }
+
+    .sidebar-content {
+      padding: 0;
+    }
+
+    .sidebar-footer {
+      padding: 18px 25px;
+      border-top: 1px solid #e2e8f0;
+      text-align: center;
+    }
+
+    .related-post-item {
+      display: flex;
+      padding: 20px 25px;
+      border-bottom: 1px solid #f1f5f9;
+      transition: var(--transition);
+    }
+
+    .related-post-item:last-child {
+      border-bottom: none;
+    }
+
+    .related-post-item:hover {
+      background-color: #f8fafc;
+    }
+
+    .related-post-image {
+      width: 80px;
+      height: 80px;
+      border-radius: var(--border-radius);
       object-fit: cover;
+      margin-right: 15px;
+    }
+
+    .related-post-info {
+      flex: 1;
+    }
+
+    .related-post-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    .related-post-title a {
+      color: var(--text-color);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .related-post-title a:hover {
+      color: var(--primary-color);
+    }
+
+    .related-post-date {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .btn-all-posts {
+      color: var(--primary-color);
+      background-color: transparent;
+      border: 1px solid var(--primary-color);
+      border-radius: 30px;
+      padding: 8px 20px;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .btn-all-posts:hover {
+      background-color: var(--primary-color);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    /* Адаптивность */
+    @media (max-width: 991px) {
+      .article-title {
+        font-size: 2rem;
+      }
+
+      .article-header, .article-body {
+        padding: 25px;
+      }
+
+      .article-header {
+        padding-bottom: 0;
+      }
+    }
+
+    @media (max-width: 767px) {
+      .article-title {
+        font-size: 1.8rem;
+      }
+
+      .article-meta {
+        flex-wrap: wrap;
+      }
+
+      .article-meta-item {
+        margin-bottom: 10px;
+      }
+
+      .share-buttons {
+        justify-content: center;
+      }
     }
   </style>
 </head>
 <body>
 <!-- Навигация -->
-<link rel="stylesheet" th:href="@{/css/header.css}">
 <header th:replace="~{fragments/header :: header}"></header>
 
 <!-- Основной контент -->
 <main class="container py-5">
   <div class="row">
-    <!-- Хлебные крошки -->
-    <div class="col-12 mb-4">
+    <div class="col-12">
+      <!-- Хлебные крошки -->
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a th:href="@{/}" class="text-decoration-none">Главная</a></li>
-          <li class="breadcrumb-item"><a th:href="@{/blog}" class="text-decoration-none">Блог</a></li>
+          <li class="breadcrumb-item"><a th:href="@{/}">Главная</a></li>
+          <li class="breadcrumb-item"><a th:href="@{/blog}">Блог</a></li>
           <li class="breadcrumb-item active" aria-current="page" th:text="${post.title}">Заголовок статьи</li>
         </ol>
       </nav>
@@ -87,93 +661,91 @@
 
     <!-- Основной контент статьи -->
     <div class="col-lg-8">
-      <article>
-        <h1 class="mb-3" th:text="${post.title}">Заголовок статьи</h1>
+      <article class="article-container">
+        <header class="article-header">
+          <h1 class="article-title" th:text="${post.title}">Заголовок статьи</h1>
 
-        <!-- Метаданные -->
-        <div class="blog-meta d-flex align-items-center mb-4">
-          <i class="far fa-calendar-alt me-2"></i>
-          <span th:text="${#temporals.format(post.createdAt, 'dd MMMM yyyy')}">01 января 2023</span>
-          <span class="mx-3">•</span>
-          <i class="far fa-clock me-2"></i>
-          <span>Время чтения: <span id="readingTime">5 мин</span></span>
-        </div>
-
-        <!-- Изображение статьи -->
-        <div th:if="${post.imagePath}">
-          <img th:src="${post.imagePath}" class="blog-header-image" th:alt="${post.title}">
-        </div>
-
-        <!-- Краткое описание -->
-        <div th:if="${post.excerpt}" class="mb-4">
-          <div class="card bg-light">
-            <div class="card-body">
-              <p class="mb-0 lead" th:text="${post.excerpt}">Краткое описание статьи...</p>
+          <!-- Метаданные -->
+          <div class="article-meta">
+            <div class="article-meta-item">
+              <i class="far fa-calendar-alt"></i>
+              <span th:text="${#temporals.format(post.createdAt, 'dd MMMM yyyy')}">01 января 2023</span>
+            </div>
+            <div class="article-meta-item">
+              <i class="far fa-clock"></i>
+              <span>Время чтения: <span id="readingTime">5 мин</span></span>
             </div>
           </div>
+        </header>
+
+        <!-- Изображение статьи -->
+        <div class="article-image-container" th:if="${post.imagePath}">
+          <img th:src="${post.imagePath}" class="article-featured-image" th:alt="${post.title}">
+          <div class="article-category">Медицинский туризм</div>
         </div>
 
-        <!-- Содержимое статьи -->
-        <div class="blog-content" th:utext="${post.content}">
-          Содержимое статьи...
-        </div>
+        <div class="article-body">
+          <!-- Краткое описание -->
+          <div th:if="${post.excerpt}" class="article-excerpt">
+            <p th:text="${post.excerpt}">Краткое описание статьи...</p>
+          </div>
 
-        <!-- Кнопки для шеринга -->
-        <div class="share-buttons">
-          <h5 class="mb-3">Поделиться статьей:</h5>
-          <div class="d-flex gap-2">
-            <a href="#" onclick="shareOnFacebook(); return false;" class="btn btn-outline-primary">
-              <i class="fab fa-facebook-f me-2"></i>Facebook
-            </a>
-            <a href="#" onclick="shareOnTwitter(); return false;" class="btn btn-outline-info">
-              <i class="fab fa-twitter me-2"></i>Twitter
-            </a>
-            <a href="#" onclick="shareOnTelegram(); return false;" class="btn btn-outline-info">
-              <i class="fab fa-telegram me-2"></i>Telegram
-            </a>
-            <a href="#" onclick="shareOnWhatsApp(); return false;" class="btn btn-outline-success">
-              <i class="fab fa-whatsapp me-2"></i>WhatsApp
-            </a>
+          <!-- Содержимое статьи -->
+          <div class="blog-content" th:utext="${post.content}">
+            <p>Содержимое статьи...</p>
+          </div>
+
+          <!-- Кнопки для шеринга -->
+          <div class="share-container">
+            <h5 class="share-heading">Поделиться статьей:</h5>
+            <div class="share-buttons">
+              <a href="#" onclick="shareOnFacebook(); return false;" class="share-button share-facebook">
+                <i class="fab fa-facebook-f"></i>Facebook
+              </a>
+              <a href="#" onclick="shareOnTwitter(); return false;" class="share-button share-twitter">
+                <i class="fab fa-twitter"></i>Twitter
+              </a>
+              <a href="#" onclick="shareOnTelegram(); return false;" class="share-button share-telegram">
+                <i class="fab fa-telegram"></i>Telegram
+              </a>
+              <a href="#" onclick="shareOnWhatsApp(); return false;" class="share-button share-whatsapp">
+                <i class="fab fa-whatsapp"></i>WhatsApp
+              </a>
+            </div>
           </div>
         </div>
       </article>
     </div>
 
     <!-- Боковая панель -->
-    <div class="col-lg-4 mt-5 mt-lg-0">
-      <div class="sticky-lg-top" style="top: 90px;">
-
-
+    <div class="col-lg-4">
+      <div class="sidebar-container">
         <!-- Последние статьи -->
-        <div class="card">
-          <div class="card-header">
-            <h5 class="mb-0">Вам также может быть интересно</h5>
+        <div class="sidebar-card">
+          <div class="sidebar-header">
+            <h5 class="sidebar-title">Вам также может быть интересно</h5>
           </div>
-          <div class="card-body p-0">
-            <div class="list-group list-group-flush">
-              <div th:each="recentPost : ${recentPosts}"
-                   th:if="${recentPost.id != post.id}" class="list-group-item p-3">
-                <div class="row g-0">
-                  <div class="col-4">
-                    <img th:if="${recentPost.imagePath}" th:src="${recentPost.imagePath}"
-                         class="img-fluid rounded" th:alt="${recentPost.title}">
-                    <img th:unless="${recentPost.imagePath}" th:src="@{/img/default-blog-thumb.jpg}"
-                         class="img-fluid rounded" alt="Изображение по умолчанию">
-                  </div>
-                  <div class="col-8 ps-3">
-                    <h6 class="mb-1">
-                      <a th:href="@{/blog/{id}(id=${recentPost.id})}" class="text-decoration-none"
-                         th:text="${#strings.abbreviate(recentPost.title, 50)}">Заголовок статьи</a>
-                    </h6>
-                    <small class="text-muted"
-                           th:text="${#temporals.format(recentPost.createdAt, 'dd.MM.yyyy')}">01.01.2023</small>
-                  </div>
+          <div class="sidebar-content">
+            <div th:each="recentPost : ${recentPosts}" th:if="${recentPost.id != post.id}"
+                 class="related-post-item">
+              <img th:if="${recentPost.imagePath}" th:src="${recentPost.imagePath}"
+                   class="related-post-image" th:alt="${recentPost.title}">
+              <img th:unless="${recentPost.imagePath}" th:src="@{/img/default-blog-thumb.jpg}"
+                   class="related-post-image" alt="Изображение по умолчанию">
+              <div class="related-post-info">
+                <h6 class="related-post-title">
+                  <a th:href="@{/blog/{id}(id=${recentPost.id})}"
+                     th:text="${#strings.abbreviate(recentPost.title, 60)}">Заголовок статьи</a>
+                </h6>
+                <div class="related-post-date">
+                  <i class="far fa-calendar-alt me-1"></i>
+                  <span th:text="${#temporals.format(recentPost.createdAt, 'dd.MM.yyyy')}">01.01.2023</span>
                 </div>
               </div>
             </div>
-            <div class="card-footer bg-white text-center">
-              <a th:href="@{/blog}" class="btn btn-outline-primary btn-sm">Все статьи</a>
-            </div>
+          </div>
+          <div class="sidebar-footer">
+            <a th:href="@{/blog}" class="btn btn-all-posts">Все статьи</a>
           </div>
         </div>
       </div>
@@ -182,11 +754,9 @@
 </main>
 
 <!-- Подвал -->
-<link rel="stylesheet" th:href="@{/css/footer.css}">
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-<script th:src="@{/js/scripts.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 <script>
   // Расчет примерного времени чтения
   document.addEventListener('DOMContentLoaded', function() {
