@@ -94,10 +94,7 @@ public class TestimonialService {
      */
     @Transactional(readOnly = true)
     public List<TestimonialListDTO> getTestimonialsByClinicId(Long clinicId) {
-        log.info("Получение отзывов для клиники с ID: {}", clinicId);
-
         List<Testimonial> testimonials = testimonialRepository.findByClinicIdOrderByCreatedAtDesc(clinicId);
-
         return testimonials.stream()
                 .map(testimonial -> {
                     try {
@@ -116,8 +113,6 @@ public class TestimonialService {
      */
     @Transactional(readOnly = true)
     public TestimonialDetailDTO getTestimonialById(Long id) {
-        log.info("Получение отзыва с ID: {}", id);
-
         try {
             Testimonial testimonial = testimonialRepository.findById(id)
                     .orElseThrow(() -> {
@@ -179,7 +174,6 @@ public class TestimonialService {
             testimonial.setClientPhotoUrl(null);
             testimonial.setClientPhotoDeleteHash(null);
             testimonialRepository.save(testimonial);
-            log.info("Фото отзыва с ID: {} успешно удалено", id);
         } else {
             log.warn("Не удалось удалить фото отзыва с ID: {}", id);
         }

@@ -23,6 +23,9 @@ public class ClinikTourApplication {
     //Публикации и достижения врача...
 
 
+
+    //http://localhost:2817/services/2 дизайн и кнопка не работает записаться
+
     //  <!-- Категории блога (опционально) -->
     //<!--  <div class="blog-categories">-->
     //<!--    <a href="#" class="category-pill active">Все статьи</a>-->
@@ -31,10 +34,6 @@ public class ClinikTourApplication {
     //<!--    <a href="#" class="category-pill">Клиники</a>-->
     //<!--    <a href="#" class="category-pill">Интересные факты</a>-->
     //<!--  </div>-->
-
-
-
-
 
 
 

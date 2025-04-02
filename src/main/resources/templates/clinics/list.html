@@ -1,157 +1,720 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--  <meta charset="UTF-8">-->
+<!--  <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--  <title>Клиники - Asiamedtour</title>-->
+<!--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">-->
+<!--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">-->
+<!--  <link rel="stylesheet" th:href="@{/css/styles.css}">-->
+<!--</head>-->
+<!--<body>-->
+<!--&lt;!&ndash; Навигация &ndash;&gt;-->
+<!--<link rel="stylesheet" th:href="@{/css/header.css}">-->
+<!--<header th:replace="~{fragments/header :: header}"></header>-->
+
+<!--&lt;!&ndash; Основной контент &ndash;&gt;-->
+<!--<main class="container py-5">-->
+<!--  <h1 class="mb-4">Клиники</h1>-->
+
+<!--  &lt;!&ndash; Поиск и фильтры &ndash;&gt;-->
+<!--  <div class="card mb-4">-->
+<!--    <div class="card-body">-->
+<!--      <div class="row">-->
+<!--        &lt;!&ndash; Поиск &ndash;&gt;-->
+<!--        <div class="col-md-6 mb-3 mb-md-0">-->
+<!--          <form th:action="@{/clinics/search}" method="get" class="d-flex">-->
+<!--            <input type="text" name="query" class="form-control me-2"-->
+<!--                   placeholder="Найти клинику..." th:value="${search}">-->
+<!--            <button type="submit" class="btn btn-primary">-->
+<!--              <i class="fas fa-search"></i>-->
+<!--            </button>-->
+<!--          </form>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Фильтры &ndash;&gt;-->
+<!--        <div class="col-md-6">-->
+<!--          <form th:action="@{/clinics}" method="get" class="d-flex">-->
+<!--            <select name="country" class="form-select me-2">-->
+<!--              <option value="">Все страны</option>-->
+<!--              <option th:each="c : ${countries}" th:value="${c}"-->
+<!--                      th:text="${c}" th:selected="${c == country}"></option>-->
+<!--            </select>-->
+
+<!--            <select name="city" class="form-select me-2">-->
+<!--              <option value="">Все города</option>-->
+<!--              <option th:each="c : ${cities}" th:value="${c}"-->
+<!--                      th:text="${c}" th:selected="${c == city}"></option>-->
+<!--            </select>-->
+
+<!--            <select name="departmentId" class="form-select me-2">-->
+<!--              <option value="">Все отделения</option>-->
+<!--              <option th:each="dept : ${departments}" th:value="${dept.id}"-->
+<!--                      th:text="${dept.name}" th:selected="${dept.id == departmentId}"></option>-->
+<!--            </select>-->
+
+<!--            <button type="submit" class="btn btn-outline-primary">-->
+<!--              <i class="fas fa-filter"></i>-->
+<!--            </button>-->
+<!--          </form>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; Результаты поиска, если есть &ndash;&gt;-->
+<!--  <div th:if="${search != null}" class="mb-4">-->
+<!--    <h3 class="mb-3">Результаты поиска: <span th:text="${search}"></span></h3>-->
+<!--    <a th:href="@{/clinics}" class="btn btn-outline-secondary mb-3">-->
+<!--      <i class="fas fa-times me-2"></i>Сбросить поиск-->
+<!--    </a>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; Список клиник (для поиска) &ndash;&gt;-->
+<!--  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" th:if="${clinics != null}">-->
+<!--    <div class="col" th:each="clinic : ${clinics}">-->
+<!--      <div class="card h-100 shadow-sm">-->
+<!--        <div class="position-relative">-->
+<!--          <img th:if="${clinic.imagePath}" th:src="${clinic.imagePath}" class="card-img-top"-->
+<!--               alt="Изображение клиники" style="height: 200px; object-fit: cover;">-->
+<!--          <img th:unless="${clinic.imagePath}" th:src="@{/img/default-clinic.jpg}" class="card-img-top"-->
+<!--               alt="Изображение клиники по умолчанию" style="height: 200px; object-fit: cover;">-->
+<!--          <div class="position-absolute bottom-0 start-0 p-2 bg-light">-->
+<!--            <span th:text="${clinic.city + ', ' + clinic.country}">Город, Страна</span>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="card-body">-->
+<!--          <h5 class="card-title" th:text="${clinic.name}">Название клиники</h5>-->
+<!--          <p class="card-text" th:if="${clinic.shortDescription}" th:text="${clinic.shortDescription}">-->
+<!--            Краткое описание клиники...-->
+<!--          </p>-->
+<!--          <div class="mb-3 small">-->
+<!--            <div th:if="${clinic.departmentNames != null && !clinic.departmentNames.empty}">-->
+<!--              <strong>Отделения:</strong>-->
+<!--              <span th:each="dept, iterStat : ${clinic.departmentNames}" th:if="${iterStat.index < clinic.displayedDepartmentsCount}">-->
+<!--                                <span th:text="${dept}"></span><span th:unless="${iterStat.last && iterStat.index < clinic.displayedDepartmentsCount - 1}">, </span>-->
+<!--                            </span>-->
+<!--              <span th:if="${clinic.totalDepartmentsCount > clinic.displayedDepartmentsCount}">-->
+<!--                                и еще <span th:text="${clinic.totalDepartmentsCount - clinic.displayedDepartmentsCount}"></span>-->
+<!--                            </span>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="card-footer bg-white border-top-0">-->
+<!--          <a th:href="@{/clinics/{id}(id=${clinic.id})}" class="btn btn-primary">Подробнее</a>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; Список клиник (для пагинации) &ndash;&gt;-->
+<!--  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" th:if="${clinicPage != null}">-->
+<!--    <div class="col" th:each="clinic : ${clinicPage.content}">-->
+<!--      <div class="card h-100 shadow-sm">-->
+<!--        <div class="position-relative">-->
+<!--          <img th:if="${clinic.imagePath}" th:src="${clinic.imagePath}" class="card-img-top"-->
+<!--               alt="Изображение клиники" style="height: 200px; object-fit: cover;">-->
+<!--          <img th:unless="${clinic.imagePath}" th:src="@{/img/default-clinic.jpg}" class="card-img-top"-->
+<!--               alt="Изображение клиники по умолчанию" style="height: 200px; object-fit: cover;">-->
+<!--          <div class="position-absolute bottom-0 start-0 p-2 bg-light">-->
+<!--            <span th:text="${clinic.city + ', ' + clinic.country}">Город, Страна</span>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="card-body">-->
+<!--          <h5 class="card-title" th:text="${clinic.name}">Название клиники</h5>-->
+<!--          <p class="card-text" th:if="${clinic.shortDescription}" th:text="${clinic.shortDescription}">-->
+<!--            Краткое описание клиники...-->
+<!--          </p>-->
+<!--          <div class="mb-3 small">-->
+<!--            <div th:if="${clinic.departmentNames != null && !clinic.departmentNames.empty}">-->
+<!--              <strong>Отделения:</strong>-->
+<!--              <span th:each="dept, iterStat : ${clinic.departmentNames}" th:if="${iterStat.index < clinic.displayedDepartmentsCount}">-->
+<!--                                <span th:text="${dept}"></span><span th:unless="${iterStat.last && iterStat.index < clinic.displayedDepartmentsCount - 1}">, </span>-->
+<!--                            </span>-->
+<!--              <span th:if="${clinic.totalDepartmentsCount > clinic.displayedDepartmentsCount}">-->
+<!--                                и еще <span th:text="${clinic.totalDepartmentsCount - clinic.displayedDepartmentsCount}"></span>-->
+<!--                            </span>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="card-footer bg-white border-top-0">-->
+<!--          <a th:href="@{/clinics/{id}(id=${clinic.id})}" class="btn btn-primary">Подробнее</a>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; Пагинация &ndash;&gt;-->
+<!--  <div class="mt-4" th:if="${clinicPage != null && clinicPage.totalPages > 1}">-->
+<!--    <nav aria-label="Навигация по страницам">-->
+<!--      <ul class="pagination justify-content-center">-->
+<!--        <li class="page-item" th:classappend="${currentPage == 0 ? 'disabled' : ''}">-->
+<!--          <a class="page-link" th:href="@{/clinics(page=${currentPage - 1}, size=${pageSize}, sort=${sortField},-->
+<!--                                                  city=${city}, country=${country}, departmentId=${departmentId})}" aria-label="Предыдущая">-->
+<!--            <span aria-hidden="true">&laquo;</span>-->
+<!--          </a>-->
+<!--        </li>-->
+
+<!--        <li class="page-item" th:each="i : ${#numbers.sequence(0, clinicPage.totalPages - 1)}"-->
+<!--            th:classappend="${i == currentPage ? 'active' : ''}">-->
+<!--          <a class="page-link" th:href="@{/clinics(page=${i}, size=${pageSize}, sort=${sortField},-->
+<!--                                                 city=${city}, country=${country}, departmentId=${departmentId})}"-->
+<!--             th:text="${i + 1}">1</a>-->
+<!--        </li>-->
+
+<!--        <li class="page-item" th:classappend="${currentPage == clinicPage.totalPages - 1 ? 'disabled' : ''}">-->
+<!--          <a class="page-link" th:href="@{/clinics(page=${currentPage + 1}, size=${pageSize}, sort=${sortField},-->
+<!--                                                  city=${city}, country=${country}, departmentId=${departmentId})}" aria-label="Следующая">-->
+<!--            <span aria-hidden="true">&raquo;</span>-->
+<!--          </a>-->
+<!--        </li>-->
+<!--      </ul>-->
+<!--    </nav>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; Сообщение, если клиник нет &ndash;&gt;-->
+<!--  <div class="alert alert-info" th:if="${(clinics == null || clinics.empty) && (clinicPage == null || clinicPage.empty)}">-->
+<!--    По вашему запросу не найдено ни одной клиники.-->
+<!--  </div>-->
+<!--</main>-->
+<!--<link rel="stylesheet" th:href="@{/css/footer.css}">-->
+<!--<footer th:replace="~{fragments/footer :: footer}"></footer>-->
+
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>-->
+<!--<script th:src="@{/js/scripts.js}"></script>-->
+<!--</body>-->
+<!--</html>-->
+
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Клиники - Asiamedtour</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <style>
+    :root {
+      --primary-color: #2563eb;
+      --primary-dark: #1e40af;
+      --primary-light: #3b82f6;
+      --secondary-color: #f0f9ff;
+      --accent-color: #4f46e5;
+      --text-color: #1e293b;
+      --text-muted: #64748b;
+      --border-radius: 12px;
+      --transition: all 0.3s ease;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      color: var(--text-color);
+      line-height: 1.7;
+      background-color: #f8fafc;
+    }
+
+    /* Заголовок страницы */
+    .page-header {
+      margin-bottom: 40px;
+    }
+
+    .page-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--text-color);
+      margin-bottom: 15px;
+    }
+
+    .page-description {
+      color: var(--text-muted);
+      max-width: 700px;
+      margin-bottom: 0;
+    }
+
+    /* Фильтры и поиск */
+    .filters-card {
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      padding: 25px;
+      margin-bottom: 40px;
+      border: none;
+    }
+
+    .search-input {
+      border-radius: var(--border-radius);
+      padding: 12px 20px;
+      border: 1px solid #e2e8f0;
+      transition: var(--transition);
+    }
+
+    .search-input:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.25);
+    }
+
+    .filter-select {
+      border-radius: var(--border-radius);
+      padding: 12px 20px;
+      border: 1px solid #e2e8f0;
+      transition: var(--transition);
+      color: var(--text-color);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%231e293b' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3E%3C/svg%3E");
+      background-position: right 1rem center;
+    }
+
+    .filter-select:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.25);
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      border-radius: var(--border-radius);
+      padding: 12px 24px;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      border-color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px rgba(37, 99, 235, 0.1);
+    }
+
+    .btn-outline-primary {
+      color: var(--primary-color);
+      background-color: transparent;
+      border-color: var(--primary-color);
+      border-radius: var(--border-radius);
+      padding: 12px 24px;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+
+    .btn-outline-primary:hover {
+      background-color: var(--primary-color);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px rgba(37, 99, 235, 0.1);
+    }
+
+    .btn-outline-secondary {
+      color: var(--text-muted);
+      background-color: transparent;
+      border-color: #e2e8f0;
+      border-radius: var(--border-radius);
+      padding: 10px 20px;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+
+    .btn-outline-secondary:hover {
+      background-color: #f8fafc;
+      color: var(--text-color);
+      transform: translateY(-2px);
+    }
+
+    .btn-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      padding: 0;
+    }
+
+    /* Результаты поиска */
+    .search-results {
+      background-color: #f0f9ff;
+      border-radius: var(--border-radius);
+      padding: 15px 25px;
+      margin-bottom: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .search-results-text {
+      font-weight: 600;
+      color: var(--text-color);
+      margin-bottom: 0;
+    }
+
+    .search-results-query {
+      color: var(--primary-color);
+    }
+
+    /* Карточки клиник */
+    .clinic-card {
+      border: none;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      transition: var(--transition);
+      height: 100%;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .clinic-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .clinic-image-container {
+      position: relative;
+      height: 220px;
+      overflow: hidden;
+    }
+
+    .clinic-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+
+    .clinic-card:hover .clinic-image {
+      transform: scale(1.05);
+    }
+
+    .clinic-location {
+      position: absolute;
+      bottom: 15px;
+      left: 15px;
+      background-color: rgba(255, 255, 255, 0.9);
+      color: var(--text-color);
+      padding: 8px 16px;
+      border-radius: var(--border-radius);
+      font-size: 0.85rem;
+      font-weight: 500;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+    }
+
+    .clinic-location i {
+      color: var(--primary-color);
+      margin-right: 8px;
+    }
+
+    .clinic-card-body {
+      padding: 25px;
+      background-color: white;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .clinic-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      color: var(--text-color);
+      line-height: 1.3;
+    }
+
+    .clinic-description {
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      flex-grow: 1;
+    }
+
+    .departments-container {
+      margin-bottom: 20px;
+    }
+
+    .departments-label {
+      font-weight: 600;
+      color: var(--text-color);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .department-badge {
+      display: inline-block;
+      background-color: #f1f5f9;
+      color: var(--text-color);
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      margin-right: 5px;
+      margin-bottom: 5px;
+    }
+
+    .department-count {
+      display: inline-block;
+      background-color: var(--primary-light);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      margin-bottom: 5px;
+    }
+
+    .clinic-card-footer {
+      padding: 0;
+      background-color: transparent;
+      border-top: none;
+    }
+
+    .btn-details {
+      width: 100%;
+      padding: 12px;
+      font-weight: 600;
+      border-radius: 0 0 var(--border-radius) var(--border-radius);
+    }
+
+    /* Пагинация */
+    .pagination-container {
+      margin-top: 50px;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+    }
+
+    .pagination .page-item .page-link {
+      border: none;
+      color: var(--text-color);
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 5px;
+      border-radius: 50%;
+      transition: var(--transition);
+    }
+
+    .pagination .page-item .page-link:hover {
+      background-color: rgba(37, 99, 235, 0.1);
+      color: var(--primary-color);
+    }
+
+    .pagination .page-item.active .page-link {
+      background-color: var(--primary-color);
+      color: white;
+      box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+    }
+
+    .pagination .page-item.disabled .page-link {
+      color: #ccc;
+      background-color: transparent;
+    }
+
+    /* Сообщение об отсутствии клиник */
+    .no-clinics-container {
+      background-color: white;
+      border-radius: var(--border-radius);
+      padding: 60px 30px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .no-clinics-icon {
+      font-size: 4rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .no-clinics-title {
+      font-weight: 700;
+      margin-bottom: 15px;
+      color: var(--text-color);
+    }
+
+    .no-clinics-text {
+      color: var(--text-muted);
+      max-width: 500px;
+      margin: 0 auto 30px;
+    }
+
+    /* Адаптивность */
+    @media (max-width: 991px) {
+      .filters-row {
+        flex-direction: column;
+      }
+
+      .filters-col {
+        margin-bottom: 15px;
+        width: 100%;
+      }
+
+      .page-title {
+        font-size: 2rem;
+      }
+    }
+
+    @media (max-width: 767px) {
+      .page-title {
+        font-size: 1.8rem;
+      }
+
+      .clinic-image-container {
+        height: 180px;
+      }
+
+      .search-results {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .search-results-btn {
+        margin-top: 15px;
+      }
+    }
+  </style>
 </head>
 <body>
 <!-- Навигация -->
-<link rel="stylesheet" th:href="@{/css/header.css}">
 <header th:replace="~{fragments/header :: header}"></header>
 
 <!-- Основной контент -->
 <main class="container py-5">
-  <h1 class="mb-4">Клиники</h1>
+  <!-- Заголовок страницы -->
+  <div class="page-header">
+    <h1 class="page-title">Лучшие клиники Турции</h1>
+    <p class="page-description">Мы сотрудничаем только с проверенными медицинскими центрами, которые предоставляют высококачественное лечение по международным стандартам</p>
+  </div>
 
   <!-- Поиск и фильтры -->
-  <div class="card mb-4">
-    <div class="card-body">
-      <div class="row">
-        <!-- Поиск -->
-        <div class="col-md-6 mb-3 mb-md-0">
-          <form th:action="@{/clinics/search}" method="get" class="d-flex">
-            <input type="text" name="query" class="form-control me-2"
-                   placeholder="Найти клинику..." th:value="${search}">
-            <button type="submit" class="btn btn-primary">
-              <i class="fas fa-search"></i>
-            </button>
-          </form>
-        </div>
+  <div class="filters-card">
+    <div class="row filters-row">
+      <!-- Поиск -->
+      <div class="col-lg-5 filters-col">
+        <form th:action="@{/clinics/search}" method="get" class="d-flex">
+          <input type="text" name="query" class="form-control search-input me-2"
+                 placeholder="Поиск по названию, специализации..." th:value="${search}">
+          <button type="submit" class="btn btn-primary btn-icon">
+            <i class="fas fa-search"></i>
+          </button>
+        </form>
+      </div>
 
-        <!-- Фильтры -->
-        <div class="col-md-6">
-          <form th:action="@{/clinics}" method="get" class="d-flex">
-            <select name="country" class="form-select me-2">
-              <option value="">Все страны</option>
-              <option th:each="c : ${countries}" th:value="${c}"
-                      th:text="${c}" th:selected="${c == country}"></option>
-            </select>
+      <!-- Фильтры -->
+      <div class="col-lg-7 filters-col">
+        <form th:action="@{/clinics}" method="get" class="d-flex flex-wrap gap-2">
+          <select name="country" class="form-select filter-select">
+            <option value="">Все страны</option>
+            <option th:each="c : ${countries}" th:value="${c}"
+                    th:text="${c}" th:selected="${c == country}"></option>
+          </select>
 
-            <select name="city" class="form-select me-2">
-              <option value="">Все города</option>
-              <option th:each="c : ${cities}" th:value="${c}"
-                      th:text="${c}" th:selected="${c == city}"></option>
-            </select>
+          <select name="city" class="form-select filter-select">
+            <option value="">Все города</option>
+            <option th:each="c : ${cities}" th:value="${c}"
+                    th:text="${c}" th:selected="${c == city}"></option>
+          </select>
 
-            <select name="departmentId" class="form-select me-2">
-              <option value="">Все отделения</option>
-              <option th:each="dept : ${departments}" th:value="${dept.id}"
-                      th:text="${dept.name}" th:selected="${dept.id == departmentId}"></option>
-            </select>
+          <select name="departmentId" class="form-select filter-select">
+            <option value="">Все отделения</option>
+            <option th:each="dept : ${departments}" th:value="${dept.id}"
+                    th:text="${dept.name}" th:selected="${dept.id == departmentId}"></option>
+          </select>
 
-            <button type="submit" class="btn btn-outline-primary">
-              <i class="fas fa-filter"></i>
-            </button>
-          </form>
-        </div>
+          <button type="submit" class="btn btn-primary btn-icon">
+            <i class="fas fa-filter"></i>
+          </button>
+        </form>
       </div>
     </div>
   </div>
 
   <!-- Результаты поиска, если есть -->
-  <div th:if="${search != null}" class="mb-4">
-    <h3 class="mb-3">Результаты поиска: <span th:text="${search}"></span></h3>
-    <a th:href="@{/clinics}" class="btn btn-outline-secondary mb-3">
+  <div th:if="${search != null}" class="search-results">
+    <h3 class="search-results-text">Результаты поиска: <span class="search-results-query" th:text="${search}"></span></h3>
+    <a th:href="@{/clinics}" class="btn btn-outline-secondary search-results-btn">
       <i class="fas fa-times me-2"></i>Сбросить поиск
     </a>
   </div>
 
   <!-- Список клиник (для поиска) -->
-  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" th:if="${clinics != null}">
-    <div class="col" th:each="clinic : ${clinics}">
-      <div class="card h-100 shadow-sm">
-        <div class="position-relative">
-          <img th:if="${clinic.imagePath}" th:src="${clinic.imagePath}" class="card-img-top"
-               alt="Изображение клиники" style="height: 200px; object-fit: cover;">
-          <img th:unless="${clinic.imagePath}" th:src="@{/img/default-clinic.jpg}" class="card-img-top"
-               alt="Изображение клиники по умолчанию" style="height: 200px; object-fit: cover;">
-          <div class="position-absolute bottom-0 start-0 p-2 bg-light">
+  <div class="row g-4" th:if="${clinics != null}">
+    <div class="col-md-6 col-lg-4" th:each="clinic : ${clinics}">
+      <div class="clinic-card">
+        <div class="clinic-image-container">
+          <img th:if="${clinic.imagePath}" th:src="${clinic.imagePath}" class="clinic-image"
+               th:alt="${clinic.name}">
+          <img th:unless="${clinic.imagePath}" th:src="@{/img/default-clinic.jpg}" class="clinic-image"
+               alt="Изображение клиники по умолчанию">
+          <div class="clinic-location">
+            <i class="fas fa-map-marker-alt"></i>
             <span th:text="${clinic.city + ', ' + clinic.country}">Город, Страна</span>
           </div>
         </div>
-        <div class="card-body">
-          <h5 class="card-title" th:text="${clinic.name}">Название клиники</h5>
-          <p class="card-text" th:if="${clinic.shortDescription}" th:text="${clinic.shortDescription}">
+        <div class="clinic-card-body">
+          <h3 class="clinic-title" th:text="${clinic.name}">Название клиники</h3>
+          <p class="clinic-description" th:if="${clinic.shortDescription}" th:text="${clinic.shortDescription}">
             Краткое описание клиники...
           </p>
-          <div class="mb-3 small">
-            <div th:if="${clinic.departmentNames != null && !clinic.departmentNames.empty}">
-              <strong>Отделения:</strong>
-              <span th:each="dept, iterStat : ${clinic.departmentNames}" th:if="${iterStat.index < clinic.displayedDepartmentsCount}">
-                                <span th:text="${dept}"></span><span th:unless="${iterStat.last && iterStat.index < clinic.displayedDepartmentsCount - 1}">, </span>
-                            </span>
-              <span th:if="${clinic.totalDepartmentsCount > clinic.displayedDepartmentsCount}">
-                                и еще <span th:text="${clinic.totalDepartmentsCount - clinic.displayedDepartmentsCount}"></span>
-                            </span>
+          <div class="departments-container" th:if="${clinic.departmentNames != null && !clinic.departmentNames.empty}">
+            <span class="departments-label">Отделения:</span>
+            <div>
+              <span th:each="dept, iterStat : ${clinic.departmentNames}" th:if="${iterStat.index < clinic.displayedDepartmentsCount}" class="department-badge" th:text="${dept}">Отделение</span>
+              <span th:if="${clinic.totalDepartmentsCount > clinic.displayedDepartmentsCount}" class="department-count">
+                +<span th:text="${clinic.totalDepartmentsCount - clinic.displayedDepartmentsCount}">3</span>
+              </span>
             </div>
           </div>
         </div>
-        <div class="card-footer bg-white border-top-0">
-          <a th:href="@{/clinics/{id}(id=${clinic.id})}" class="btn btn-primary">Подробнее</a>
+        <div class="clinic-card-footer">
+          <a th:href="@{/clinics/{id}(id=${clinic.id})}" class="btn btn-primary btn-details">Подробнее</a>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Список клиник (для пагинации) -->
-  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" th:if="${clinicPage != null}">
-    <div class="col" th:each="clinic : ${clinicPage.content}">
-      <div class="card h-100 shadow-sm">
-        <div class="position-relative">
-          <img th:if="${clinic.imagePath}" th:src="${clinic.imagePath}" class="card-img-top"
-               alt="Изображение клиники" style="height: 200px; object-fit: cover;">
-          <img th:unless="${clinic.imagePath}" th:src="@{/img/default-clinic.jpg}" class="card-img-top"
-               alt="Изображение клиники по умолчанию" style="height: 200px; object-fit: cover;">
-          <div class="position-absolute bottom-0 start-0 p-2 bg-light">
+  <div class="row g-4" th:if="${clinicPage != null}">
+    <div class="col-md-6 col-lg-4" th:each="clinic : ${clinicPage.content}">
+      <div class="clinic-card">
+        <div class="clinic-image-container">
+          <img th:if="${clinic.imagePath}" th:src="${clinic.imagePath}" class="clinic-image"
+               th:alt="${clinic.name}">
+          <img th:unless="${clinic.imagePath}" th:src="@{/img/default-clinic.jpg}" class="clinic-image"
+               alt="Изображение клиники по умолчанию">
+          <div class="clinic-location">
+            <i class="fas fa-map-marker-alt"></i>
             <span th:text="${clinic.city + ', ' + clinic.country}">Город, Страна</span>
           </div>
         </div>
-        <div class="card-body">
-          <h5 class="card-title" th:text="${clinic.name}">Название клиники</h5>
-          <p class="card-text" th:if="${clinic.shortDescription}" th:text="${clinic.shortDescription}">
+        <div class="clinic-card-body">
+          <h3 class="clinic-title" th:text="${clinic.name}">Название клиники</h3>
+          <p class="clinic-description" th:if="${clinic.shortDescription}" th:text="${clinic.shortDescription}">
             Краткое описание клиники...
           </p>
-          <div class="mb-3 small">
-            <div th:if="${clinic.departmentNames != null && !clinic.departmentNames.empty}">
-              <strong>Отделения:</strong>
-              <span th:each="dept, iterStat : ${clinic.departmentNames}" th:if="${iterStat.index < clinic.displayedDepartmentsCount}">
-                                <span th:text="${dept}"></span><span th:unless="${iterStat.last && iterStat.index < clinic.displayedDepartmentsCount - 1}">, </span>
-                            </span>
-              <span th:if="${clinic.totalDepartmentsCount > clinic.displayedDepartmentsCount}">
-                                и еще <span th:text="${clinic.totalDepartmentsCount - clinic.displayedDepartmentsCount}"></span>
-                            </span>
+          <div class="departments-container" th:if="${clinic.departmentNames != null && !clinic.departmentNames.empty}">
+            <span class="departments-label">Отделения:</span>
+            <div>
+              <span th:each="dept, iterStat : ${clinic.departmentNames}" th:if="${iterStat.index < clinic.displayedDepartmentsCount}" class="department-badge" th:text="${dept}">Отделение</span>
+              <span th:if="${clinic.totalDepartmentsCount > clinic.displayedDepartmentsCount}" class="department-count">
+                +<span th:text="${clinic.totalDepartmentsCount - clinic.displayedDepartmentsCount}">3</span>
+              </span>
             </div>
           </div>
         </div>
-        <div class="card-footer bg-white border-top-0">
-          <a th:href="@{/clinics/{id}(id=${clinic.id})}" class="btn btn-primary">Подробнее</a>
+        <div class="clinic-card-footer">
+          <a th:href="@{/clinics/{id}(id=${clinic.id})}" class="btn btn-primary btn-details">Подробнее</a>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Пагинация -->
-  <div class="mt-4" th:if="${clinicPage != null && clinicPage.totalPages > 1}">
+  <div class="pagination-container" th:if="${clinicPage != null && clinicPage.totalPages > 1}">
     <nav aria-label="Навигация по страницам">
-      <ul class="pagination justify-content-center">
+      <ul class="pagination">
         <li class="page-item" th:classappend="${currentPage == 0 ? 'disabled' : ''}">
           <a class="page-link" th:href="@{/clinics(page=${currentPage - 1}, size=${pageSize}, sort=${sortField},
                                                   city=${city}, country=${country}, departmentId=${departmentId})}" aria-label="Предыдущая">
-            <span aria-hidden="true">&laquo;</span>
+            <i class="fas fa-chevron-left"></i>
           </a>
         </li>
 
@@ -165,7 +728,7 @@
         <li class="page-item" th:classappend="${currentPage == clinicPage.totalPages - 1 ? 'disabled' : ''}">
           <a class="page-link" th:href="@{/clinics(page=${currentPage + 1}, size=${pageSize}, sort=${sortField},
                                                   city=${city}, country=${country}, departmentId=${departmentId})}" aria-label="Следующая">
-            <span aria-hidden="true">&raquo;</span>
+            <i class="fas fa-chevron-right"></i>
           </a>
         </li>
       </ul>
@@ -173,14 +736,17 @@
   </div>
 
   <!-- Сообщение, если клиник нет -->
-  <div class="alert alert-info" th:if="${(clinics == null || clinics.empty) && (clinicPage == null || clinicPage.empty)}">
-    По вашему запросу не найдено ни одной клиники.
+  <div class="no-clinics-container" th:if="${(clinics == null || clinics.empty) && (clinicPage == null || clinicPage.empty)}">
+    <i class="fas fa-hospital-alt no-clinics-icon"></i>
+    <h3 class="no-clinics-title">Клиники не найдены</h3>
+    <p class="no-clinics-text">По вашему запросу не найдено ни одной клиники. Пожалуйста, измените параметры поиска или просмотрите все доступные клиники.</p>
+    <a th:href="@{/clinics}" class="btn btn-primary">Все клиники</a>
   </div>
 </main>
-<link rel="stylesheet" th:href="@{/css/footer.css}">
+
+<!-- Подвал -->
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-<script th:src="@{/js/scripts.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
