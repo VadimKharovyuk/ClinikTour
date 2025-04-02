@@ -116,6 +116,7 @@ public class TestimonialController {
     }
 
 
+
     /**
      * Возвращает HTML-страницу с отзывами по клинике
      */

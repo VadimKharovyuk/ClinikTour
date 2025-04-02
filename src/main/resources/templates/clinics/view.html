@@ -1,21 +1,318 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title th:text="${clinic.name} + ' - Asiamedtour'">Клиника - Asiamedtour</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <style>
+    :root {
+      --primary-color: #2c4ea0;
+      --secondary-color: #4a6fdc;
+      --accent-color: #2cd18a;
+      --light-bg: #f8f9fa;
+      --text-color: #343a40;
+      --text-muted: #6c757d;
+      --light-border: #dee2e6;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      color: var(--text-color);
+      background-color: #fff;
+      line-height: 1.6;
+    }
+
+    h1, h2, h3, h4, h5, h6, .nav-link {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+    }
+
+    .page-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+    }
+
+    .page-subtitle {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+
+    /* Клиническая информация */
+    .clinic-info-badge {
+      display: inline-block;
+      background-color: rgba(44, 78, 160, 0.1);
+      color: var(--primary-color);
+      padding: 0.5rem 1rem;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .clinic-address {
+      display: flex;
+      align-items: center;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .clinic-address i {
+      color: var(--primary-color);
+      margin-right: 0.5rem;
+      font-size: 1.1rem;
+    }
+
+    /* Карточка клиники */
+    .clinic-card {
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      border: none;
+      margin-bottom: 2rem;
+    }
+
+    .clinic-image {
+      height: 280px;
+      object-fit: cover;
+      width: 100%;
+    }
+
+    .clinic-card .card-body {
+      padding: 1.5rem;
+    }
+
+    .clinic-card .card-title {
+      color: var(--primary-color);
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .clinic-card .card-text {
+      margin-bottom: 1.5rem;
+      color: var(--text-muted);
+    }
+
+    /* Кнопки */
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      padding: 0.6rem 1.5rem;
+      border-radius: 30px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--secondary-color);
+      border-color: var(--secondary-color);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(74, 111, 220, 0.3);
+    }
+
+    .btn-outline-primary {
+      color: var(--primary-color);
+      border-color: var(--primary-color);
+      padding: 0.6rem 1.5rem;
+      border-radius: 30px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .btn-outline-primary:hover {
+      background-color: var(--primary-color);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(74, 111, 220, 0.2);
+    }
+
+    /* Контент-карточки */
+    .content-card {
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+      margin-bottom: 1.5rem;
+    }
+
+    .content-card .card-body {
+      padding: 1.5rem;
+    }
+
+    /* Вкладки */
+    .custom-tabs {
+      border-bottom: 1px solid var(--light-border);
+      margin-bottom: 2rem;
+    }
+
+    .custom-tabs .nav-link {
+      color: var(--text-muted);
+      border: none;
+      padding: 1rem 1.5rem;
+      font-weight: 500;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+
+    .custom-tabs .nav-link:hover {
+      color: var(--primary-color);
+    }
+
+    .custom-tabs .nav-link.active {
+      color: var(--primary-color);
+      background-color: transparent;
+      font-weight: 600;
+    }
+
+    .custom-tabs .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 3px;
+      background-color: var(--primary-color);
+      transition: all 0.3s ease;
+      transform: translateX(-50%);
+    }
+
+    .custom-tabs .nav-link.active::after {
+      width: 80%;
+    }
+
+    /* Отделения и врачи */
+    .department-card, .doctor-card {
+      border: none;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      height: 100%;
+      transition: all 0.3s ease;
+    }
+
+    .department-card:hover, .doctor-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .doctor-img {
+      height: 220px;
+      object-fit: cover;
+    }
+
+    /* Форма обратной связи */
+    .contact-form-section {
+      background-color: var(--light-bg);
+      border-radius: 15px;
+      padding: 3rem;
+      margin-top: 3rem;
+      margin-bottom: 3rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .contact-form-title {
+      color: var(--primary-color);
+      margin-bottom: 2rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .contact-form-title::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -10px;
+      width: 50px;
+      height: 3px;
+      background-color: var(--accent-color);
+    }
+
+    .contact-form-card {
+      border: none;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    .form-control {
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--light-border);
+    }
+
+    .form-control:focus {
+      box-shadow: 0 0 0 3px rgba(44, 78, 160, 0.15);
+      border-color: var(--primary-color);
+    }
+
+    /* Хлебные крошки */
+    .custom-breadcrumb {
+      padding: 0;
+      margin-bottom: 1.5rem;
+      background-color: transparent;
+    }
+
+    .custom-breadcrumb .breadcrumb-item a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .custom-breadcrumb .breadcrumb-item a:hover {
+      color: var(--primary-color);
+    }
+
+    .custom-breadcrumb .breadcrumb-item.active {
+      color: var(--text-color);
+      font-weight: 500;
+    }
+
+    .custom-breadcrumb .breadcrumb-item + .breadcrumb-item::before {
+      content: "›";
+      color: var(--text-muted);
+    }
+
+    /* Адаптивность */
+    @media (max-width: 992px) {
+      .contact-form-section {
+        padding: 2rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .page-title {
+        font-size: 2rem;
+      }
+
+      .custom-tabs .nav-link {
+        padding: 0.75rem 1rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .contact-form-section {
+        padding: 1.5rem;
+      }
+
+      .clinic-card .card-body {
+        padding: 1.25rem;
+      }
+    }
+  </style>
 </head>
 <body>
 <!-- Навигация -->
-<!--<header th:replace="fragments/header :: header"></header>-->
+<div th:replace="~{fragments/header :: header}"></div>
 
 <!-- Основной контент -->
 <main class="container py-5">
   <!-- Хлебные крошки -->
-  <nav aria-label="breadcrumb" class="mb-4">
+  <nav aria-label="breadcrumb" class="custom-breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a th:href="@{/}">Главная</a></li>
       <li class="breadcrumb-item"><a th:href="@{/clinics}">Клиники</a></li>
@@ -24,23 +321,23 @@
   </nav>
 
   <!-- Верхняя часть страницы -->
-  <div class="row mb-5">
+  <div class="row mb-4">
     <!-- Информация о клинике -->
     <div class="col-lg-8">
-      <h1 class="mb-3" th:text="${clinic.name}">Название клиники</h1>
+      <h1 class="page-title" th:text="${clinic.name}">Название клиники</h1>
 
-      <div class="mb-4">
-        <span class="badge bg-primary me-2" th:text="${clinic.city + ', ' + clinic.country}">Город, Страна</span>
-        <span class="badge bg-secondary" th:if="${clinic.founded}"
-              th:text="'Основана в ' + ${clinic.founded} + ' году'">Год основания</span>
+      <div class="d-flex flex-wrap mb-3">
+        <span class="clinic-info-badge" th:text="${clinic.city + ', ' + clinic.country}">Город, Страна</span>
+        <span class="clinic-info-badge" th:if="${clinic.founded}" th:text="'Основана в ' + ${clinic.founded} + ' году'">Год основания</span>
       </div>
 
-      <div class="mb-4" th:if="${clinic.address}">
-        <p><i class="fas fa-map-marker-alt me-2 text-primary"></i><span th:text="${clinic.address}">Адрес клиники</span></p>
+      <div class="clinic-address" th:if="${clinic.address}">
+        <i class="fas fa-map-marker-alt"></i>
+        <span th:text="${clinic.address}">Адрес клиники</span>
       </div>
 
       <!-- Описание (первый блок) -->
-      <div class="card mb-4" th:if="${clinic.descriptionBlock1 != null && !clinic.descriptionBlock1.isEmpty()}">
+      <div class="content-card card" th:if="${clinic.descriptionBlock1 != null && !clinic.descriptionBlock1.isEmpty()}">
         <div class="card-body">
           <div th:utext="${clinic.descriptionBlock1}">
             Первый блок описания клиники...
@@ -49,40 +346,46 @@
       </div>
     </div>
 
-
     <!-- Изображение клиники -->
     <div class="col-lg-4">
-      <div class="card shadow-sm">
-        <img th:if="${clinic.imagePath}" th:src="${clinic.imagePath}" class="card-img-top img-fluid"
+      <div class="clinic-card card">
+        <img th:if="${clinic.imagePath}" th:src="${clinic.imagePath}" class="clinic-image"
              alt="Изображение клиники">
-        <img th:unless="${clinic.imagePath}" th:src="@{/img/default-clinic.jpg}" class="card-img-top img-fluid"
+        <img th:unless="${clinic.imagePath}" th:src="@{/img/default-clinic.jpg}" class="clinic-image"
              alt="Изображение клиники по умолчанию">
         <div class="card-body">
           <h5 class="card-title">Связаться с клиникой</h5>
           <p class="card-text">Для получения дополнительной информации или записи на консультацию, свяжитесь с нами:</p>
-          <a href="#contact-form" class="btn btn-primary w-100 mb-2">Оставить заявку</a>
-          <!-- Если нужно просто перейти к отзывам клиники по ID клиники -->
-          <a th:href="@{/testimonials/clinic-fragment/{id}(id=${clinic.id})}" class="btn btn-outline-primary w-100">Отзывы о клинике</a>
-
-
+          <a href="#contact-form" class="btn btn-primary w-100 mb-3">
+            <i class="fas fa-envelope me-2"></i> Оставить заявку
+          </a>
+          <a th:href="@{/testimonials/clinic-fragment/{id}(id=${clinic.id})}" class="btn btn-outline-primary w-100">
+            <i class="fas fa-star me-2"></i> Отзывы о клинике
+          </a>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Навигация по разделам -->
-  <ul class="nav nav-tabs mb-4" id="clinicTabs" role="tablist">
+  <ul class="nav custom-tabs" id="clinicTabs" role="tablist">
     <li class="nav-item" role="presentation">
       <button class="nav-link active" id="about-tab" data-bs-toggle="tab" data-bs-target="#about"
-              type="button" role="tab" aria-controls="about" aria-selected="true">О клинике</button>
+              type="button" role="tab" aria-controls="about" aria-selected="true">
+        <i class="fas fa-info-circle me-2"></i> О клинике
+      </button>
     </li>
     <li class="nav-item" role="presentation">
       <button class="nav-link" id="departments-tab" data-bs-toggle="tab" data-bs-target="#departments"
-              type="button" role="tab" aria-controls="departments" aria-selected="false">Отделения</button>
+              type="button" role="tab" aria-controls="departments" aria-selected="false">
+        <i class="fas fa-hospital me-2"></i> Отделения
+      </button>
     </li>
     <li class="nav-item" role="presentation">
       <button class="nav-link" id="doctors-tab" data-bs-toggle="tab" data-bs-target="#doctors"
-              type="button" role="tab" aria-controls="doctors" aria-selected="false">Врачи</button>
+              type="button" role="tab" aria-controls="doctors" aria-selected="false">
+        <i class="fas fa-user-md me-2"></i> Врачи
+      </button>
     </li>
   </ul>
 
@@ -91,7 +394,7 @@
     <!-- О клинике -->
     <div class="tab-pane fade show active" id="about" role="tabpanel" aria-labelledby="about-tab">
       <!-- Описание (блоки 2-4) -->
-      <div class="card mb-4" th:if="${clinic.descriptionBlock2 != null && !clinic.descriptionBlock2.isEmpty()}">
+      <div class="content-card card mb-4" th:if="${clinic.descriptionBlock2 != null && !clinic.descriptionBlock2.isEmpty()}">
         <div class="card-body">
           <div th:utext="${clinic.descriptionBlock2}">
             Второй блок описания клиники...
@@ -99,7 +402,7 @@
         </div>
       </div>
 
-      <div class="card mb-4" th:if="${clinic.descriptionBlock3 != null && !clinic.descriptionBlock3.isEmpty()}">
+      <div class="content-card card mb-4" th:if="${clinic.descriptionBlock3 != null && !clinic.descriptionBlock3.isEmpty()}">
         <div class="card-body">
           <div th:utext="${clinic.descriptionBlock3}">
             Третий блок описания клиники...
@@ -107,7 +410,7 @@
         </div>
       </div>
 
-      <div class="card mb-4" th:if="${clinic.descriptionBlock4 != null && !clinic.descriptionBlock4.isEmpty()}">
+      <div class="content-card card mb-4" th:if="${clinic.descriptionBlock4 != null && !clinic.descriptionBlock4.isEmpty()}">
         <div class="card-body">
           <div th:utext="${clinic.descriptionBlock4}">
             Четвертый блок описания клиники...
@@ -115,11 +418,12 @@
         </div>
       </div>
 
-      <div class="alert alert-info" th:if="${(clinic.descriptionBlock1 == null || clinic.descriptionBlock1.isEmpty()) &&
-                                                  (clinic.descriptionBlock2 == null || clinic.descriptionBlock2.isEmpty()) &&
-                                                  (clinic.descriptionBlock3 == null || clinic.descriptionBlock3.isEmpty()) &&
-                                                  (clinic.descriptionBlock4 == null || clinic.descriptionBlock4.isEmpty())}">
-        Для этой клиники не добавлено описание.
+      <div class="alert alert-info rounded-3 border-0 shadow-sm"
+           th:if="${(clinic.descriptionBlock1 == null || clinic.descriptionBlock1.isEmpty()) &&
+                  (clinic.descriptionBlock2 == null || clinic.descriptionBlock2.isEmpty()) &&
+                  (clinic.descriptionBlock3 == null || clinic.descriptionBlock3.isEmpty()) &&
+                  (clinic.descriptionBlock4 == null || clinic.descriptionBlock4.isEmpty())}">
+        <i class="fas fa-info-circle me-2"></i> Для этой клиники пока не добавлено подробное описание.
       </div>
     </div>
 
@@ -127,15 +431,13 @@
     <div class="tab-pane fade" id="departments" role="tabpanel" aria-labelledby="departments-tab">
       <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" th:if="${departments != null && !departments.empty}">
         <div class="col" th:each="department : ${departments}">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
+          <div class="department-card card h-100">
+            <div class="card-body d-flex flex-column">
               <h5 class="card-title" th:text="${department.name}">Название отделения</h5>
-              <p class="card-text" th:if="${department.description}" th:text="${department.description}">
+              <p class="card-text flex-grow-1" th:if="${department.description}" th:text="${department.description}">
                 Описание отделения...
               </p>
-            </div>
-            <div class="card-footer bg-white border-top-0">
-              <a th:href="@{/departments/{id}(id=${department.id})}" class="btn btn-sm btn-outline-primary">
+              <a th:href="@{/departments/{id}(id=${department.id})}" class="btn btn-outline-primary mt-auto align-self-start">
                 Подробнее
               </a>
             </div>
@@ -143,8 +445,8 @@
         </div>
       </div>
 
-      <div class="alert alert-info" th:if="${departments == null || departments.empty}">
-        У этой клиники нет отделений.
+      <div class="alert alert-info rounded-3 border-0 shadow-sm" th:if="${departments == null || departments.empty}">
+        <i class="fas fa-info-circle me-2"></i> У этой клиники пока нет зарегистрированных отделений.
       </div>
     </div>
 
@@ -152,17 +454,18 @@
     <div class="tab-pane fade" id="doctors" role="tabpanel" aria-labelledby="doctors-tab">
       <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" th:if="${doctors != null && !doctors.empty}">
         <div class="col" th:each="doctor : ${doctors}">
-          <div class="card h-100 shadow-sm">
-            <img th:if="${doctor.imagePath}" th:src="${doctor.imagePath}" class="card-img-top"
-                 alt="Фото врача" style="height: 200px; object-fit: cover;">
-            <img th:unless="${doctor.imagePath}" th:src="@{/img/default-doctor.jpg}" class="card-img-top"
-                 alt="Фото врача по умолчанию" style="height: 200px; object-fit: cover;">
-            <div class="card-body">
-              <h5 class="card-title" th:text="${doctor.fullName}">ФИО врача</h5>
-              <p class="card-text" th:text="${doctor.specialization}">Специализация врача</p>
-            </div>
-            <div class="card-footer bg-white border-top-0">
-              <a th:href="@{/doctors/{id}(id=${doctor.id})}" class="btn btn-sm btn-outline-primary">
+          <div class="doctor-card card h-100">
+            <img th:if="${doctor.imagePath}" th:src="${doctor.imagePath}" class="doctor-img"
+                 alt="Фото врача">
+            <img th:unless="${doctor.imagePath}" th:src="@{/img/default-doctor.jpg}" class="doctor-img"
+                 alt="Фото врача по умолчанию">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title mb-1" th:text="${doctor.fullName}">ФИО врача</h5>
+              <p class="text-muted mb-2" th:text="${doctor.specialization}">Специализация врача</p>
+              <p class="card-text mb-3" th:if="${doctor.yearsOfExperience}">
+                <i class="fas fa-clock text-primary me-1"></i> Опыт: <span th:text="${doctor.yearsOfExperience} + ' лет'">15 лет</span>
+              </p>
+              <a th:href="@{/doctors/{id}(id=${doctor.id})}" class="btn btn-outline-primary mt-auto align-self-start">
                 Подробнее
               </a>
             </div>
@@ -170,59 +473,125 @@
         </div>
       </div>
 
-      <div class="alert alert-info" th:if="${doctors == null || doctors.empty}">
-        В этой клинике нет зарегистрированных врачей.
+      <div class="alert alert-info rounded-3 border-0 shadow-sm" th:if="${doctors == null || doctors.empty}">
+        <i class="fas fa-info-circle me-2"></i> В этой клинике пока нет зарегистрированных врачей.
       </div>
     </div>
   </div>
 
   <!-- Форма обратной связи -->
-  <div class="card mt-5" id="contact-form">
-    <div class="card-header bg-primary text-white">
-      <h3 class="mb-0">Получить консультацию</h3>
-    </div>
-    <div class="card-body">
-      <form th:action="@{/consultations/request}" method="post">
-        <input type="hidden" name="clinicId" th:value="${clinic.id}">
+  <div class="contact-form-section" id="contact-form">
+    <div class="row">
+      <div class="col-lg-5 mb-4 mb-lg-0">
+        <h2 class="contact-form-title">Получить консультацию</h2>
+        <p class="text-muted mb-4">Оставьте свои контактные данные, и мы свяжемся с вами для обсуждения возможностей лечения в клинике.</p>
 
-        <div class="row mb-3">
-          <div class="col-md-6 mb-3 mb-md-0">
-            <label for="fullName" class="form-label">ФИО</label>
-            <input type="text" class="form-control" id="fullName" name="fullName" required>
+        <div class="mb-4">
+          <h5 class="mb-3">Почему стоит обратиться к нам:</h5>
+          <ul class="list-unstyled">
+            <li class="mb-3">
+              <i class="fas fa-check-circle text-success me-2"></i> Бесплатная первичная консультация
+            </li>
+            <li class="mb-3">
+              <i class="fas fa-check-circle text-success me-2"></i> Подбор лучших специалистов
+            </li>
+            <li class="mb-3">
+              <i class="fas fa-check-circle text-success me-2"></i> Помощь в организации поездки
+            </li>
+            <li>
+              <i class="fas fa-check-circle text-success me-2"></i> Поддержка 24/7 на всех этапах лечения
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-lg-7">
+        <div class="contact-form-card card">
+          <div class="card-body p-4">
+            <form th:action="@{/consultations/request}" method="post" class="needs-validation" novalidate>
+              <input type="hidden" name="clinicId" th:value="${clinic.id}">
+
+              <div class="row mb-3">
+                <div class="col-md-6 mb-3 mb-md-0">
+                  <label for="fullName" class="form-label">ФИО *</label>
+                  <input type="text" class="form-control" id="fullName" name="fullName" required>
+                  <div class="invalid-feedback">Пожалуйста, укажите ваше имя</div>
+                </div>
+                <div class="col-md-6">
+                  <label for="phone" class="form-label">Телефон *</label>
+                  <input type="tel" class="form-control" id="phone" name="phone" required>
+                  <div class="invalid-feedback">Укажите контактный телефон</div>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="email" class="form-label">Email *</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+                <div class="invalid-feedback">Укажите корректный email</div>
+              </div>
+
+              <div class="mb-3">
+                <label for="message" class="form-label">Сообщение *</label>
+                <textarea class="form-control" id="message" name="message" rows="4" required
+                          placeholder="Опишите вашу ситуацию или задайте вопросы..."></textarea>
+                <div class="invalid-feedback">Пожалуйста, напишите сообщение</div>
+              </div>
+
+              <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="agree" name="agree" required>
+                <label class="form-check-label" for="agree">
+                  Я согласен на обработку персональных данных
+                </label>
+                <div class="invalid-feedback">Необходимо согласие на обработку данных</div>
+              </div>
+
+              <button type="submit" class="btn btn-primary w-100">
+                <i class="fas fa-paper-plane me-2"></i> Отправить заявку
+              </button>
+            </form>
           </div>
-          <div class="col-md-6">
-            <label for="phone" class="form-label">Телефон</label>
-            <input type="tel" class="form-control" id="phone" name="phone" required>
-          </div>
         </div>
-
-        <div class="mb-3">
-          <label for="email" class="form-label">Email</label>
-          <input type="email" class="form-control" id="email" name="email" required>
-        </div>
-
-        <div class="mb-3">
-          <label for="message" class="form-label">Сообщение</label>
-          <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
-        </div>
-
-        <div class="form-check mb-3">
-          <input class="form-check-input" type="checkbox" id="agree" name="agree" required>
-          <label class="form-check-label" for="agree">
-            Я согласен на обработку персональных данных
-          </label>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Отправить заявку</button>
-      </form>
+      </div>
     </div>
   </div>
 </main>
 
-<link rel="stylesheet" th:href="@{/css/footer.css}">
-<footer th:replace="~{fragments/footer :: footer}"></footer>
+<!-- Подвал сайта -->
+<div th:replace="~{fragments/footer :: footer}"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-<script th:src="@{/js/scripts.js}"></script>
+<script>
+  // Валидация формы
+  (function() {
+    'use strict';
+
+    // Fetch all forms we want to apply validation styles to
+    var forms = document.querySelectorAll('.needs-validation');
+
+    // Loop over them and prevent submission
+    Array.prototype.slice.call(forms)
+            .forEach(function(form) {
+              form.addEventListener('submit', function(event) {
+                if (!form.checkValidity()) {
+                  event.preventDefault();
+                  event.stopPropagation();
+                }
+
+                form.classList.add('was-validated');
+              }, false);
+            });
+  })();
+
+  // Маска для телефона
+  document.addEventListener('DOMContentLoaded', function() {
+    const phoneInput = document.getElementById('phone');
+    if (phoneInput) {
+      phoneInput.addEventListener('input', function(e) {
+        let x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,4})/);
+        e.target.value = !x[2] ? x[1] : '+' + x[1] + ' (' + x[2] + ') ' + (x[3] ? x[3] + '-' + x[4] : x[3]);
+      });
+    }
+  });
+</script>
 </body>
 </html>
