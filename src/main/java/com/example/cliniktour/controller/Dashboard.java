@@ -2,7 +2,7 @@ package com.example.cliniktour.controller;
 
 import com.example.cliniktour.dto.ClinicDto;
 import com.example.cliniktour.dto.ContactRequestDto;
-import com.example.cliniktour.dto.DoctorDto;
+import com.example.cliniktour.dto.DoctorListDto;
 import com.example.cliniktour.service.ClinicService;
 import com.example.cliniktour.service.ContactRequestService;
 import com.example.cliniktour.service.DepartmentService;
@@ -50,7 +50,7 @@ public class Dashboard {
         model.addAttribute("latestClinics", latestClinics);
 
         // Получаем список последних врачей (ограничение по 5 врачей)
-        List<DoctorDto> latestDoctors = doctorService.getLatestDoctors(5);
+        List<DoctorListDto> latestDoctors = doctorService.getLatestDoctors(5);
         model.addAttribute("latestDoctors", latestDoctors);
 
         return "admin/dashboard";

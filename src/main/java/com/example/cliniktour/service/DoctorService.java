@@ -1,6 +1,7 @@
 package com.example.cliniktour.service;
-
-import com.example.cliniktour.dto.DoctorDto;
+import com.example.cliniktour.dto.CreateDoctorDto;
+import com.example.cliniktour.dto.DoctorDetailDto;
+import com.example.cliniktour.dto.DoctorListDto;
 import com.example.cliniktour.mapper.DoctorMapper;
 import com.example.cliniktour.model.Clinic;
 import com.example.cliniktour.model.Department;
@@ -36,19 +37,19 @@ public class DoctorService {
     }
 
     /**
-     * Получение всех докторов с преобразованием в DTO
+     * Получение всех докторов с преобразованием в ListDto
      */
-    public List<DoctorDto> getAllDoctorDtos() {
+    public List<DoctorListDto> getAllDoctorListDtos() {
         List<Doctor> doctors = doctorRepository.findAll();
-        return doctorMapper.toDtoList(doctors);
+        return doctorMapper.toListDtoList(doctors);
     }
 
     /**
-     * Получение страницы докторов с преобразованием в DTO
+     * Получение страницы докторов с преобразованием в ListDto
      */
-    public Page<DoctorDto> getDoctorPage(Pageable pageable) {
+    public Page<DoctorListDto> getDoctorListPage(Pageable pageable) {
         Page<Doctor> doctorPage = doctorRepository.findAll(pageable);
-        List<DoctorDto> doctorDtos = doctorMapper.toDtoList(doctorPage.getContent());
+        List<DoctorListDto> doctorDtos = doctorMapper.toListDtoList(doctorPage.getContent());
         return new PageImpl<>(doctorDtos, pageable, doctorPage.getTotalElements());
     }
 
@@ -60,11 +61,11 @@ public class DoctorService {
     }
 
     /**
-     * Получение доктора по ID с преобразованием в DTO
+     * Получение доктора по ID с преобразованием в DetailDto
      */
-    public Optional<DoctorDto> getDoctorDtoById(Long id) {
+    public Optional<DoctorDetailDto> getDoctorDetailById(Long id) {
         return doctorRepository.findById(id)
-                .map(doctorMapper::toDto);
+                .map(doctorMapper::toDetailDto);
     }
 
     /**
@@ -75,10 +76,26 @@ public class DoctorService {
     }
 
     /**
+     * Получение ListDto докторов по ID клиники
+     */
+    public List<DoctorListDto> getDoctorListDtosByClinicId(Long clinicId) {
+        List<Doctor> doctors = doctorRepository.findByClinicId(clinicId);
+        return doctorMapper.toListDtoList(doctors);
+    }
+
+    /**
      * Получение докторов по ID отделения
      */
     public List<Doctor> getDoctorsByDepartmentId(Long departmentId) {
         return doctorRepository.findByDepartmentId(departmentId);
+    }
+
+    /**
+     * Получение ListDto докторов по ID отделения
+     */
+    public List<DoctorListDto> getDoctorListDtosByDepartmentId(Long departmentId) {
+        List<Doctor> doctors = doctorRepository.findByDepartmentId(departmentId);
+        return doctorMapper.toListDtoList(doctors);
     }
 
     /**
@@ -91,17 +108,17 @@ public class DoctorService {
     /**
      * Поиск докторов по имени
      */
-    public List<DoctorDto> searchDoctorsByName(String name) {
+    public List<DoctorListDto> searchDoctorsByName(String name) {
         List<Doctor> doctors = doctorRepository.findByFullNameContainingIgnoreCase(name);
-        return doctorMapper.toDtoList(doctors);
+        return doctorMapper.toListDtoList(doctors);
     }
 
     /**
      * Поиск докторов по специализации
      */
-    public List<DoctorDto> searchDoctorsBySpecialization(String specialization) {
+    public List<DoctorListDto> searchDoctorsBySpecialization(String specialization) {
         List<Doctor> doctors = doctorRepository.findBySpecializationContainingIgnoreCase(specialization);
-        return doctorMapper.toDtoList(doctors);
+        return doctorMapper.toListDtoList(doctors);
     }
 
     /**
@@ -133,10 +150,10 @@ public class DoctorService {
     }
 
     /**
-     * Сохранение доктора из DTO
+     * Сохранение доктора из CreateDto
      */
     @Transactional
-    public Doctor saveDoctorFromDto(DoctorDto dto) {
+    public Doctor saveDoctorFromDto(CreateDoctorDto dto) {
         // Получаем клинику и отделение
         Clinic clinic = null;
         Department department = null;
@@ -167,10 +184,10 @@ public class DoctorService {
     }
 
     /**
-     * Сохранение доктора из DTO с изображением
+     * Сохранение доктора из CreateDto с изображением
      */
     @Transactional
-    public Doctor saveDoctorFromDtoWithImage(DoctorDto dto, MultipartFile image) throws IOException {
+    public Doctor saveDoctorFromDtoWithImage(CreateDoctorDto dto, MultipartFile image) throws IOException {
         // Получаем клинику и отделение
         Clinic clinic = null;
         Department department = null;
@@ -222,9 +239,43 @@ public class DoctorService {
         return doctorRepository.count();
     }
 
-    public List<DoctorDto> getLatestDoctors(int limit) {
+    /**
+     * Получение последних добавленных докторов
+     */
+    public List<DoctorListDto> getLatestDoctors(int limit) {
         Page<Doctor> doctorPage = doctorRepository.findAll(
                 PageRequest.of(0, limit, Sort.by(Sort.Direction.DESC, "createdAt")));
-        return doctorMapper.toDtoList(doctorPage.getContent());
+        return doctorMapper.toListDtoList(doctorPage.getContent());
+    }
+
+    /**
+     * Получение CreateDoctorDto для редактирования существующего доктора
+     */
+    public Optional<CreateDoctorDto> getCreateDoctorDtoForEdit(Long id) {
+        return doctorRepository.findById(id)
+                .map(doctor -> {
+                    CreateDoctorDto dto = new CreateDoctorDto();
+                    dto.setId(doctor.getId());
+                    dto.setFullName(doctor.getFullName());
+                    dto.setTitle(doctor.getTitle());
+                    dto.setSpecialization(doctor.getSpecialization());
+                    dto.setYearsOfExperience(doctor.getYearsOfExperience());
+                    dto.setMemberships(doctor.getMemberships());
+                    dto.setClinicalInterests(doctor.getClinicalInterests());
+                    dto.setEducation(doctor.getEducation());
+                    dto.setCareer(doctor.getCareer());
+                    dto.setAdditionalSpecializations(doctor.getAdditionalSpecializations());
+                    dto.setImagePath(doctor.getImagePath());
+
+                    if (doctor.getClinic() != null) {
+                        dto.setClinicId(doctor.getClinic().getId());
+                    }
+
+                    if (doctor.getDepartment() != null) {
+                        dto.setDepartmentId(doctor.getDepartment().getId());
+                    }
+
+                    return dto;
+                });
     }
 }

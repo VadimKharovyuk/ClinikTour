@@ -1,200 +1,571 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--  <meta charset="UTF-8">-->
+<!--  <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--  <title th:text="${doctor.fullName} + ' - Asiamedtour'">Врач - Asiamedtour</title>-->
+<!--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">-->
+<!--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">-->
+<!--  <link rel="stylesheet" th:href="@{/css/styles.css}">-->
+<!--</head>-->
+<!--<body>-->
+<!--&lt;!&ndash; Навигация &ndash;&gt;-->
+<!--<link rel="stylesheet" th:href="@{/css/header.css}">-->
+<!--<header th:replace="~{fragments/header :: header}"></header>-->
+
+<!--&lt;!&ndash; Основной контент &ndash;&gt;-->
+<!--<main class="container py-5">-->
+<!--  &lt;!&ndash; Хлебные крошки &ndash;&gt;-->
+<!--  <nav aria-label="breadcrumb" class="mb-4">-->
+<!--    <ol class="breadcrumb">-->
+<!--      <li class="breadcrumb-item"><a th:href="@{/}">Главная</a></li>-->
+<!--      <li class="breadcrumb-item"><a th:href="@{/doctors}">Врачи</a></li>-->
+<!--      <li class="breadcrumb-item active" aria-current="page" th:text="${doctor.fullName}">ФИО врача</li>-->
+<!--    </ol>-->
+<!--  </nav>-->
+
+<!--  &lt;!&ndash; Профиль врача &ndash;&gt;-->
+<!--  <div class="row mb-5">-->
+<!--    &lt;!&ndash; Информация о враче &ndash;&gt;-->
+<!--    <div class="col-lg-8">-->
+<!--      <h1 class="mb-2" th:text="${doctor.fullName}">ФИО врача</h1>-->
+
+<!--      <div class="mb-4">-->
+<!--        <span class="badge bg-primary me-2" th:text="${doctor.specialization}">Специализация</span>-->
+<!--        <span class="badge bg-secondary" th:if="${doctor.yearsOfExperience != null}"-->
+<!--              th:text="'Опыт работы: ' + ${doctor.yearsOfExperience} + ' лет'">Опыт работы</span>-->
+<!--      </div>-->
+
+<!--&lt;!&ndash;      <div class="card mb-4" th:if="${doctor.biography != null && !doctor.biography.isEmpty()}">&ndash;&gt;-->
+<!--&lt;!&ndash;        <div class="card-header">&ndash;&gt;-->
+<!--&lt;!&ndash;          <h5 class="mb-0">Биография</h5>&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <div class="card-body">&ndash;&gt;-->
+<!--&lt;!&ndash;          <div th:utext="${doctor.biography}">&ndash;&gt;-->
+<!--&lt;!&ndash;            Биография врача...&ndash;&gt;-->
+<!--&lt;!&ndash;          </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;      </div>&ndash;&gt;-->
+
+<!--      &lt;!&ndash; Образование и квалификация &ndash;&gt;-->
+<!--      <div class="card mb-4" th:if="${doctor.education != null && !doctor.education.isEmpty()}">-->
+<!--        <div class="card-header">-->
+<!--          <h5 class="mb-0">Образование и квалификация</h5>-->
+<!--        </div>-->
+<!--        <div class="card-body">-->
+<!--          <div th:utext="${doctor.education}">-->
+<!--            Образование врача...-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+
+<!--      &lt;!&ndash; Специализация и навыки &ndash;&gt;-->
+<!--&lt;!&ndash;      <div class="card mb-4" th:if="${doctor.skills != null && !doctor.skills.isEmpty()}">&ndash;&gt;-->
+<!--&lt;!&ndash;        <div class="card-header">&ndash;&gt;-->
+<!--&lt;!&ndash;          <h5 class="mb-0">Специализация и навыки</h5>&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <div class="card-body">&ndash;&gt;-->
+<!--&lt;!&ndash;          <div th:utext="${doctor.skills}">&ndash;&gt;-->
+<!--&lt;!&ndash;            Специализация и навыки врача...&ndash;&gt;-->
+<!--&lt;!&ndash;          </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;      </div>&ndash;&gt;-->
+
+<!--      &lt;!&ndash; Публикации и достижения &ndash;&gt;-->
+<!--&lt;!&ndash;      <div class="card mb-4" th:if="${doctor.publications != null && !doctor.publications.isEmpty()}">&ndash;&gt;-->
+<!--        <div class="card-header">-->
+<!--          <h5 class="mb-0">Публикации и достижения</h5>-->
+<!--        </div>-->
+<!--        <div class="card-body">-->
+<!--&lt;!&ndash;          <div th:utext="${doctor.publications}">&ndash;&gt;-->
+<!--            Публикации и достижения врача...-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Боковая информация &ndash;&gt;-->
+<!--    <div class="col-lg-4">-->
+<!--      &lt;!&ndash; Фото врача &ndash;&gt;-->
+<!--      <div class="card mb-4 shadow-sm">-->
+<!--        <img th:if="${doctor.imagePath}" th:src="${doctor.imagePath}" class="card-img-top img-fluid"-->
+<!--             alt="Фото врача">-->
+<!--        <img th:unless="${doctor.imagePath}" th:src="@{/img/default-doctor.jpg}" class="card-img-top img-fluid"-->
+<!--             alt="Фото врача по умолчанию">-->
+<!--        <div class="card-body">-->
+<!--          <div th:if="${clinic != null}" class="mb-3">-->
+<!--            <h5 class="card-title">Клиника</h5>-->
+<!--            <p class="card-text">-->
+<!--              <a th:href="@{/clinics/{id}(id=${clinic.id})}" th:text="${clinic.name}">Название клиники</a><br>-->
+<!--              <span th:if="${!#strings.isEmpty(clinic.address)}" th:text="${clinic.address}">Адрес клиники</span><br>-->
+<!--              <span th:if="${!#strings.isEmpty(clinic.city) && !#strings.isEmpty(clinic.country)}"-->
+<!--                    th:text="${clinic.city + ', ' + clinic.country}">Город, Страна</span>-->
+<!--            </p>-->
+<!--          </div>-->
+
+<!--          <div th:if="${department != null}" class="mb-3">-->
+<!--            <h5 class="card-title">Отделение</h5>-->
+<!--            <p class="card-text">-->
+<!--              <a th:href="@{/departments/{id}(id=${department.id})}" th:text="${department.name}">Название отделения</a>-->
+<!--            </p>-->
+<!--          </div>-->
+
+<!--          <h5 class="card-title">Записаться на приём</h5>-->
+<!--          <a href="#appointment-form" class="btn btn-primary w-100 mb-2">Оставить заявку</a>-->
+<!--          <a href="tel:+123456789" class="btn btn-outline-primary w-100">Позвонить</a>-->
+<!--        </div>-->
+<!--      </div>-->
+
+<!--      &lt;!&ndash; Похожие врачи &ndash;&gt;-->
+<!--      <div class="card mb-4" th:if="${similarDoctors != null && !similarDoctors.empty}">-->
+<!--        <div class="card-header">-->
+<!--          <h5 class="mb-0">Похожие специалисты</h5>-->
+<!--        </div>-->
+<!--        <div class="card-body p-0">-->
+<!--          <div class="list-group list-group-flush">-->
+<!--            <a th:each="similar : ${similarDoctors}"-->
+<!--               th:href="@{/doctors/{id}(id=${similar.id})}"-->
+<!--               class="list-group-item list-group-item-action d-flex align-items-center">-->
+<!--              <img th:if="${similar.imagePath}" th:src="${similar.imagePath}"-->
+<!--                   alt="Фото врача" class="rounded-circle me-3" style="width: 40px; height: 40px; object-fit: cover;">-->
+<!--              <img th:unless="${similar.imagePath}" th:src="@{/img/default-doctor.jpg}"-->
+<!--                   alt="Фото врача по умолчанию" class="rounded-circle me-3" style="width: 40px; height: 40px; object-fit: cover;">-->
+<!--              <div>-->
+<!--                <div class="fw-bold" th:text="${similar.fullName}">ФИО врача</div>-->
+<!--                <small class="text-muted" th:text="${similar.specialization}">Специализация</small>-->
+<!--              </div>-->
+<!--            </a>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+
+
+<!--  &lt;!&ndash; Форма для записи на приём &ndash;&gt;-->
+<!--  <div class="card mt-5" id="appointment-form">-->
+<!--    <div class="card-header bg-primary text-white">-->
+<!--      <h3 class="mb-0">Записаться на приём</h3>-->
+<!--    </div>-->
+<!--    <div class="card-body">-->
+<!--      <form th:action="@{/appointments/request}" method="post">-->
+<!--        <input type="hidden" name="doctorId" th:value="${doctor.id}">-->
+
+<!--        <div class="row mb-3">-->
+<!--          <div class="col-md-6 mb-3 mb-md-0">-->
+<!--            <label for="fullName" class="form-label">ФИО</label>-->
+<!--            <input type="text" class="form-control" id="fullName" name="fullName" required>-->
+<!--          </div>-->
+<!--          <div class="col-md-6">-->
+<!--            <label for="phone" class="form-label">Телефон</label>-->
+<!--            <input type="tel" class="form-control" id="phone" name="phone" required>-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--        <div class="mb-3">-->
+<!--          <label for="email" class="form-label">Email</label>-->
+<!--          <input type="email" class="form-control" id="email" name="email" required>-->
+<!--        </div>-->
+
+<!--        <div class="mb-3">-->
+<!--          <label for="preferredDate" class="form-label">Предпочтительная дата</label>-->
+<!--          <input type="date" class="form-control" id="preferredDate" name="preferredDate" required>-->
+<!--        </div>-->
+
+<!--        <div class="mb-3">-->
+<!--          <label for="message" class="form-label">Сообщение</label>-->
+<!--          <textarea class="form-control" id="message" name="message" rows="4"></textarea>-->
+<!--        </div>-->
+
+<!--        <div class="form-check mb-3">-->
+<!--          <input class="form-check-input" type="checkbox" id="agree" name="agree" required>-->
+<!--          <label class="form-check-label" for="agree">-->
+<!--            Я согласен на обработку персональных данных-->
+<!--          </label>-->
+<!--        </div>-->
+
+<!--        <button type="submit" class="btn btn-primary">Отправить заявку</button>-->
+<!--      </form>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</main>-->
+
+<!--&lt;!&ndash; Подвал &ndash;&gt;-->
+<!--<link rel="stylesheet" th:href="@{/css/footer.css}">-->
+<!--<footer th:replace="~{fragments/footer :: footer}"></footer>-->
+
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>-->
+<!--<script th:src="@{/js/scripts.js}"></script>-->
+<!--</body>-->
+<!--</html>-->
+
+
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title th:text="${doctor.fullName} + ' - Asiamedtour'">Врач - Asiamedtour</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <title th:text="${doctor.fullName + ' - ' + doctor.specialization}">Доктор - Клиник-Тур</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <!-- FontAwesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <style>
+    .doctor-profile-header {
+      background-color: #f8f9fa;
+      padding: 2rem 0;
+      border-bottom: 1px solid #e9ecef;
+      margin-bottom: 2rem;
+    }
+    .doctor-specialty-badge {
+      background-color: #e9f5ff;
+      color: #0d6efd;
+      font-weight: normal;
+      font-size: 0.9rem;
+      padding: 0.5rem 1rem;
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
+      border-radius: 50px;
+      display: inline-block;
+    }
+    .doctor-info-section {
+      margin-bottom: 2rem;
+    }
+    .doctor-info-section h3 {
+      color: #1e3a8a;
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #e9ecef;
+    }
+    .doctor-image {
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      max-width: 100%;
+      height: auto;
+    }
+    .doctor-profile-details {
+      background-color: white;
+      padding: 2rem 0;
+    }
+    .profile-section {
+      margin-bottom: 2.5rem;
+    }
+    .sidebar-card {
+      margin-bottom: 1.5rem;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .sidebar-card .card-header {
+      padding: 1rem;
+    }
+    .sidebar-card .card-body {
+      padding: 1.25rem;
+    }
+    .similar-doctors {
+      background-color: #f8f9fa;
+      padding: 3rem 0;
+      margin-top: 3rem;
+    }
+    .doctor-card {
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      height: 100%;
+    }
+    .doctor-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    .doctor-card-img {
+      height: 220px;
+      object-fit: cover;
+    }
+    .doctor-card-info {
+      padding: 1.25rem;
+    }
+    .appointment-btn {
+      background-color: #1e3a8a;
+      border-color: #1e3a8a;
+      padding: 0.75rem 2rem;
+      font-weight: 500;
+      border-radius: 50px;
+    }
+    .appointment-btn:hover {
+      background-color: #152a60;
+      border-color: #152a60;
+    }
+    .appointment-section {
+      background-color: #f8f9fa;
+      padding: 3rem 0;
+      margin-top: 3rem;
+    }
+    .appointment-card {
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    .appointment-card .card-header {
+      padding: 1.5rem;
+    }
+    .doctor-info-empty {
+      color: #6c757d;
+      font-style: italic;
+      padding: 1rem 0;
+    }
+    .sticky-sidebar {
+      position: sticky;
+      top: 20px;
+    }
+    .text-content p {
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+    @media (max-width: 992px) {
+      .sticky-sidebar {
+        position: static;
+        margin-top: 2rem;
+      }
+    }
+  </style>
 </head>
 <body>
-<!-- Навигация -->
-<link rel="stylesheet" th:href="@{/css/header.css}">
-<header th:replace="~{fragments/header :: header}"></header>
+<!-- Подключаем шапку сайта -->
+<div th:replace="~{fragments/header :: header}"></div>
 
 <!-- Основной контент -->
-<main class="container py-5">
-  <!-- Хлебные крошки -->
-  <nav aria-label="breadcrumb" class="mb-4">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a th:href="@{/}">Главная</a></li>
-      <li class="breadcrumb-item"><a th:href="@{/doctors}">Врачи</a></li>
-      <li class="breadcrumb-item active" aria-current="page" th:text="${doctor.fullName}">ФИО врача</li>
-    </ol>
-  </nav>
-
-  <!-- Профиль врача -->
-  <div class="row mb-5">
-    <!-- Информация о враче -->
-    <div class="col-lg-8">
-      <h1 class="mb-2" th:text="${doctor.fullName}">ФИО врача</h1>
-
-      <div class="mb-4">
-        <span class="badge bg-primary me-2" th:text="${doctor.specialization}">Специализация</span>
-        <span class="badge bg-secondary" th:if="${doctor.yearsOfExperience != null}"
-              th:text="'Опыт работы: ' + ${doctor.yearsOfExperience} + ' лет'">Опыт работы</span>
-      </div>
-
-<!--      <div class="card mb-4" th:if="${doctor.biography != null && !doctor.biography.isEmpty()}">-->
-<!--        <div class="card-header">-->
-<!--          <h5 class="mb-0">Биография</h5>-->
-<!--        </div>-->
-<!--        <div class="card-body">-->
-<!--          <div th:utext="${doctor.biography}">-->
-<!--            Биография врача...-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-
-      <!-- Образование и квалификация -->
-      <div class="card mb-4" th:if="${doctor.education != null && !doctor.education.isEmpty()}">
-        <div class="card-header">
-          <h5 class="mb-0">Образование и квалификация</h5>
+<main>
+  <!-- Шапка профиля доктора -->
+  <section class="doctor-profile-header">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-4 col-md-5 text-center text-md-start mb-4 mb-md-0">
+          <img th:if="${doctor.imagePath}" th:src="${doctor.imagePath}" alt="Фото доктора" class="doctor-image img-fluid">
+          <img th:unless="${doctor.imagePath}" th:src="@{/images/doctor-placeholder.jpg}" alt="Фото доктора" class="doctor-image img-fluid">
         </div>
-        <div class="card-body">
-          <div th:utext="${doctor.education}">
-            Образование врача...
+        <div class="col-lg-8 col-md-7">
+          <h1 class="mb-2" th:text="${doctor.fullName}">Имя Доктора</h1>
+          <p class="fs-5 text-muted mb-3" th:if="${doctor.title}" th:text="${doctor.title}">Ученая степень</p>
+
+          <div class="mb-3">
+            <span class="doctor-specialty-badge" th:text="${doctor.specialization}">Основная специализация</span>
+            <th:block th:if="${doctor.additionalSpecializations != null && !doctor.additionalSpecializations.empty}">
+              <span class="doctor-specialty-badge" th:each="spec : ${doctor.additionalSpecializations}" th:text="${spec}">
+                Дополнительная специализация
+              </span>
+            </th:block>
           </div>
-        </div>
-      </div>
 
-      <!-- Специализация и навыки -->
-<!--      <div class="card mb-4" th:if="${doctor.skills != null && !doctor.skills.isEmpty()}">-->
-<!--        <div class="card-header">-->
-<!--          <h5 class="mb-0">Специализация и навыки</h5>-->
-<!--        </div>-->
-<!--        <div class="card-body">-->
-<!--          <div th:utext="${doctor.skills}">-->
-<!--            Специализация и навыки врача...-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-
-      <!-- Публикации и достижения -->
-<!--      <div class="card mb-4" th:if="${doctor.publications != null && !doctor.publications.isEmpty()}">-->
-        <div class="card-header">
-          <h5 class="mb-0">Публикации и достижения</h5>
-        </div>
-        <div class="card-body">
-<!--          <div th:utext="${doctor.publications}">-->
-            Публикации и достижения врача...
+          <div class="d-flex flex-column flex-md-row mb-3">
+            <span class="me-md-4 mb-2 mb-md-0" th:if="${doctor.clinicName != null}">
+              <i class="fas fa-hospital me-2 text-primary"></i>
+              <span th:text="${doctor.clinicName}">Название клиники</span>
+            </span>
+            <span class="mb-2 mb-md-0" th:if="${doctor.departmentName != null}">
+              <i class="fas fa-briefcase-medical me-2 text-primary"></i>
+              <span th:text="${doctor.departmentName}">Название отделения</span>
+            </span>
           </div>
+
+          <div class="mb-4" th:if="${doctor.yearsOfExperience != null}">
+            <span>
+              <i class="fas fa-clock me-2 text-primary"></i>
+              <span th:text="${'Стаж: ' + doctor.yearsOfExperience + ' лет'}">Стаж: 15 лет</span>
+            </span>
+          </div>
+
+          <a href="#appointment-section" class="btn btn-primary appointment-btn">
+            <i class="fas fa-calendar-check me-2"></i> Записаться на прием
+          </a>
         </div>
       </div>
     </div>
+  </section>
 
-    <!-- Боковая информация -->
-    <div class="col-lg-4">
-      <!-- Фото врача -->
-      <div class="card mb-4 shadow-sm">
-        <img th:if="${doctor.imagePath}" th:src="${doctor.imagePath}" class="card-img-top img-fluid"
-             alt="Фото врача">
-        <img th:unless="${doctor.imagePath}" th:src="@{/img/default-doctor.jpg}" class="card-img-top img-fluid"
-             alt="Фото врача по умолчанию">
-        <div class="card-body">
-          <div th:if="${clinic != null}" class="mb-3">
-            <h5 class="card-title">Клиника</h5>
-            <p class="card-text">
-              <a th:href="@{/clinics/{id}(id=${clinic.id})}" th:text="${clinic.name}">Название клиники</a><br>
-              <span th:if="${!#strings.isEmpty(clinic.address)}" th:text="${clinic.address}">Адрес клиники</span><br>
-              <span th:if="${!#strings.isEmpty(clinic.city) && !#strings.isEmpty(clinic.country)}"
-                    th:text="${clinic.city + ', ' + clinic.country}">Город, Страна</span>
-            </p>
+  <!-- Детали профиля доктора -->
+  <section class="doctor-profile-details">
+    <div class="container">
+      <div class="row">
+        <!-- Основная информация о докторе -->
+        <div class="col-lg-8">
+          <!-- Информация, если нет данных -->
+          <div class="doctor-info-empty" th:if="${(doctor.education == null || doctor.education.isEmpty()) &&
+                                               (doctor.career == null || doctor.career.isEmpty()) &&
+                                               (doctor.clinicalInterests == null || doctor.clinicalInterests.isEmpty()) &&
+                                               (doctor.memberships == null || doctor.memberships.isEmpty())}">
+            <p>Подробная информация о докторе скоро появится.</p>
           </div>
 
-          <div th:if="${department != null}" class="mb-3">
-            <h5 class="card-title">Отделение</h5>
-            <p class="card-text">
-              <a th:href="@{/departments/{id}(id=${department.id})}" th:text="${department.name}">Название отделения</a>
-            </p>
+          <!-- Образование -->
+          <div class="doctor-info-section" th:if="${doctor.education != null && !doctor.education.isEmpty()}">
+            <h3>Образование</h3>
+            <div class="text-content" th:utext="${#strings.replace(#strings.escapeXml(doctor.education), '&#10;', '<br>')}">
+              Образовательная информация
+            </div>
           </div>
 
-          <h5 class="card-title">Записаться на приём</h5>
-          <a href="#appointment-form" class="btn btn-primary w-100 mb-2">Оставить заявку</a>
-          <a href="tel:+123456789" class="btn btn-outline-primary w-100">Позвонить</a>
-        </div>
-      </div>
+          <!-- Карьера -->
+          <div class="doctor-info-section" th:if="${doctor.career != null && !doctor.career.isEmpty()}">
+            <h3>Карьера</h3>
+            <div class="text-content" th:utext="${#strings.replace(#strings.escapeXml(doctor.career), '&#10;', '<br>')}">
+              Карьерная информация
+            </div>
+          </div>
 
-      <!-- Похожие врачи -->
-      <div class="card mb-4" th:if="${similarDoctors != null && !similarDoctors.empty}">
-        <div class="card-header">
-          <h5 class="mb-0">Похожие специалисты</h5>
+          <!-- Области клинических интересов -->
+          <div class="doctor-info-section" th:if="${doctor.clinicalInterests != null && !doctor.clinicalInterests.isEmpty()}">
+            <h3>Области клинических интересов</h3>
+            <div class="text-content" th:utext="${#strings.replace(#strings.escapeXml(doctor.clinicalInterests), '&#10;', '<br>')}">
+              Области интересов
+            </div>
+          </div>
+
+          <!-- Членство в организациях -->
+          <div class="doctor-info-section" th:if="${doctor.memberships != null && !doctor.memberships.isEmpty()}">
+            <h3>Членство в профессиональных организациях</h3>
+            <div class="text-content" th:utext="${#strings.replace(#strings.escapeXml(doctor.memberships), '&#10;', '<br>')}">
+              Членство в организациях
+            </div>
+          </div>
         </div>
-        <div class="card-body p-0">
-          <div class="list-group list-group-flush">
-            <a th:each="similar : ${similarDoctors}"
-               th:href="@{/doctors/{id}(id=${similar.id})}"
-               class="list-group-item list-group-item-action d-flex align-items-center">
-              <img th:if="${similar.imagePath}" th:src="${similar.imagePath}"
-                   alt="Фото врача" class="rounded-circle me-3" style="width: 40px; height: 40px; object-fit: cover;">
-              <img th:unless="${similar.imagePath}" th:src="@{/img/default-doctor.jpg}"
-                   alt="Фото врача по умолчанию" class="rounded-circle me-3" style="width: 40px; height: 40px; object-fit: cover;">
-              <div>
-                <div class="fw-bold" th:text="${similar.fullName}">ФИО врача</div>
-                <small class="text-muted" th:text="${similar.specialization}">Специализация</small>
+
+        <!-- Боковая панель -->
+        <div class="col-lg-4">
+          <div class="sticky-sidebar">
+            <!-- Информация о клинике -->
+            <div class="sidebar-card card mb-4" th:if="${clinic != null}">
+              <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">О клинике</h5>
               </div>
-            </a>
+              <div class="card-body">
+                <h5 class="card-title" th:text="${clinic.name}">Название клиники</h5>
+                <p class="card-text" th:if="${clinic.address != null && !clinic.address.isEmpty()}" th:text="${clinic.address}">Адрес клиники</p>
+                </p>
+                <a th:href="@{'/clinics/' + ${clinic.id}}" class="btn btn-outline-primary">Подробнее о клинике</a>
+              </div>
+            </div>
+
+            <!-- Информация об отделении -->
+            <div class="sidebar-card card" th:if="${department != null}">
+              <div class="card-header bg-info text-white">
+                <h5 class="mb-0">Отделение</h5>
+              </div>
+              <div class="card-body">
+                <h5 class="card-title" th:text="${department.name}">Название отделения</h5>
+                <p class="card-text" th:if="${department.description != null && !department.description.isEmpty()}" th:text="${department.description}">
+                  Описание отделения
+                </p>
+                <a th:href="@{'/departments/' + ${department.id}}" class="btn btn-outline-info">Подробнее об отделении</a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
+  <!-- Форма записи на прием -->
+  <section id="appointment-section" class="appointment-section">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <h2 class="text-center mb-4">Запись на прием</h2>
+          <div class="appointment-card card shadow">
+            <div class="card-header bg-primary text-white text-center">
+              <h3 class="mb-0">Заполните форму</h3>
+            </div>
+            <div class="card-body p-4">
+              <form th:action="@{/appointments/request}" method="post">
+                <input type="hidden" name="doctorId" th:value="${doctor.id}">
 
-  <!-- Форма для записи на приём -->
-  <div class="card mt-5" id="appointment-form">
-    <div class="card-header bg-primary text-white">
-      <h3 class="mb-0">Записаться на приём</h3>
-    </div>
-    <div class="card-body">
-      <form th:action="@{/appointments/request}" method="post">
-        <input type="hidden" name="doctorId" th:value="${doctor.id}">
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="firstName" class="form-label">Имя *</label>
+                    <input type="text" class="form-control" id="firstName" name="firstName" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="lastName" class="form-label">Фамилия *</label>
+                    <input type="text" class="form-control" id="lastName" name="lastName" required>
+                  </div>
+                </div>
 
-        <div class="row mb-3">
-          <div class="col-md-6 mb-3 mb-md-0">
-            <label for="fullName" class="form-label">ФИО</label>
-            <input type="text" class="form-control" id="fullName" name="fullName" required>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="phone" class="form-label">Телефон *</label>
+                    <input type="tel" class="form-control" id="phone" name="phone" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email">
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="preferredDate" class="form-label">Предпочтительная дата *</label>
+                  <input type="date" class="form-control" id="preferredDate" name="preferredDate" required>
+                </div>
+
+                <div class="mb-3">
+                  <label for="message" class="form-label">Сообщение</label>
+                  <textarea class="form-control" id="message" name="message" rows="3" placeholder="Опишите цель вашего визита..."></textarea>
+                </div>
+
+                <div class="d-grid">
+                  <button type="submit" class="btn btn-primary appointment-btn">
+                    <i class="fas fa-calendar-check me-2"></i> Отправить заявку
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
-          <div class="col-md-6">
-            <label for="phone" class="form-label">Телефон</label>
-            <input type="tel" class="form-control" id="phone" name="phone" required>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Похожие доктора -->
+  <section class="similar-doctors" th:if="${similarDoctors != null && !similarDoctors.empty}">
+    <div class="container">
+      <h2 class="text-center mb-4">Похожие специалисты</h2>
+      <div class="row">
+        <div class="col-lg-4 col-md-6 mb-4" th:each="similarDoctor : ${similarDoctors}">
+          <div class="doctor-card h-100">
+            <img th:if="${similarDoctor.imagePath}" th:src="${similarDoctor.imagePath}" class="card-img-top doctor-card-img" alt="Фото доктора">
+            <img th:unless="${similarDoctor.imagePath}" th:src="@{/images/doctor-placeholder.jpg}" class="card-img-top doctor-card-img" alt="Фото доктора">
+            <div class="doctor-card-info d-flex flex-column">
+              <h5 class="card-title" th:text="${similarDoctor.fullName}">Имя доктора</h5>
+              <p class="card-text text-muted mb-2" th:text="${similarDoctor.specialization}">Специализация</p>
+              <p class="card-text mb-3" th:if="${similarDoctor.shortBio}" th:text="${similarDoctor.shortBio}">Краткая биография</p>
+              <a th:href="@{'/doctors/' + ${similarDoctor.id}}" class="btn btn-outline-primary mt-auto">Подробнее</a>
+            </div>
           </div>
         </div>
-
-        <div class="mb-3">
-          <label for="email" class="form-label">Email</label>
-          <input type="email" class="form-control" id="email" name="email" required>
-        </div>
-
-        <div class="mb-3">
-          <label for="preferredDate" class="form-label">Предпочтительная дата</label>
-          <input type="date" class="form-control" id="preferredDate" name="preferredDate" required>
-        </div>
-
-        <div class="mb-3">
-          <label for="message" class="form-label">Сообщение</label>
-          <textarea class="form-control" id="message" name="message" rows="4"></textarea>
-        </div>
-
-        <div class="form-check mb-3">
-          <input class="form-check-input" type="checkbox" id="agree" name="agree" required>
-          <label class="form-check-label" for="agree">
-            Я согласен на обработку персональных данных
-          </label>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Отправить заявку</button>
-      </form>
+      </div>
     </div>
-  </div>
+  </section>
 </main>
 
-<!-- Подвал -->
-<link rel="stylesheet" th:href="@{/css/footer.css}">
-<footer th:replace="~{fragments/footer :: footer}"></footer>
+<!-- Подключаем подвал сайта -->
+<div th:replace="~{fragments/footer :: footer}"></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-<script th:src="@{/js/scripts.js}"></script>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Маска для телефона -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('#phone').inputmask("+7 (999) 999-99-99");
+
+    // Установка минимальной даты для выбора (сегодня)
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('preferredDate').setAttribute('min', today);
+  });
+</script>
 </body>
 </html>
