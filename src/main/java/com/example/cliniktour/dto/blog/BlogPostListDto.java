@@ -1,5 +1,6 @@
 package com.example.cliniktour.dto.blog;
 
+import com.example.cliniktour.enums.BlogPostType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ public class BlogPostListDto {
     private String title;
     private String excerpt;
     private String imagePath;
+    private BlogPostType postType;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

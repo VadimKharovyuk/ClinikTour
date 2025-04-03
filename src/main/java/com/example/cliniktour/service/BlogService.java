@@ -4,6 +4,7 @@ import com.example.cliniktour.dto.blog.BlogPostCreateDto;
 import com.example.cliniktour.dto.blog.BlogPostDetailDto;
 import com.example.cliniktour.dto.blog.BlogPostListDto;
 import com.example.cliniktour.dto.blog.BlogPostPageDto;
+import com.example.cliniktour.enums.BlogPostType;
 import com.example.cliniktour.mapper.BlogMapper;
 import com.example.cliniktour.model.BlogPost;
 import com.example.cliniktour.repository.BlogPostRepository;
@@ -177,5 +178,39 @@ public class BlogService {
     private BlogPost findPostById(Long id) {
         return blogPostRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Блог-пост не найден с ID: " + id));
+    }
+
+    /**
+     * Получить блог-посты определенного типа с пагинацией
+     *
+     * @param postType тип постов для фильтрации
+     * @param pageable объект пагинации
+     * @return страница с DTO блог-постов для списка
+     */
+    public Page<BlogPostListDto> getPostsByType(BlogPostType postType, Pageable pageable) {
+        return blogPostRepository.findByPostType(postType, pageable)
+                .map(blogMapper::toListDto);
+    }
+
+    /**
+     * Получить блог-посты определенного типа для публичной части сайта с пагинацией
+     *
+     * @param postType тип постов для фильтрации
+     * @param pageable объект пагинации
+     * @return DTO с пагинированным списком блог-постов
+     */
+    public BlogPostPageDto getPublicPostsByType(BlogPostType postType, Pageable pageable) {
+        Page<BlogPost> postsPage = blogPostRepository.findByPostType(postType, pageable);
+
+        List<BlogPostListDto> posts = postsPage.getContent().stream()
+                .map(blogMapper::toListDto)
+                .collect(Collectors.toList());
+
+        return new BlogPostPageDto(
+                posts,
+                postsPage.getNumber(),
+                postsPage.getTotalPages(),
+                postsPage.getTotalElements()
+        );
     }
 }

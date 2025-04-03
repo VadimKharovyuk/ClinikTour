@@ -33,6 +33,7 @@ public class BlogMapper {
         entity.setTitle(dto.getTitle());
         entity.setContent(dto.getContent());
         entity.setExcerpt(dto.getExcerpt());
+        entity.setPostType(dto.getPostType());
 
         // Обработка изображения, если оно предоставлено
         if (imageFile != null && !imageFile.isEmpty()) {
@@ -63,6 +64,7 @@ public class BlogMapper {
         entity.setTitle(dto.getTitle());
         entity.setContent(dto.getContent());
         entity.setExcerpt(dto.getExcerpt());
+        entity.setPostType(dto.getPostType());
 
         // Обработка изображения, если новое изображение предоставлено
         if (imageFile != null && !imageFile.isEmpty()) {
@@ -78,8 +80,6 @@ public class BlogMapper {
         } else if (dto.getImagePath() != null && !dto.getImagePath().isEmpty() &&
                 !dto.getImagePath().equals(entity.getImagePath())) {
             // Если URL изображения изменился, но новый файл не был загружен
-            // (Это может произойти при изменении URL вручную, в этом случае
-            // мы не можем удалить старое изображение, так как у нас нет deleteHash для нового)
             entity.setImagePath(dto.getImagePath());
         }
 
@@ -98,6 +98,7 @@ public class BlogMapper {
                 entity.getTitle(),
                 entity.getExcerpt(),
                 entity.getImagePath(),
+                entity.getPostType(),
                 entity.getCreatedAt(),
                 entity.getUpdatedAt()
         );
@@ -115,6 +116,7 @@ public class BlogMapper {
                 entity.getContent(),
                 entity.getExcerpt(),
                 entity.getImagePath(),
+                entity.getPostType(),
                 entity.getCreatedAt(),
                 entity.getUpdatedAt()
         );
@@ -127,11 +129,12 @@ public class BlogMapper {
      * @return DTO для создания/обновления
      */
     public BlogPostCreateDto toCreateDto(BlogPost entity) {
-        return new BlogPostCreateDto(
-                entity.getTitle(),
-                entity.getContent(),
-                entity.getExcerpt(),
-                entity.getImagePath()
-        );
+        BlogPostCreateDto dto = new BlogPostCreateDto();
+        dto.setTitle(entity.getTitle());
+        dto.setContent(entity.getContent());
+        dto.setExcerpt(entity.getExcerpt());
+        dto.setImagePath(entity.getImagePath());
+        dto.setPostType(entity.getPostType());
+        return dto;
     }
 }

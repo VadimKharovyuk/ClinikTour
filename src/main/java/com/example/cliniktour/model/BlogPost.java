@@ -1,5 +1,6 @@
 package com.example.cliniktour.model;
 
+import com.example.cliniktour.enums.BlogPostType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -42,6 +43,9 @@ public class BlogPost {
     // Хеш для удаления изображения (если используется внешний сервис хранения)
     private String imageDeleteHash;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "post_type")
+    private BlogPostType postType;
 
     @CreationTimestamp
     @Column(updatable = false)

@@ -4,6 +4,7 @@ import com.example.cliniktour.dto.blog.BlogPostCreateDto;
 import com.example.cliniktour.dto.blog.BlogPostDetailDto;
 import com.example.cliniktour.dto.blog.BlogPostListDto;
 import com.example.cliniktour.dto.blog.BlogPostPageDto;
+import com.example.cliniktour.enums.BlogPostType;
 import com.example.cliniktour.service.BlogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -35,17 +36,35 @@ public class AdminBlogController {
     private final BlogService blogService;
 
     /**
+     * Добавление списка типов постов в модель для форм
+     */
+    @ModelAttribute("postTypes")
+    public BlogPostType[] getPostTypes() {
+        return BlogPostType.values();
+    }
+
+    /**
      * Страница со списком статей блога
      */
     @GetMapping
     public String listBlogPosts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) BlogPostType postType,
             Model model) {
 
-        Page<BlogPostListDto> postsPage = blogService.getAllPosts(
-                PageRequest.of(page, size, Sort.by("createdAt").descending())
-        );
+        Page<BlogPostListDto> postsPage;
+
+        if (postType != null) {
+            // Если указан тип поста, используем фильтрацию
+            postsPage = blogService.getPostsByType(postType,
+                    PageRequest.of(page, size, Sort.by("createdAt").descending()));
+            model.addAttribute("selectedType", postType);
+        } else {
+            // Иначе получаем все посты
+            postsPage = blogService.getAllPosts(
+                    PageRequest.of(page, size, Sort.by("createdAt").descending()));
+        }
 
         BlogPostPageDto pageDto = new BlogPostPageDto(
                 postsPage.getContent(),
@@ -57,6 +76,7 @@ public class AdminBlogController {
         model.addAttribute("pageDto", pageDto);
         return "admin/blog/list";
     }
+
 
     /**
      * Страница создания новой статьи

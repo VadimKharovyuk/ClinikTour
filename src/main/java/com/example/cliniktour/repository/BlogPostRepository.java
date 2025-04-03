@@ -1,5 +1,6 @@
 package com.example.cliniktour.repository;
 
+import com.example.cliniktour.enums.BlogPostType;
 import com.example.cliniktour.model.BlogPost;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,4 +28,7 @@ public interface BlogPostRepository extends JpaRepository<BlogPost, Long> {
      * Поиск по содержимому
      */
     Page<BlogPost> findByContentContainingIgnoreCase(String content, Pageable pageable);
+
+    Page<BlogPost> findByPostType(BlogPostType postType, Pageable pageable);
+
 }

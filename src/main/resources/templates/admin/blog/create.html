@@ -56,6 +56,18 @@
         </div>
 
         <div class="mb-3">
+          <label for="postType" class="form-label">Тип статьи <span class="text-danger">*</span></label>
+          <select class="form-select" id="postType" th:field="*{postType}" required>
+            <option value="">-- Выберите тип статьи --</option>
+            <option th:each="type : ${postTypes}"
+                    th:value="${type}"
+                    th:text="${type.displayName}">Тип статьи</option>
+          </select>
+          <div class="text-danger" th:if="${#fields.hasErrors('postType')}" th:errors="*{postType}"></div>
+          <div class="form-text">Выберите категорию, к которой относится статья.</div>
+        </div>
+
+        <div class="mb-3">
           <label for="excerpt" class="form-label">Краткое описание</label>
           <textarea class="form-control" id="excerpt" th:field="*{excerpt}" rows="3"
                     placeholder="Введите краткое описание статьи (до 500 символов)"></textarea>
@@ -85,7 +97,6 @@
   </div>
 </main>
 
-<!-- Подвал -->
 <!-- Подвал -->
 <link rel="stylesheet" th:href="@{/css/footer.css}">
 <footer th:replace="~{fragments/footer :: footer}"></footer>
