@@ -15,6 +15,9 @@ public class ClinikTourApplication {
 
     // Приложение будет доступно по адресу: http://localhost:2817
 
+
+    //     docker-compose -f docker-compose.prod.yml up -d
+
     //______________________________________
 
 

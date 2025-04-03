@@ -17,7 +17,6 @@ import java.util.List;
 public class AdminAppointmentController {
 
     private final AppointmentService appointmentService;
-
     @GetMapping
     public String getAllAppointments(
             @RequestParam(required = false) String type,
@@ -25,6 +24,7 @@ public class AdminAppointmentController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo,
             @RequestParam(required = false) Long doctorId,
             @RequestParam(required = false) Long clinicId,
+            @RequestParam(required = false) Long serviceId,
             Model model
     ) {
         List<Appointment> appointments;
@@ -34,11 +34,15 @@ public class AdminAppointmentController {
             appointments = appointmentService.getDoctorAppointments(doctorId);
         } else if (clinicId != null) {
             appointments = appointmentService.getClinicConsultations(clinicId);
+        } else if (serviceId != null) {
+            appointments = appointmentService.getServiceAppointments(serviceId);
         } else if (type != null && dateFrom != null && dateTo != null) {
             if ("doctor".equals(type)) {
                 appointments = appointmentService.getDoctorAppointmentsByDateRange(dateFrom, dateTo);
             } else if ("clinic".equals(type)) {
                 appointments = appointmentService.getClinicConsultationsByDateRange(dateFrom, dateTo);
+            } else if ("service".equals(type)) {
+                appointments = appointmentService.getServiceAppointmentsByDateRange(dateFrom, dateTo);
             } else {
                 appointments = appointmentService.getAppointmentsByDateRange(dateFrom, dateTo);
             }
@@ -47,6 +51,8 @@ public class AdminAppointmentController {
                 appointments = appointmentService.getAllDoctorAppointments();
             } else if ("clinic".equals(type)) {
                 appointments = appointmentService.getAllClinicConsultations();
+            } else if ("service".equals(type)) {
+                appointments = appointmentService.getAllServiceAppointments();
             } else {
                 appointments = appointmentService.getAllAppointments();
             }
@@ -59,39 +65,122 @@ public class AdminAppointmentController {
         // Статистика для карточек
         int doctorAppointmentsCount = appointmentService.countDoctorAppointments();
         int clinicConsultationsCount = appointmentService.countClinicConsultations();
+        int serviceAppointmentsCount = appointmentService.countServiceAppointments(serviceId);
         int todayAppointmentsCount = appointmentService.countTodayAppointments();
 
         model.addAttribute("appointments", appointments);
         model.addAttribute("doctorAppointments", doctorAppointmentsCount);
         model.addAttribute("clinicConsultations", clinicConsultationsCount);
+        model.addAttribute("serviceAppointments", serviceAppointmentsCount);
         model.addAttribute("todayAppointments", todayAppointmentsCount);
 
         return "admin/appointments/list";
     }
 
-    @GetMapping("/{id}")
-    public String getAppointmentDetails(@PathVariable Long id, Model model) {
-        Appointment appointment = appointmentService.getAppointmentById(id)
-                .orElseThrow(() -> new RuntimeException("Запись не найдена"));
+//
+//    @GetMapping
+//    public String getAllAppointments(
+//            @RequestParam(required = false) String type,
+//            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
+//            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo,
+//            @RequestParam(required = false) Long doctorId,
+//            @RequestParam(required = false) Long clinicId,
+//            Model model
+//    ) {
+//        List<Appointment> appointments;
+//
+//        // Получение записей с учетом фильтров
+//        if (doctorId != null) {
+//            appointments = appointmentService.getDoctorAppointments(doctorId);
+//        } else if (clinicId != null) {
+//            appointments = appointmentService.getClinicConsultations(clinicId);
+//        } else if (type != null && dateFrom != null && dateTo != null) {
+//            if ("doctor".equals(type)) {
+//                appointments = appointmentService.getDoctorAppointmentsByDateRange(dateFrom, dateTo);
+//            } else if ("clinic".equals(type)) {
+//                appointments = appointmentService.getClinicConsultationsByDateRange(dateFrom, dateTo);
+//            } else {
+//                appointments = appointmentService.getAppointmentsByDateRange(dateFrom, dateTo);
+//            }
+//        } else if (type != null) {
+//            if ("doctor".equals(type)) {
+//                appointments = appointmentService.getAllDoctorAppointments();
+//            } else if ("clinic".equals(type)) {
+//                appointments = appointmentService.getAllClinicConsultations();
+//            } else {
+//                appointments = appointmentService.getAllAppointments();
+//            }
+//        } else if (dateFrom != null && dateTo != null) {
+//            appointments = appointmentService.getAppointmentsByDateRange(dateFrom, dateTo);
+//        } else {
+//            appointments = appointmentService.getAllAppointments();
+//        }
+//
+//        // Статистика для карточек
+//        int doctorAppointmentsCount = appointmentService.countDoctorAppointments();
+//        int clinicConsultationsCount = appointmentService.countClinicConsultations();
+//        int todayAppointmentsCount = appointmentService.countTodayAppointments();
+//
+//        model.addAttribute("appointments", appointments);
+//        model.addAttribute("doctorAppointments", doctorAppointmentsCount);
+//        model.addAttribute("clinicConsultations", clinicConsultationsCount);
+//        model.addAttribute("todayAppointments", todayAppointmentsCount);
+//
+//        return "admin/appointments/list";
+//    }
 
-        // Дополнительная информация для правой колонки
-        int doctorAppointmentsCount = 0;
-        int clinicAppointmentsCount = 0;
+//    @GetMapping("/{id}")
+//    public String getAppointmentDetails(@PathVariable Long id, Model model) {
+//        Appointment appointment = appointmentService.getAppointmentById(id)
+//                .orElseThrow(() -> new RuntimeException("Запись не найдена"));
+//
+//        // Дополнительная информация для правой колонки
+//        int doctorAppointmentsCount = 0;
+//        int clinicAppointmentsCount = 0;
+//
+//        if (appointment.getDoctor() != null) {
+//            doctorAppointmentsCount = appointmentService.countDoctorAppointments(appointment.getDoctor().getId());
+//        }
+//
+//        if (appointment.getClinic() != null) {
+//            clinicAppointmentsCount = appointmentService.countClinicConsultations(appointment.getClinic().getId());
+//        }
+//
+//        model.addAttribute("appt", appointment);
+//        model.addAttribute("doctorAppointments", doctorAppointmentsCount);
+//        model.addAttribute("clinicAppointments", clinicAppointmentsCount);
+//
+//        return "admin/appointments/details";
+//    }
+@GetMapping("/{id}")
+public String getAppointmentDetails(@PathVariable Long id, Model model) {
+    Appointment appointment = appointmentService.getAppointmentById(id)
+            .orElseThrow(() -> new RuntimeException("Запись не найдена"));
 
-        if (appointment.getDoctor() != null) {
-            doctorAppointmentsCount = appointmentService.countDoctorAppointments(appointment.getDoctor().getId());
-        }
+    // Дополнительная информация для правой колонки
+    int doctorAppointmentsCount = 0;
+    int clinicAppointmentsCount = 0;
+    int serviceAppointmentsCount = 0;
 
-        if (appointment.getClinic() != null) {
-            clinicAppointmentsCount = appointmentService.countClinicConsultations(appointment.getClinic().getId());
-        }
-
-        model.addAttribute("appt", appointment);
-        model.addAttribute("doctorAppointments", doctorAppointmentsCount);
-        model.addAttribute("clinicAppointments", clinicAppointmentsCount);
-
-        return "admin/appointments/details";
+    if (appointment.getDoctor() != null) {
+        doctorAppointmentsCount = appointmentService.countDoctorAppointments(appointment.getDoctor().getId());
     }
+
+    if (appointment.getClinic() != null) {
+        clinicAppointmentsCount = appointmentService.countClinicConsultations(appointment.getClinic().getId());
+    }
+
+    if (appointment.getService() != null) {
+        serviceAppointmentsCount = appointmentService.countServiceAppointments(appointment.getService().getId());
+    }
+
+    model.addAttribute("appt", appointment);
+    model.addAttribute("doctorAppointments", doctorAppointmentsCount);
+    model.addAttribute("clinicAppointments", clinicAppointmentsCount);
+    model.addAttribute("serviceAppointments", serviceAppointmentsCount);
+
+    return "admin/appointments/details";
+}
 
     @GetMapping("/{id}/delete")
     public String deleteAppointment(@PathVariable Long id, RedirectAttributes redirectAttributes) {

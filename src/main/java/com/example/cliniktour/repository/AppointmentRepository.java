@@ -41,4 +41,14 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     int countByClinicId(Long clinicId);
 
     int countByDate(LocalDate date);
+
+    int countByServiceId(Long serviceId);
+
+    List<Appointment> findByServiceIsNotNull();
+
+    List<Appointment> findByServiceId(Long serviceId);
+
+    List<Appointment> findByServiceIsNotNullAndDateBetween(LocalDate dateFrom, LocalDate dateTo);
+
+    int countByServiceIsNotNull();
 }

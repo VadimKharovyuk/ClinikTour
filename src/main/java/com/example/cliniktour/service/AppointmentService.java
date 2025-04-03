@@ -27,7 +27,7 @@ public class AppointmentService {
     private final ClinicRepository clinicRepository;
     private final AppointmentMapper appointmentMapper;
     private final DepartmentRepository departmentRepository;
-    private final ServiceRepository serviceRepository ;
+    private final ServiceRepository serviceRepository;
 
     @Transactional
     public Appointment createDoctorAppointment(DoctorAppointmentDTO dto) {
@@ -67,6 +67,7 @@ public class AppointmentService {
     public List<Appointment> getAllAppointments() {
         return appointmentRepository.findAll();
     }
+
     public List<Appointment> getAllDoctorAppointments() {
         return appointmentRepository.findByDoctorIsNotNull();
     }
@@ -94,6 +95,7 @@ public class AppointmentService {
 
     /**
      * Подсчитывает количество записей к конкретному доктору
+     *
      * @param doctorId ID доктора
      * @return количество записей к доктору
      */
@@ -103,6 +105,7 @@ public class AppointmentService {
 
     /**
      * Подсчитывает количество консультаций клиник
+     *
      * @return количество консультаций клиник
      */
     public int countClinicConsultations() {
@@ -111,6 +114,7 @@ public class AppointmentService {
 
     /**
      * Подсчитывает количество консультаций конкретной клиники
+     *
      * @param clinicId ID клиники
      * @return количество консультаций клиники
      */
@@ -120,6 +124,7 @@ public class AppointmentService {
 
     /**
      * Подсчитывает количество записей на сегодня
+     *
      * @return количество записей на сегодня
      */
     public int countTodayAppointments() {
@@ -163,5 +168,30 @@ public class AppointmentService {
         }
 
         return Optional.empty();
+    }
+
+    // Получение всех заявок на услуги
+    public List<Appointment> getAllServiceAppointments() {
+        return appointmentRepository.findByServiceIsNotNull();
+    }
+
+    // Получение заявок на конкретную услугу
+    public List<Appointment> getServiceAppointments(Long serviceId) {
+        return appointmentRepository.findByServiceId(serviceId);
+    }
+
+    // Получение заявок на услуги в указанном диапазоне дат
+    public List<Appointment> getServiceAppointmentsByDateRange(LocalDate dateFrom, LocalDate dateTo) {
+        return appointmentRepository.findByServiceIsNotNullAndDateBetween(dateFrom, dateTo);
+    }
+
+    // Подсчет количества заявок на услуги
+    public int countServiceAppointments() {
+        return appointmentRepository.countByServiceIsNotNull();
+    }
+
+    // Подсчет количества заявок на конкретную услугу
+    public int countServiceAppointments(Long serviceId) {
+        return appointmentRepository.countByServiceId(serviceId);
     }
 }
