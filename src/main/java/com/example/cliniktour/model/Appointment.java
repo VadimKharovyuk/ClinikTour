@@ -26,6 +26,7 @@ public class Appointment {
     private LocalDateTime createdAt;
 
 
+
     @ManyToOne
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
@@ -37,6 +38,11 @@ public class Appointment {
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
+
+
+    @ManyToOne
+    @JoinColumn(name = "service_id")
+    private Service service;
 
 
     @PrePersist

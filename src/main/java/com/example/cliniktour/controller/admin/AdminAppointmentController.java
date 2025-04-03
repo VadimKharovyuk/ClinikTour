@@ -103,4 +103,5 @@ public class AdminAppointmentController {
         }
         return "redirect:/admin/appointments";
     }
+
 }

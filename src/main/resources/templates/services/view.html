@@ -59,6 +59,7 @@
 </head>
 <body>
 <!-- Header -->
+<link rel="stylesheet" th:href="@{/css/header.css}">
 <header th:replace="~{fragments/header :: header}"></header>
 
 <div class="container py-4">
@@ -134,12 +135,12 @@
           <h4 class="mb-0">Запись на приём</h4>
         </div>
         <div class="card-body">
-          <form th:action="@{/appointment/create}" method="post" class="appointment-form">
+          <form th:action="@{/appointments/create}" method="post" class="appointment-form">
             <input type="hidden" name="serviceId" th:value="${service.id}">
 
             <div class="mb-3">
-              <label for="name" class="form-label">Ваше имя</label>
-              <input type="text" class="form-control" id="name" name="name" required>
+              <label for="fullName" class="form-label">Ваше имя</label>
+              <input type="text" class="form-control" id="fullName" name="fullName" required>
             </div>
 
             <div class="mb-3">
@@ -148,24 +149,62 @@
             </div>
 
             <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" class="form-control" id="email" name="email">
+            </div>
+
+            <div class="mb-3">
               <label for="date" class="form-label">Предпочтительная дата</label>
               <input type="date" class="form-control" id="date" name="date" required>
             </div>
 
             <div class="mb-3">
-              <label for="comment" class="form-label">Комментарий</label>
-              <textarea class="form-control" id="comment" name="comment" rows="2"></textarea>
+              <label for="message" class="form-label">Комментарий</label>
+              <textarea class="form-control" id="message" name="message" rows="2"></textarea>
             </div>
 
             <div class="mb-3 form-check">
-              <input type="checkbox" class="form-check-input" id="privacyConsent" required>
-              <label class="form-check-label small" for="privacyConsent">Я согласен на обработку персональных данных</label>
+              <input type="checkbox" class="form-check-input" id="privacyAgreed" name="privacyAgreed" required>
+              <label class="form-check-label small" for="privacyAgreed">Я согласен на обработку персональных данных</label>
             </div>
 
             <button type="submit" class="btn btn-primary w-100">Записаться</button>
           </form>
         </div>
+<!--        <div class="card-body">-->
+<!--          <form th:action="@{/appointment/create}" method="post" class="appointment-form">-->
+<!--            <input type="hidden" name="serviceId" th:value="${service.id}">-->
+
+<!--            <div class="mb-3">-->
+<!--              <label for="name" class="form-label">Ваше имя</label>-->
+<!--              <input type="text" class="form-control" id="name" name="name" required>-->
+<!--            </div>-->
+
+<!--            <div class="mb-3">-->
+<!--              <label for="phone" class="form-label">Телефон</label>-->
+<!--              <input type="tel" class="form-control" id="phone" name="phone" required>-->
+<!--            </div>-->
+
+<!--            <div class="mb-3">-->
+<!--              <label for="date" class="form-label">Предпочтительная дата</label>-->
+<!--              <input type="date" class="form-control" id="date" name="date" required>-->
+<!--            </div>-->
+
+<!--            <div class="mb-3">-->
+<!--              <label for="comment" class="form-label">Комментарий</label>-->
+<!--              <textarea class="form-control" id="comment" name="comment" rows="2"></textarea>-->
+<!--            </div>-->
+
+<!--            <div class="mb-3 form-check">-->
+<!--              <input type="checkbox" class="form-check-input" id="privacyConsent" required>-->
+<!--              <label class="form-check-label small" for="privacyConsent">Я согласен на обработку персональных данных</label>-->
+<!--            </div>-->
+
+<!--            <button type="submit" class="btn btn-primary w-100">Записаться</button>-->
+<!--          </form>-->
+<!--        </div>-->
       </div>
+
 
       <!-- Quick Contact -->
       <div class="card shadow-sm">

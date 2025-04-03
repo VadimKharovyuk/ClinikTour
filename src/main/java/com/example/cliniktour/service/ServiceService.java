@@ -1,8 +1,12 @@
 package com.example.cliniktour.service;
 
+import com.example.cliniktour.dto.ServiceCreateAppointmentDTO;
 import com.example.cliniktour.dto.ServiceDto;
+import com.example.cliniktour.mapper.AppointmentMapper;
 import com.example.cliniktour.mapper.ServiceMapper;
+import com.example.cliniktour.model.Appointment;
 import com.example.cliniktour.model.Service;
+import com.example.cliniktour.repository.AppointmentRepository;
 import com.example.cliniktour.repository.ServiceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
@@ -19,6 +23,8 @@ public class ServiceService {
 
     private final ServiceRepository serviceRepository;
     private final ServiceMapper serviceMapper;
+    private final AppointmentRepository appointmentRepository;
+    private final AppointmentMapper appointmentMapper;
 
     /**
      * Получение всех услуг

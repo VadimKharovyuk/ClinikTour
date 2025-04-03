@@ -3,15 +3,13 @@ package com.example.cliniktour.service;
 import com.example.cliniktour.dto.ClinicConsultationDTO;
 import com.example.cliniktour.dto.ConsultationRequestDto;
 import com.example.cliniktour.dto.DoctorAppointmentDTO;
+import com.example.cliniktour.dto.ServiceCreateAppointmentDTO;
 import com.example.cliniktour.mapper.AppointmentMapper;
 import com.example.cliniktour.model.Appointment;
 import com.example.cliniktour.model.Clinic;
 import com.example.cliniktour.model.Department;
 import com.example.cliniktour.model.Doctor;
-import com.example.cliniktour.repository.AppointmentRepository;
-import com.example.cliniktour.repository.ClinicRepository;
-import com.example.cliniktour.repository.DepartmentRepository;
-import com.example.cliniktour.repository.DoctorRepository;
+import com.example.cliniktour.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +27,7 @@ public class AppointmentService {
     private final ClinicRepository clinicRepository;
     private final AppointmentMapper appointmentMapper;
     private final DepartmentRepository departmentRepository;
+    private final ServiceRepository serviceRepository ;
 
     @Transactional
     public Appointment createDoctorAppointment(DoctorAppointmentDTO dto) {
@@ -148,5 +147,21 @@ public class AppointmentService {
         // Используем новый метод маппера для создания заявки
         Appointment appointment = appointmentMapper.toConsultationAppointment(dto, clinic, department);
         return appointmentRepository.save(appointment);
+    }
+
+
+    @Transactional
+    public Optional<Appointment> createServiceAppointment(ServiceCreateAppointmentDTO dto) {
+        Optional<com.example.cliniktour.model.Service> serviceOpt = serviceRepository.findById(dto.getServiceId());
+        if (serviceOpt.isPresent()) {
+            // Создаем запись на приём
+            Appointment appointment = appointmentMapper.toEntity(dto, serviceOpt.get());
+            appointment = appointmentRepository.save(appointment);
+
+            // Возвращаем созданную запись
+            return Optional.of(appointment);
+        }
+
+        return Optional.empty();
     }
 }
