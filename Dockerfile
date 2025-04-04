@@ -1,16 +1,15 @@
-FROM eclipse-temurin:17-jre-jammy
-
+# Сборка приложения
+FROM maven:3.8-openjdk-17 AS build
 WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
 
-# Копируем собранный JAR-файл
-COPY target/*.jar app.jar
-
-# Создаем директории для постоянных данных и логов
+# Запуск приложения
+FROM eclipse-temurin:17-jre-jammy
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 VOLUME /app/data
 VOLUME /app/logs
-
-# Экспонируем порт, на котором работает приложение
 EXPOSE 2817
-
-# Запускаем приложение
 CMD ["java", "-jar", "app.jar"]

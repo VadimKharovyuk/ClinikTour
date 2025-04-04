@@ -1,5 +1,5 @@
 HELP.md
-target/
+##target/    # Закомментировано - теперь папка target будет включена в репозиторий
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
