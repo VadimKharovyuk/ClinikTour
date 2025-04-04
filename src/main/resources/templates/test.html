@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ru">
+<html xmlns:th="http://www.thymeleaf.org" lang="ru" th:lang="${#locale.language}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Путешествия по миру</title>
+    <html xmlns:th="http://www.thymeleaf.org">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #3498db;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 3rem 0;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #555;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .content-blocks {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .block {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .block:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        .block-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .block-content {
+            padding: 1.5rem;
+        }
+
+        .block h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .block p {
+            color: #555;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background-color: #2c3e50;
+            color: white;
+            margin-top: 3rem;
+        }
+        .language-selector a.active {
+            font-weight: bold;
+            color: #3498db; /* ваш основной цвет */
+        }
+        .language-selector {
+            margin-left: 1rem;
+        }
+        .language-selector a {
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <div class="logo">World Explorer</div>
+        <ul class="nav-links">
+            <li><a href="#" th:text="#{nav.home}">Главная</a></li>
+            <li><a href="#" th:text="#{nav.destinations}">Направления</a></li>
+            <li><a href="#" th:text="#{nav.tips}">Советы</a></li>
+            <li><a href="#" th:text="#{nav.gallery}">Галерея</a></li>
+            <li><a href="#" th:text="#{nav.about}">О нас</a></li>
+            <li><a href="#" th:text="#{nav.contacts}">Контакты</a></li>
+        </ul>
+
+        <div class="language-selector ms-3">
+            <a href="?lang=ru" class="me-2" th:classappend="${#locale.language == 'ru' || #locale.language == 'ru-RU' ? 'active' : ''}">RU</a>
+            <a href="?lang=en" th:classappend="${#locale.language == 'en' ? 'active' : ''}">EN</a>
+        </div>
+    </nav>
+</header>
+
+<div class="container">
+    <p>Текущая локаль: <span th:text="${#locale}"></span></p>
+    <section class="hero">
+        <h1 th:text="#{hero.title}">Откройте для себя удивительные места</h1>
+        <p th:text="#{hero.description}">Путешествия расширяют кругозор, обогащают душу и создают воспоминания, которые остаются на всю жизнь. Исследуйте мир вместе с нами!</p>
+    </section>
+
+    <div class="content-blocks">
+        <!-- Блок 1 -->
+        <div class="block">
+            <div class="block-image" style="background-image: url('https://source.unsplash.com/random/600x400/?beach')"></div>
+            <div class="block-content">
+                <h2 th:text="#{block1.title}">Пляжный отдых</h2>
+                <p th:text="#{block1.description}">Насладитесь кристально чистой водой, белоснежным песком и безмятежным спокойствием на лучших пляжах мира. Идеальное место для перезагрузки и релаксации.</p>
+                <a href="#" class="btn" th:text="#{button.more}">Узнать больше</a>
+            </div>
+        </div>
+
+        <!-- Блок 2 -->
+        <div class="block">
+            <div class="block-image" style="background-image: url('https://source.unsplash.com/random/600x400/?mountains')"></div>
+            <div class="block-content">
+                <h2 th:text="#{block2.title}">Горные приключения</h2>
+                <p th:text="#{block2.description}">Покорите величественные вершины, насладитесь захватывающими видами и почувствуйте адреналин в крови. Походы, скалолазание и горнолыжные курорты ждут вас.</p>
+                <a href="#" class="btn" th:text="#{button.more}">Узнать больше</a>
+            </div>
+        </div>
+
+        <!-- Блок 3 -->
+        <div class="block">
+            <div class="block-image" style="background-image: url('https://source.unsplash.com/random/600x400/?city')"></div>
+            <div class="block-content">
+                <h2 th:text="#{block3.title}">Городские экскурсии</h2>
+                <p th:text="#{block3.description}">Исследуйте архитектуру, историю и культуру великих городов мира. Погрузитесь в местную атмосферу, попробуйте аутентичную кухню и посетите знаковые достопримечательности.</p>
+                <a href="#" class="btn" th:text="#{button.more}">Узнать больше</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2025 World Explorer. <span th:text="#{footer.copyright}">Все права защищены.</span></p>
+</footer>
+</body>
+</html>

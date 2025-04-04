@@ -1,9 +1,705 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org" lang="ru">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Asiamedtour - Медицинский туризм</title>-->
+<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">-->
+<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">-->
+<!--    <style>-->
+<!--        :root {-->
+<!--            &#45;&#45;primary-color: #2563eb;-->
+<!--            &#45;&#45;primary-dark: #1e40af;-->
+<!--            &#45;&#45;secondary-color: #f0f9ff;-->
+<!--            &#45;&#45;accent-color: #4f46e5;-->
+<!--            &#45;&#45;text-color: #1e293b;-->
+<!--            &#45;&#45;text-muted: #64748b;-->
+<!--            &#45;&#45;border-radius: 12px;-->
+<!--            &#45;&#45;transition: all 0.3s ease;-->
+<!--        }-->
+
+<!--        body {-->
+<!--            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;-->
+<!--            color: var(&#45;&#45;text-color);-->
+<!--            line-height: 1.7;-->
+<!--            overflow-x: hidden;-->
+<!--        }-->
+
+<!--        /* Navbar */-->
+<!--        .navbar {-->
+<!--            background-color: rgba(255, 255, 255, 0.95);-->
+<!--            backdrop-filter: blur(10px);-->
+<!--            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);-->
+<!--            padding: 20px 0;-->
+<!--            transition: var(&#45;&#45;transition);-->
+<!--        }-->
+
+<!--        .navbar-brand {-->
+<!--            font-weight: 700;-->
+<!--            font-size: 1.5rem;-->
+<!--            color: var(&#45;&#45;primary-color);-->
+<!--        }-->
+
+<!--        .nav-link {-->
+<!--            font-weight: 500;-->
+<!--            margin: 0 8px;-->
+<!--            position: relative;-->
+<!--            transition: var(&#45;&#45;transition);-->
+<!--        }-->
+
+<!--        .nav-link:after {-->
+<!--            content: '';-->
+<!--            position: absolute;-->
+<!--            width: 0;-->
+<!--            height: 2px;-->
+<!--            bottom: 0;-->
+<!--            left: 0;-->
+<!--            background-color: var(&#45;&#45;primary-color);-->
+<!--            transition: var(&#45;&#45;transition);-->
+<!--        }-->
+
+<!--        .nav-link:hover:after {-->
+<!--            width: 100%;-->
+<!--        }-->
+
+<!--        .btn-primary {-->
+<!--            background-color: var(&#45;&#45;primary-color);-->
+<!--            border-color: var(&#45;&#45;primary-color);-->
+<!--            border-radius: var(&#45;&#45;border-radius);-->
+<!--            padding: 10px 24px;-->
+<!--            font-weight: 600;-->
+<!--            transition: var(&#45;&#45;transition);-->
+<!--        }-->
+
+<!--        .btn-primary:hover {-->
+<!--            background-color: var(&#45;&#45;primary-dark);-->
+<!--            border-color: var(&#45;&#45;primary-dark);-->
+<!--            transform: translateY(-2px);-->
+<!--        }-->
+
+<!--        .btn-outline {-->
+<!--            color: var(&#45;&#45;text-color);-->
+<!--            background-color: transparent;-->
+<!--            border: 1px solid #cbd5e1;-->
+<!--            border-radius: var(&#45;&#45;border-radius);-->
+<!--            padding: 10px 24px;-->
+<!--            font-weight: 600;-->
+<!--            transition: var(&#45;&#45;transition);-->
+<!--        }-->
+
+<!--        .btn-outline:hover {-->
+<!--            color: var(&#45;&#45;primary-color);-->
+<!--            border-color: var(&#45;&#45;primary-color);-->
+<!--            background-color: rgba(37, 99, 235, 0.05);-->
+<!--            transform: translateY(-2px);-->
+<!--        }-->
+
+<!--        /* Hero Section */-->
+<!--        .hero-section {-->
+<!--            position: relative;-->
+<!--            padding: 180px 0 120px;-->
+<!--            background: linear-gradient(135deg, #f8fafc, #eff6ff);-->
+<!--            overflow: hidden;-->
+<!--            min-height: 100vh;-->
+<!--            display: flex;-->
+<!--            align-items: center;-->
+<!--        }-->
+
+<!--        .hero-content {-->
+<!--            position: relative;-->
+<!--            z-index: 10;-->
+<!--        }-->
+
+<!--        .hero-image-container {-->
+<!--            position: absolute;-->
+<!--            right: 5%;-->
+<!--            top: 15%;-->
+<!--            width: 45%;-->
+<!--            height: 75%;-->
+<!--            z-index: 1;-->
+<!--        }-->
+
+<!--        .hero-image {-->
+<!--            width: 100%;-->
+<!--            height: 100%;-->
+<!--            object-fit: cover;-->
+<!--            object-position: center;-->
+<!--            border-radius: 12px;-->
+<!--            box-shadow: -20px 20px 60px rgba(0, 0, 0, 0.1);-->
+<!--        }-->
+
+<!--        /* Section Styling */-->
+<!--        .section {-->
+<!--            padding: 100px 0;-->
+<!--        }-->
+
+<!--        .section-heading {-->
+<!--            text-align: center;-->
+<!--            margin-bottom: 60px;-->
+<!--        }-->
+
+<!--        .section-title {-->
+<!--            font-weight: 700;-->
+<!--            margin-bottom: 20px;-->
+<!--        }-->
+
+<!--        .section-subtitle {-->
+<!--            max-width: 800px;-->
+<!--            margin: 0 auto;-->
+<!--            color: var(&#45;&#45;text-muted);-->
+<!--        }-->
+
+<!--        /* Feature Cards */-->
+<!--        .feature-card {-->
+<!--            background-color: white;-->
+<!--            padding: 30px;-->
+<!--            border-radius: var(&#45;&#45;border-radius);-->
+<!--            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);-->
+<!--            height: 100%;-->
+<!--            position: relative;-->
+<!--            overflow: hidden;-->
+<!--            transition: var(&#45;&#45;transition);-->
+<!--        }-->
+
+<!--        .feature-card:hover {-->
+<!--            transform: translateY(-5px);-->
+<!--            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);-->
+<!--        }-->
+
+<!--        .feature-number {-->
+<!--            position: absolute;-->
+<!--            top: 20px;-->
+<!--            right: 20px;-->
+<!--            font-size: 3rem;-->
+<!--            font-weight: 800;-->
+<!--            color: rgba(37, 99, 235, 0.1);-->
+<!--        }-->
+
+<!--        .feature-icon {-->
+<!--            font-size: 2rem;-->
+<!--            margin-bottom: 20px;-->
+<!--            color: var(&#45;&#45;primary-color);-->
+<!--            background: rgba(37, 99, 235, 0.1);-->
+<!--            width: 70px;-->
+<!--            height: 70px;-->
+<!--            display: flex;-->
+<!--            align-items: center;-->
+<!--            justify-content: center;-->
+<!--            border-radius: 20px;-->
+<!--        }-->
+
+<!--        /* Clinic Cards */-->
+<!--        .card {-->
+<!--            border: none;-->
+<!--            border-radius: var(&#45;&#45;border-radius);-->
+<!--            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);-->
+<!--            transition: var(&#45;&#45;transition);-->
+<!--            overflow: hidden;-->
+<!--        }-->
+
+<!--        .card:hover {-->
+<!--            transform: translateY(-5px);-->
+<!--            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);-->
+<!--        }-->
+
+<!--        .card-img-top {-->
+<!--            height: 220px;-->
+<!--            object-fit: cover;-->
+<!--        }-->
+
+<!--        .badge {-->
+<!--            padding: 6px 12px;-->
+<!--            border-radius: 20px;-->
+<!--            font-weight: 500;-->
+<!--        }-->
+
+<!--        /* Mission Section */-->
+<!--        .mission-section {-->
+<!--            position: relative;-->
+<!--            padding: 120px 0;-->
+<!--            background: linear-gradient(135deg, var(&#45;&#45;primary-color), var(&#45;&#45;accent-color));-->
+<!--            color: white;-->
+<!--            overflow: hidden;-->
+<!--        }-->
+
+<!--        .mission-shape {-->
+<!--            position: absolute;-->
+<!--            bottom: -10%;-->
+<!--            left: -5%;-->
+<!--            width: 50%;-->
+<!--            height: 50%;-->
+<!--            background-color: rgba(255, 255, 255, 0.1);-->
+<!--            border-radius: 50%;-->
+<!--            z-index: 1;-->
+<!--        }-->
+
+<!--        /* Department Cards */-->
+<!--        .department-card {-->
+<!--            background-color: white;-->
+<!--            padding: 30px 20px;-->
+<!--            border-radius: var(&#45;&#45;border-radius);-->
+<!--            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);-->
+<!--            text-align: center;-->
+<!--            transition: var(&#45;&#45;transition);-->
+<!--        }-->
+
+<!--        .department-card:hover {-->
+<!--            transform: translateY(-5px);-->
+<!--            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);-->
+<!--            background-color: var(&#45;&#45;primary-color);-->
+<!--            color: white;-->
+<!--        }-->
+
+<!--        .department-icon {-->
+<!--            font-size: 2rem;-->
+<!--            margin-bottom: 15px;-->
+<!--            color: var(&#45;&#45;primary-color);-->
+<!--            transition: var(&#45;&#45;transition);-->
+<!--        }-->
+
+<!--        .department-card:hover .department-icon {-->
+<!--            color: white;-->
+<!--        }-->
+
+<!--        /* Footer */-->
+<!--        .footer {-->
+<!--            background-color: #f8fafc;-->
+<!--            padding: 80px 0 40px;-->
+<!--        }-->
+
+<!--        .footer a {-->
+<!--            color: var(&#45;&#45;text-color);-->
+<!--            text-decoration: none;-->
+<!--            transition: var(&#45;&#45;transition);-->
+<!--        }-->
+
+<!--        .footer a:hover {-->
+<!--            color: var(&#45;&#45;primary-color);-->
+<!--        }-->
+
+<!--        .social-icon {-->
+<!--            display: inline-flex;-->
+<!--            align-items: center;-->
+<!--            justify-content: center;-->
+<!--            width: 40px;-->
+<!--            height: 40px;-->
+<!--            border-radius: 50%;-->
+<!--            background-color: #fff;-->
+<!--            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);-->
+<!--            margin-right: 10px;-->
+<!--            color: var(&#45;&#45;text-color);-->
+<!--            transition: var(&#45;&#45;transition);-->
+<!--        }-->
+
+<!--        .social-icon:hover {-->
+<!--            background-color: var(&#45;&#45;primary-color);-->
+<!--            color: white;-->
+<!--            transform: translateY(-3px);-->
+<!--        }-->
+
+<!--        /* Responsive Adjustments */-->
+<!--        @media (max-width: 991px) {-->
+<!--            .hero-section {-->
+<!--                padding: 150px 0 80px;-->
+<!--            }-->
+
+<!--            .hero-image-container {-->
+<!--                opacity: 0.3;-->
+<!--                width: 100%;-->
+<!--                right: 0;-->
+<!--            }-->
+<!--        }-->
+
+<!--        @media (max-width: 767px) {-->
+<!--            .section {-->
+<!--                padding: 70px 0;-->
+<!--            }-->
+
+<!--            .hero-section {-->
+<!--                text-align: center;-->
+<!--            }-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--&lt;!&ndash; Навигация &ndash;&gt;-->
+<!--<nav class="navbar navbar-expand-lg fixed-top">-->
+<!--    <div class="container">-->
+<!--        <a class="navbar-brand" href="/">-->
+<!--            <span>Asia<span style="color: var(&#45;&#45;accent-color)">med</span>tour</span>-->
+<!--        </a>-->
+<!--        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">-->
+<!--            <span class="navbar-toggler-icon"></span>-->
+<!--        </button>-->
+<!--        <div class="collapse navbar-collapse" id="navbarNav">-->
+<!--            <ul class="navbar-nav ms-auto">-->
+<!--                <li class="nav-item">-->
+<!--                    <a class="nav-link" href="/">Главная</a>-->
+<!--                </li>-->
+<!--                <li class="nav-item">-->
+<!--                    <a class="nav-link" href="/clinics">Клиники</a>-->
+<!--                </li>-->
+<!--                <li class="nav-item">-->
+<!--                    <a class="nav-link" href="/departments">Отделения</a>-->
+<!--                </li>-->
+<!--                <li class="nav-item">-->
+<!--                    <a class="nav-link" href="/doctors">Врачи</a>-->
+<!--                </li>-->
+<!--                <li class="nav-item">-->
+<!--                    <a class="nav-link" href="/services">Услуги</a>-->
+<!--                </li>-->
+<!--                <li class="nav-item">-->
+<!--                    <a class="nav-link" href="/about">О нас</a>-->
+<!--                </li>-->
+<!--                <li class="nav-item">-->
+<!--                    <a class="nav-link" href="/blog">Блог</a>-->
+<!--                </li>-->
+<!--                <li class="nav-item ms-lg-3">-->
+<!--                    <a class="btn btn-primary" href="/contact">Связаться</a>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</nav>-->
+
+<!--&lt;!&ndash; Герой-секция &ndash;&gt;-->
+<!--<section class="hero-section">-->
+<!--    <div class="container">-->
+<!--        <div class="row align-items-center">-->
+<!--            <div class="col-lg-6 hero-content">-->
+<!--                <h6 class="text-primary fw-bold mb-3">МЕДИЦИНСКИЙ ТУРИЗМ В ТУРЦИИ</h6>-->
+<!--                <h1 class="display-4 fw-bold mb-4">Современная медицина<br>для вашего здоровья</h1>-->
+<!--                <p class="lead mb-5">Мы предлагаем лечение в лучших клиниках Турции с использованием передовых технологий и опыта высококвалифицированных специалистов.</p>-->
+<!--                <div class="d-flex flex-wrap gap-3">-->
+<!--                    <a href="/clinics" class="btn btn-primary">Найти клинику</a>-->
+<!--                    <a href="/departments" class="btn btn-outline">Выбрать отделение</a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="hero-image-container">-->
+<!--        <img src="/images/Leonardo_Lightning_XL_modern_clinic_3.jpg" alt="Современная клиника" class="hero-image">-->
+<!--    </div>-->
+<!--</section>-->
+
+<!--&lt;!&ndash; О нас &ndash;&gt;-->
+<!--<section class="section">-->
+<!--    <div class="container">-->
+<!--        <div class="row align-items-center">-->
+<!--            <div class="col-lg-6 mb-5 mb-lg-0">-->
+<!--                <div class="position-relative">-->
+<!--                    <img src="/images/Leonardo_Lightning_XL_modern_clinic_2.jpg" alt="О нас" class="img-fluid rounded-4 shadow">-->
+<!--                    <div class="position-absolute bg-white rounded-4 shadow p-4" style="bottom: -30px; right: -30px; max-width: 60%;">-->
+<!--                        <div class="d-flex align-items-center">-->
+<!--                            <div class="me-3">-->
+<!--                                <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; background-color: var(&#45;&#45;primary-color);">-->
+<!--                                    <i class="fas fa-heartbeat text-white"></i>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div>-->
+<!--                                <h4 class="h5 mb-1">Высокое качество</h4>-->
+<!--                                <p class="mb-0 small text-muted">Лечение мирового уровня</p>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-lg-6 ps-lg-5">-->
+<!--                <h6 class="text-primary fw-bold mb-3">О НАС</h6>-->
+<!--                <h2 class="mb-4">Мы делаем медицинский туризм доступным и безопасным</h2>-->
+<!--                <p class="lead mb-4">Asiamedtour — это ваш надежный партнер в организации медицинского лечения в лучших клиниках Турции. Мы предлагаем полное сопровождение пациентов на всех этапах.</p>-->
+<!--                <div class="row mb-4">-->
+<!--                    <div class="col-md-6 mb-3">-->
+<!--                        <div class="d-flex">-->
+<!--                            <div class="me-3 text-primary">-->
+<!--                                <i class="fas fa-check-circle fa-2x"></i>-->
+<!--                            </div>-->
+<!--                            <div>-->
+<!--                                <h5 class="fw-bold">Индивидуальный подход</h5>-->
+<!--                                <p class="mb-0">Персональный координатор для каждого пациента</p>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="col-md-6 mb-3">-->
+<!--                        <div class="d-flex">-->
+<!--                            <div class="me-3 text-primary">-->
+<!--                                <i class="fas fa-check-circle fa-2x"></i>-->
+<!--                            </div>-->
+<!--                            <div>-->
+<!--                                <h5 class="fw-bold">Полный спектр услуг</h5>-->
+<!--                                <p class="mb-0">От подбора клиники до организации проживания</p>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <a href="/about" class="btn btn-primary">Узнать больше</a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</section>-->
+
+<!--&lt;!&ndash; Преимущества &ndash;&gt;-->
+<!--<section class="section bg-light">-->
+<!--    <div class="container">-->
+<!--        <div class="section-heading">-->
+<!--            <h6 class="text-primary fw-bold mb-3">ПОЧЕМУ МЫ</h6>-->
+<!--            <h2 class="section-title">Основные преимущества лечения в Турции</h2>-->
+<!--            <p class="section-subtitle">Мы предоставляем полный спектр услуг медицинского туризма, обеспечивая комфорт и безопасность пациентов на каждом этапе лечения.</p>-->
+<!--        </div>-->
+
+<!--        <div class="row g-4">-->
+<!--            <div class="col-md-6 col-lg-3">-->
+<!--                <div class="feature-card">-->
+<!--                    <div class="feature-number">01</div>-->
+<!--                    <div class="feature-icon">-->
+<!--                        <i class="fas fa-clipboard-list"></i>-->
+<!--                    </div>-->
+<!--                    <h3 class="h5 fw-bold mb-3">Индивидуальное планирование</h3>-->
+<!--                    <p class="mb-0">Разработка персонального плана лечения с учетом всех особенностей пациента.</p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-md-6 col-lg-3">-->
+<!--                <div class="feature-card">-->
+<!--                    <div class="feature-number">02</div>-->
+<!--                    <div class="feature-icon">-->
+<!--                        <i class="fas fa-user-md"></i>-->
+<!--                    </div>-->
+<!--                    <h3 class="h5 fw-bold mb-3">Опытные специалисты</h3>-->
+<!--                    <p class="mb-0">Врачи международного уровня с многолетним опытом и признанием в медицинском сообществе.</p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-md-6 col-lg-3">-->
+<!--                <div class="feature-card">-->
+<!--                    <div class="feature-number">03</div>-->
+<!--                    <div class="feature-icon">-->
+<!--                        <i class="fas fa-hospital"></i>-->
+<!--                    </div>-->
+<!--                    <h3 class="h5 fw-bold mb-3">Современные клиники</h3>-->
+<!--                    <p class="mb-0">Медицинские центры с передовым оборудованием и инновационными методиками лечения.</p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-md-6 col-lg-3">-->
+<!--                <div class="feature-card">-->
+<!--                    <div class="feature-number">04</div>-->
+<!--                    <div class="feature-icon">-->
+<!--                        <i class="fas fa-coins"></i>-->
+<!--                    </div>-->
+<!--                    <h3 class="h5 fw-bold mb-3">Прозрачные цены</h3>-->
+<!--                    <p class="mb-0">Оптимальное соотношение цены и качества с подробной калькуляцией всех расходов.</p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</section>-->
+
+<!--&lt;!&ndash; Популярные клиники &ndash;&gt;-->
+<!--<section class="section">-->
+<!--    <div class="container">-->
+<!--        <div class="section-heading">-->
+<!--            <h6 class="text-primary fw-bold mb-3">ЛУЧШИЙ ВЫБОР</h6>-->
+<!--            <h2 class="section-title">Популярные клиники</h2>-->
+<!--            <p class="section-subtitle">Сотрудничаем с ведущими медицинскими центрами Турции, которые отвечают всем международным стандартам качества</p>-->
+<!--        </div>-->
+
+<!--        <div class="row g-4">-->
+<!--            <div th:each="clinic : ${topClinics}" class="col-md-6 col-lg-4">-->
+<!--                <div class="card h-100">-->
+<!--                    <img th:src="${clinic.imagePath}" th:alt="${clinic.name}" class="card-img-top">-->
+<!--                    <div class="card-body d-flex flex-column">-->
+<!--                        <div class="d-flex align-items-center mb-3">-->
+<!--                            <i class="fas fa-map-marker-alt text-primary me-2"></i>-->
+<!--                            <span class="text-muted" th:text="${clinic.city + ', ' + clinic.country}">Стамбул, Турция</span>-->
+<!--                        </div>-->
+<!--                        <h3 class="h5 card-title" th:text="${clinic.name}">Название клиники</h3>-->
+<!--                        <p class="card-text mb-3" th:text="${clinic.shortDescription}">Краткое описание клиники...</p>-->
+
+<!--                        <div class="mb-4">-->
+<!--                            <span th:each="dept, stat : ${clinic.departmentNames}" class="badge bg-light text-dark me-1 mb-1" th:text="${dept}">Отделение</span>-->
+<!--                            <span th:if="${clinic.totalDepartmentsCount > clinic.displayedDepartmentsCount}" class="badge bg-primary me-1 mb-1" th:text="${'+' + (clinic.totalDepartmentsCount - clinic.displayedDepartmentsCount)}">+3</span>-->
+<!--                        </div>-->
+
+<!--                        <a th:href="@{/clinics/{id}(id=${clinic.id})}" class="btn btn-outline w-100 mt-auto">Подробнее</a>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        <div class="text-center mt-5">-->
+<!--            <a href="/clinics" class="btn btn-primary">Все клиники</a>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</section>-->
+
+<!--&lt;!&ndash; Миссия &ndash;&gt;-->
+<!--<section class="mission-section">-->
+<!--    <div class="container position-relative">-->
+<!--        <div class="row justify-content-center">-->
+<!--            <div class="col-lg-8 text-center">-->
+<!--                <h6 class="text-white-50 fw-bold mb-3">НАША МИССИЯ</h6>-->
+<!--                <h2 class="display-6 fw-bold mb-4">Мы помогаем пациентам получить лучшее лечение</h2>-->
+<!--                <p class="lead mb-5">Наша цель — обеспечить пациентам доступ к передовой медицине и заботу на всех этапах лечения. Команда Asiamedtour предоставляет комплексные решения для вашего здоровья.</p>-->
+<!--                <a href="/contact" class="btn btn-light">Связаться с нами</a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="mission-shape"></div>-->
+<!--</section>-->
+
+<!--&lt;!&ndash; Популярные отделения &ndash;&gt;-->
+<!--<section class="section">-->
+<!--    <div class="container">-->
+<!--        <div class="section-heading">-->
+<!--            <h6 class="text-primary fw-bold mb-3">СПЕЦИАЛИЗАЦИИ</h6>-->
+<!--            <h2 class="section-title">Популярные направления лечения</h2>-->
+<!--            <p class="section-subtitle">Выберите необходимое направление медицины для решения вашей проблемы</p>-->
+<!--        </div>-->
+
+<!--        <div class="row g-4">-->
+<!--            <div th:each="dept : ${popularDepartments}" class="col-6 col-md-4 col-lg-3">-->
+<!--                <a th:href="@{/departments/{id}(id=${dept.id})}" class="text-decoration-none">-->
+<!--                    <div class="department-card h-100">-->
+<!--                        <i class="fas fa-heartbeat department-icon"></i>-->
+<!--                        <h3 class="h6 mb-0" th:text="${dept.name}">Название отделения</h3>-->
+<!--                    </div>-->
+<!--                </a>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        <div class="text-center mt-5">-->
+<!--            <a href="/departments" class="btn btn-primary">Все направления</a>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</section>-->
+
+<!--&lt;!&ndash; Футер &ndash;&gt;-->
+<!--<footer class="footer">-->
+<!--    <div class="container">-->
+<!--        <div class="row g-4 mb-5">-->
+<!--            <div class="col-lg-4 mb-4 mb-lg-0">-->
+<!--                <a href="/" class="d-inline-block mb-4">-->
+<!--                    <span class="h3 fw-bold">Asia<span style="color: var(&#45;&#45;accent-color)">med</span>tour</span>-->
+<!--                </a>-->
+
+<!--                <p class="mb-4">Мы делаем медицинский туризм доступным, безопасным и комфортным для наших пациентов.</p>-->
+<!--                <div class="d-flex">-->
+<!--                    <a href="https://www.facebook.com/profile.php?id=100009226154613" class="social-icon"><i class="fab fa-facebook-f"></i></a>-->
+<!--                    <a href="https://www.instagram.com/name_lucky_lucky_/" class="social-icon"><i class="fab fa-instagram"></i></a>-->
+<!--                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>-->
+<!--                    <a href="#" class="social-icon"><i class="fab fa-whatsapp"></i></a>-->
+<!--                    <a href="https://t.me/name_lucky_lucky" class="social-icon"><i class="fab fa-telegram"></i></a>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            <div class="col-md-4 col-lg-2">-->
+<!--                <h5 class="fw-bold mb-4">О нас</h5>-->
+<!--                <ul class="list-unstyled">-->
+<!--                    <li class="mb-2"><a href="/about">О компании</a></li>-->
+<!--                    <li class="mb-2"><a href="/testimonials">Отзывы</a></li>-->
+<!--                    <li class="mb-2"><a href="/blog">Блог</a></li>-->
+<!--                </ul>-->
+<!--            </div>-->
+
+<!--            <div class="col-md-4 col-lg-2">-->
+<!--                <h5 class="fw-bold mb-4">Пациентам</h5>-->
+<!--                <ul class="list-unstyled">-->
+<!--                    <li class="mb-2"><a href="/clinics">Клиники</a></li>-->
+<!--                    <li class="mb-2"><a href="/departments">Отделения</a></li>-->
+<!--                    <li class="mb-2"><a href="/doctors">Врачи</a></li>-->
+<!--                    <li class="mb-2"><a href="/services">Услуги</a></li>-->
+<!--                </ul>-->
+<!--            </div>-->
+
+<!--            <div class="col-md-4 col-lg-4">-->
+<!--                <h5 class="fw-bold mb-4">Контакты</h5>-->
+<!--                <ul class="list-unstyled">-->
+<!--                    <li class="mb-3">-->
+<!--                        <div class="d-flex">-->
+<!--                            <div class="me-3 mt-1 text-primary">-->
+<!--                                <i class="fas fa-map-marker-alt"></i>-->
+<!--                            </div>-->
+<!--                            <span>Стамбул, Турция<br>Ataşehir, D-100</span>-->
+<!--                        </div>-->
+<!--                    </li>-->
+<!--                    <li class="mb-3">-->
+<!--                        <div class="d-flex">-->
+<!--                            <div class="me-3 mt-1 text-primary">-->
+<!--                                <i class="fas fa-phone-alt"></i>-->
+<!--                            </div>-->
+<!--                            <span>+90 532 123 45 67</span>-->
+<!--                        </div>-->
+<!--                    </li>-->
+<!--                    <li class="mb-3">-->
+<!--                        <div class="d-flex">-->
+<!--                            <div class="me-3 mt-1 text-primary">-->
+<!--                                <i class="fas fa-envelope"></i>-->
+<!--                            </div>-->
+<!--                            <span>info@Luckytour.com</span>-->
+<!--                        </div>-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        <hr class="border-light opacity-25 my-4">-->
+
+<!--        <div class="row align-items-center">-->
+<!--            <div class="col-md-6 text-center text-md-start">-->
+<!--                <p class="mb-0">&copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2023</span> Luckytour. Все права защищены.</p>-->
+<!--            </div>-->
+<!--            <div class="col-md-6 text-center text-md-end mt-3 mt-md-0">-->
+<!--                <ul class="list-inline mb-0">-->
+<!--                    <li class="list-inline-item"><a href="/faq">Частые вопросы</a></li>-->
+<!--                    <li class="list-inline-item"><a href="/privacy">Конфиденциальность</a></li>-->
+<!--                    <li class="list-inline-item"><a href="/terms">Условия</a></li>-->
+<!--                </ul>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</footer>-->
+<!--<script>-->
+<!--    // Простой скрипт для изменения стиля навигационной панели при прокрутке-->
+<!--    window.addEventListener('scroll', function() {-->
+<!--        const navbar = document.querySelector('.navbar');-->
+<!--        if (window.scrollY > 50) {-->
+<!--            navbar.style.padding = '12px 0';-->
+<!--            navbar.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.08)';-->
+<!--        } else {-->
+<!--            navbar.style.padding = '20px 0';-->
+<!--            navbar.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.03)';-->
+<!--        }-->
+<!--    });-->
+<!--</script>-->
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>-->
+<!--</body>-->
+<!--</html>-->
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asiamedtour - Медицинский туризм</title>
+    <!-- Улучшенный заголовок страницы -->
+    <title>Asiamedtour - Медицинский туризм в Турции | Лечение за рубежом</title>
+
+    <!-- Мета-теги для SEO -->
+    <meta name="description" content="Организация медицинского туризма в Турции. Лечение в лучших клиниках с сопровождением на всех этапах. Индивидуальный подход и доступные цены.">
+    <meta name="keywords" content="медицинский туризм, лечение в Турции, клиники Турции, медицинские услуги за рубежом">
+
+    <!-- Open Graph теги для социальных сетей -->
+    <meta property="og:title" content="Asiamedtour - Медицинский туризм в Турции">
+    <meta property="og:description" content="Организация лечения в лучших клиниках Турции с полным сопровождением пациентов.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://asiamedtour.com/">
+    <meta property="og:image" content="/images/Leonardo_Lightning_XL_modern_clinic_3.jpg">
+
+    <!-- Каноническая ссылка -->
+    <link rel="canonical" href="https://asiamedtour.com/" />
+
+    <!-- Метатеги для локализации -->
+    <meta name="geo.region" content="TR" />
+    <meta name="geo.placename" content="Istanbul" />
+    <meta name="format-detection" content="telephone=yes">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
@@ -322,6 +1018,40 @@
     </style>
 </head>
 <body>
+<!-- Структурированные данные Schema.org для медицинской организации -->
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "MedicalBusiness",
+        "name": "Asiamedtour",
+        "description": "Организация медицинского туризма и лечения в лучших клиниках Турции",
+        "url": "https://asiamedtour.com/",
+        "logo": "https://asiamedtour.com/images/logo.png",
+        "image": "/images/Leonardo_Lightning_XL_modern_clinic_3.jpg",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Стамбул",
+            "addressCountry": "Турция",
+            "streetAddress": "Ataşehir, D-100"
+        },
+        "telephone": "+90 532 123 45 67",
+        "email": "info@Luckytour.com",
+        "sameAs": [
+            "https://www.facebook.com/profile.php?id=100009226154613",
+            "https://www.instagram.com/name_lucky_lucky_/",
+            "https://t.me/name_lucky_lucky"
+        ],
+        "openingHours": "Mo-Fr 09:00-18:00",
+        "availableService": [
+            {
+                "@type": "MedicalProcedure",
+                "name": "Лечение в Турции",
+                "description": "Организация лечения в лучших клиниках Турции"
+            }
+        ]
+    }
+</script>
+
 <!-- Навигация -->
 <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container">
@@ -363,7 +1093,7 @@
 </nav>
 
 <!-- Герой-секция -->
-<section class="hero-section">
+<section class="hero-section" id="home">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6 hero-content">
@@ -378,17 +1108,17 @@
         </div>
     </div>
     <div class="hero-image-container">
-        <img src="/images/Leonardo_Lightning_XL_modern_clinic_3.jpg" alt="Современная клиника" class="hero-image">
+        <img src="/images/Leonardo_Lightning_XL_modern_clinic_3.jpg" alt="Современная медицинская клиника в Турции для лечения иностранных пациентов" class="hero-image">
     </div>
 </section>
 
 <!-- О нас -->
-<section class="section">
+<section class="section" id="about">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6 mb-5 mb-lg-0">
                 <div class="position-relative">
-                    <img src="/images/Leonardo_Lightning_XL_modern_clinic_2.jpg" alt="О нас" class="img-fluid rounded-4 shadow">
+                    <img src="/images/Default_Modern_clinic_1.jpg" alt="Высококлассное медицинское обслуживание в клиниках Турции" class="img-fluid rounded-4 shadow">
                     <div class="position-absolute bg-white rounded-4 shadow p-4" style="bottom: -30px; right: -30px; max-width: 60%;">
                         <div class="d-flex align-items-center">
                             <div class="me-3">
@@ -439,7 +1169,7 @@
 </section>
 
 <!-- Преимущества -->
-<section class="section bg-light">
+<section class="section bg-light" id="benefits">
     <div class="container">
         <div class="section-heading">
             <h6 class="text-primary fw-bold mb-3">ПОЧЕМУ МЫ</h6>
@@ -493,7 +1223,7 @@
 </section>
 
 <!-- Популярные клиники -->
-<section class="section">
+<section class="section" id="clinics">
     <div class="container">
         <div class="section-heading">
             <h6 class="text-primary fw-bold mb-3">ЛУЧШИЙ ВЫБОР</h6>
@@ -504,7 +1234,7 @@
         <div class="row g-4">
             <div th:each="clinic : ${topClinics}" class="col-md-6 col-lg-4">
                 <div class="card h-100">
-                    <img th:src="${clinic.imagePath}" th:alt="${clinic.name}" class="card-img-top">
+                    <img th:src="${clinic.imagePath}" th:alt="${'Клиника ' + clinic.name + ' в Турции'}" class="card-img-top">
                     <div class="card-body d-flex flex-column">
                         <div class="d-flex align-items-center mb-3">
                             <i class="fas fa-map-marker-alt text-primary me-2"></i>
@@ -531,7 +1261,7 @@
 </section>
 
 <!-- Миссия -->
-<section class="mission-section">
+<section class="mission-section" id="mission">
     <div class="container position-relative">
         <div class="row justify-content-center">
             <div class="col-lg-8 text-center">
@@ -546,7 +1276,7 @@
 </section>
 
 <!-- Популярные отделения -->
-<section class="section">
+<section class="section" id="departments">
     <div class="container">
         <div class="section-heading">
             <h6 class="text-primary fw-bold mb-3">СПЕЦИАЛИЗАЦИИ</h6>
@@ -571,22 +1301,56 @@
     </div>
 </section>
 
+<!-- FAQ Schema -->
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "Как организуется медицинский туризм в Турцию?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Мы обеспечиваем полное сопровождение пациентов на всех этапах: от подбора клиники и врача до организации проживания и переводчика."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Какие направления лечения доступны в клиниках Турции?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Доступны все основные направления медицины: онкология, кардиология, ортопедия, нейрохирургия, пластическая хирургия и многие другие."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Сколько стоит лечение в Турции?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Стоимость лечения зависит от конкретной проблемы, необходимых процедур, выбранной клиники и врача. Мы предлагаем прозрачную систему ценообразования с подробной калькуляцией всех расходов."
+                }
+            }
+        ]
+    }
+</script>
+
 <!-- Футер -->
 <footer class="footer">
     <div class="container">
         <div class="row g-4 mb-5">
             <div class="col-lg-4 mb-4 mb-lg-0">
-                <a href="/" class="d-inline-block mb-4">
+                <a href="/" class="d-inline-block mb-4" aria-label="Asiamedtour">
                     <span class="h3 fw-bold">Asia<span style="color: var(--accent-color)">med</span>tour</span>
                 </a>
 
                 <p class="mb-4">Мы делаем медицинский туризм доступным, безопасным и комфортным для наших пациентов.</p>
                 <div class="d-flex">
-                    <a href="https://www.facebook.com/profile.php?id=100009226154613" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://www.instagram.com/name_lucky_lucky_/" class="social-icon"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="social-icon"><i class="fab fa-whatsapp"></i></a>
-                    <a href="https://t.me/name_lucky_lucky" class="social-icon"><i class="fab fa-telegram"></i></a>
+                    <a href="https://www.facebook.com/profile.php?id=100009226154613" class="social-icon" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/name_lucky_lucky_/" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-icon" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://t.me/name_lucky_lucky" class="social-icon" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
                 </div>
             </div>
 
@@ -594,7 +1358,6 @@
                 <h5 class="fw-bold mb-4">О нас</h5>
                 <ul class="list-unstyled">
                     <li class="mb-2"><a href="/about">О компании</a></li>
-<!--                    <li class="mb-2"><a href="/team">Наша команда</a></li>-->
                     <li class="mb-2"><a href="/testimonials">Отзывы</a></li>
                     <li class="mb-2"><a href="/blog">Блог</a></li>
                 </ul>
@@ -626,7 +1389,7 @@
                             <div class="me-3 mt-1 text-primary">
                                 <i class="fas fa-phone-alt"></i>
                             </div>
-                            <span>+90 532 123 45 67</span>
+                            <span><a href="tel:+905321234567">+90 532 123 45 67</a></span>
                         </div>
                     </li>
                     <li class="mb-3">
@@ -634,7 +1397,7 @@
                             <div class="me-3 mt-1 text-primary">
                                 <i class="fas fa-envelope"></i>
                             </div>
-                            <span>info@Luckytour.com</span>
+                            <span><a href="mailto:info@Luckytour.com">info@Luckytour.com</a></span>
                         </div>
                     </li>
                 </ul>
@@ -649,14 +1412,16 @@
             </div>
             <div class="col-md-6 text-center text-md-end mt-3 mt-md-0">
                 <ul class="list-inline mb-0">
-                    <li class="list-inline-item"><a href="/faq">Частые вопросы</a></li>
+                    <li class="list-inline-item"><a href="/contact">Частые вопросы</a></li>
                     <li class="list-inline-item"><a href="/privacy">Конфиденциальность</a></li>
                     <li class="list-inline-item"><a href="/terms">Условия</a></li>
+<!--                    <li class="list-inline-item"><a href="/sitemap">Карта сайта</a></li>-->
                 </ul>
             </div>
         </div>
     </div>
 </footer>
+
 <script>
     // Простой скрипт для изменения стиля навигационной панели при прокрутке
     window.addEventListener('scroll', function() {

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title, description)">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Динамический заголовок и описание -->
+  <title th:text="${title}">Asiamedtour - Медицинский туризм в Турции | Лечение за рубежом</title>
+  <meta name="description" th:content="${description}" content="Организация медицинского туризма в Турции. Лечение в лучших клиниках с сопровождением на всех этапах. Индивидуальный подход и доступные цены.">
+
+  <!-- Общие мета-теги для всех страниц -->
+  <meta name="keywords" content="медицинский туризм, лечение в Турции, клиники Турции, медицинские услуги за рубежом">
+
+  <!-- Open Graph теги для социальных сетей -->
+  <meta property="og:title" th:content="${title}" content="Asiamedtour - Медицинский туризм в Турции">
+  <meta property="og:description" th:content="${description}" content="Организация лечения в лучших клиниках Турции с полным сопровождением пациентов.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" th:content="${request != null ? request.requestURL : '/'}" content="https://asiamedtour.com/">
+  <meta property="og:image" content="/images/Leonardo_Lightning_XL_modern_clinic_3.jpg">
+
+  <!-- Каноническая ссылка -->
+  <link rel="canonical" th:href="${request != null ? request.requestURL : '/'}" href="https://asiamedtour.com/" />
+
+  <!-- Метатеги для локализации -->
+  <meta name="geo.region" content="TR" />
+  <meta name="geo.placename" content="Istanbul" />
+  <meta name="format-detection" content="telephone=yes">
+
+  <!-- Стили -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+
+  <!-- Иконки и фавиконы -->
+  <link rel="icon" type="image/png" sizes="32x32" th:href="@{/images/favicon-32x32.png}">
+  <link rel="icon" type="image/png" sizes="16x16" th:href="@{/images/favicon-16x16.png}">
+  <link rel="apple-touch-icon" sizes="180x180" th:href="@{/images/apple-touch-icon.png}">
+
+  <!-- Переменные стилей -->
+  <style>
+    :root {
+      --primary-color: #2563eb;
+      --primary-dark: #1e40af;
+      --secondary-color: #f0f9ff;
+      --accent-color: #4f46e5;
+      --text-color: #1e293b;
+      --text-muted: #64748b;
+      --border-radius: 12px;
+      --transition: all 0.3s ease;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      color: var(--text-color);
+      line-height: 1.7;
+      overflow-x: hidden;
+      padding-top: 80px; /* Для фиксированного хедера */
+    }
+  </style>
+</head>
+</html>
