@@ -1,25 +1,328 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--  <meta charset="UTF-8">-->
+<!--  <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--  <title th:text="${service.title} + ' | КлиникТур'">Название услуги | КлиникТур</title>-->
+<!--  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">-->
+<!--  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">-->
+<!--  <link rel="stylesheet" href="/css/style.css">-->
+
+<!--  <style>-->
+<!--    .service-image {-->
+<!--      max-height: 500px; /* Увеличена максимальная высота */-->
+<!--      min-height: 250px; /* Минимальная высота для небольших экранов */-->
+<!--      width: 100%;-->
+<!--      display: flex;-->
+<!--      justify-content: center;-->
+<!--      align-items: center;-->
+<!--      overflow: hidden;-->
+<!--      border-radius: 12px; /* Немного увеличен радиус скругления */-->
+<!--      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Добавлена легкая тень */-->
+<!--    }-->
+
+<!--    .service-image img {-->
+<!--      width: 100%;-->
+<!--      height: 100%;-->
+<!--      object-fit: cover; /* Сохраняет пропорции изображения */-->
+<!--      object-position: center; /* Центрирует изображение */-->
+<!--      transition: transform 0.3s ease; /* Плавный эффект при наведении */-->
+<!--    }-->
+
+<!--    .service-image img:hover {-->
+<!--      transform: scale(1.05); /* Легкий эффект увеличения при наведении */-->
+<!--    }-->
+
+<!--    /* Адаптивность для разных размеров экрана */-->
+<!--    @media (max-width: 768px) {-->
+<!--      .service-image {-->
+<!--        max-height: 300px; /* Уменьшена высота для мобильных устройств */-->
+<!--        min-height: 200px;-->
+<!--      }-->
+<!--    }-->
+
+<!--    @media (max-width: 480px) {-->
+<!--      .service-image {-->
+<!--        max-height: 250px; /* Еще меньше для совсем маленьких экранов */-->
+<!--        min-height: 150px;-->
+<!--      }-->
+<!--    }-->
+
+<!--    .price-badge {-->
+<!--      background-color: var(&#45;&#45;bs-primary);-->
+<!--      color: white;-->
+<!--      padding: 0.5rem 1.5rem;-->
+<!--      border-radius: 50px;-->
+<!--      font-weight: bold;-->
+<!--      font-size: 1.2rem;-->
+<!--      display: inline-block;-->
+<!--    }-->
+
+<!--    .related-card {-->
+<!--      transition: transform 0.3s ease, box-shadow 0.3s ease;-->
+<!--    }-->
+
+<!--    .related-card:hover {-->
+<!--      transform: translateY(-5px);-->
+<!--      box-shadow: 0 5px 15px rgba(0,0,0,0.1);-->
+<!--    }-->
+
+<!--    .card-img-container {-->
+<!--      height: 160px;-->
+<!--      overflow: hidden;-->
+<!--    }-->
+
+<!--    .card-img-container img {-->
+<!--      width: 100%;-->
+<!--      height: 100%;-->
+<!--      object-fit: cover;-->
+<!--    }-->
+
+<!--    .appointment-form {-->
+<!--      background-color: #f8f9fa;-->
+<!--      border-radius: 8px;-->
+<!--      padding: 1.5rem;-->
+<!--    }-->
+<!--  </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--&lt;!&ndash; Header &ndash;&gt;-->
+<!--<link rel="stylesheet" th:href="@{/css/header.css}">-->
+<!--<header th:replace="~{fragments/header :: header}"></header>-->
+
+<!--<div class="container py-4">-->
+<!--  &lt;!&ndash; Breadcrumbs &ndash;&gt;-->
+<!--  <nav aria-label="breadcrumb" class="mb-4">-->
+<!--    <ol class="breadcrumb">-->
+<!--      <li class="breadcrumb-item"><a th:href="@{/}">Главная</a></li>-->
+<!--      <li class="breadcrumb-item"><a th:href="@{/services}">Услуги</a></li>-->
+<!--      <li class="breadcrumb-item active" aria-current="page" th:text="${service.title}">Название услуги</li>-->
+<!--    </ol>-->
+<!--  </nav>-->
+
+<!--  <div class="row g-4">-->
+<!--    &lt;!&ndash; Main Content &ndash;&gt;-->
+<!--    <div class="col-lg-8">-->
+<!--      &lt;!&ndash; Service Details &ndash;&gt;-->
+<!--      <div class="card shadow-sm mb-4">-->
+<!--        <div class="card-body">-->
+<!--          <h1 class="card-title mb-3" th:text="${service.title}">Название услуги</h1>-->
+
+<!--          <div class="service-image mb-4" style="max-height: 500px; min-height: 250px; width: 100%; display: flex; justify-content: center; align-items: center; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">-->
+<!--            <img th:if="${service.imagePath}"-->
+<!--                 th:src="${service.imagePath}"-->
+<!--                 alt="Изображение услуги"-->
+<!--                 class="img-fluid"-->
+<!--                 style="width: 100%; height: 100%; object-fit: cover; object-position: center; transition: transform 0.3s ease;"-->
+<!--                 onmouseover="this.style.transform='scale(1.05)'"-->
+<!--                 onmouseout="this.style.transform='scale(1)'"-->
+<!--            >-->
+<!--            <img th:unless="${service.imagePath}"-->
+<!--                 src="/img/service-placeholder.jpg"-->
+<!--                 alt="Изображение услуги"-->
+<!--                 class="img-fluid"-->
+<!--                 style="width: 100%; height: 100%; object-fit: cover; object-position: center; transition: transform 0.3s ease;"-->
+<!--                 onmouseover="this.style.transform='scale(1.05)'"-->
+<!--                 onmouseout="this.style.transform='scale(1)'"-->
+<!--            >-->
+<!--          </div>-->
+
+<!--          <div class="d-flex justify-content-between align-items-center mb-4">-->
+<!--            <div class="price-badge" th:text="${service.formattedPrice}">1 000 ₽</div>-->
+<!--            <a href="/appointment" class="btn btn-primary">-->
+<!--              <i class="fas fa-calendar-check me-2"></i> Записаться-->
+<!--            </a>-->
+<!--          </div>-->
+
+<!--          <h4 class="mb-3">Описание услуги</h4>-->
+<!--          <div class="mb-4" th:utext="${service.description}">-->
+<!--            <p>Подробное описание услуги.</p>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+
+<!--      &lt;!&ndash; Related Services &ndash;&gt;-->
+<!--      <div class="card shadow-sm">-->
+<!--        <div class="card-header bg-light">-->
+<!--          <h4 class="mb-0">Вас также может заинтересовать</h4>-->
+<!--        </div>-->
+<!--        <div class="card-body">-->
+<!--          <div class="row g-3">-->
+<!--            <div class="col-md-4" th:each="relatedService : ${relatedServices}" th:if="${relatedService.id != service.id}">-->
+<!--              <div class="card related-card h-100 shadow-sm">-->
+<!--                <div class="card-img-container">-->
+<!--                  <img th:if="${relatedService.imagePath}" th:src="${relatedService.imagePath}" alt="Изображение услуги">-->
+<!--                  <img th:unless="${relatedService.imagePath}" src="/img/service-placeholder.jpg" alt="Изображение услуги">-->
+<!--                </div>-->
+<!--                <div class="card-body">-->
+<!--                  <h5 class="card-title" th:text="${relatedService.title}">Название услуги</h5>-->
+<!--                  <p class="card-text small text-muted" th:text="${relatedService.shortDescription}">Краткое описание услуги.</p>-->
+<!--                  <div class="d-flex justify-content-between align-items-center mt-2">-->
+<!--                    <span class="fw-bold text-primary" th:text="${relatedService.formattedPrice}">1 000 ₽</span>-->
+<!--                    <a th:href="@{/services/{id}(id=${relatedService.id})}" class="btn btn-sm btn-outline-primary">Подробнее</a>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Sidebar &ndash;&gt;-->
+<!--    <div class="col-lg-4">-->
+<!--      &lt;!&ndash; Appointment Form &ndash;&gt;-->
+<!--      <div class="card shadow-sm mb-4">-->
+<!--        <div class="card-header bg-primary text-white">-->
+<!--          <h4 class="mb-0">Запись на приём</h4>-->
+<!--        </div>-->
+<!--        <div class="card-body">-->
+<!--          <form th:action="@{/appointments/create}" method="post" class="appointment-form">-->
+<!--            <input type="hidden" name="serviceId" th:value="${service.id}">-->
+
+<!--            <div class="mb-3">-->
+<!--              <label for="fullName" class="form-label">Ваше имя</label>-->
+<!--              <input type="text" class="form-control" id="fullName" name="fullName" required>-->
+<!--            </div>-->
+
+<!--            <div class="mb-3">-->
+<!--              <label for="phone" class="form-label">Телефон</label>-->
+<!--              <input type="tel" class="form-control" id="phone" name="phone" required>-->
+<!--            </div>-->
+
+<!--            <div class="mb-3">-->
+<!--              <label for="email" class="form-label">Email</label>-->
+<!--              <input type="email" class="form-control" id="email" name="email">-->
+<!--            </div>-->
+
+<!--            <div class="mb-3">-->
+<!--              <label for="date" class="form-label">Предпочтительная дата</label>-->
+<!--              <input type="date" class="form-control" id="date" name="date" required>-->
+<!--            </div>-->
+
+<!--            <div class="mb-3">-->
+<!--              <label for="message" class="form-label">Комментарий</label>-->
+<!--              <textarea class="form-control" id="message" name="message" rows="2"></textarea>-->
+<!--            </div>-->
+
+<!--            <div class="mb-3 form-check">-->
+<!--              <input type="checkbox" class="form-check-input" id="privacyAgreed" name="privacyAgreed" required>-->
+<!--              <label class="form-check-label small" for="privacyAgreed">Я согласен на обработку персональных данных</label>-->
+<!--            </div>-->
+
+<!--            <button type="submit" class="btn btn-primary w-100">Записаться</button>-->
+<!--          </form>-->
+<!--        </div>-->
+<!--      </div>-->
+
+
+<!--      &lt;!&ndash; Quick Contact &ndash;&gt;-->
+<!--      <div class="card shadow-sm">-->
+<!--        <div class="card-header bg-light">-->
+<!--          <h4 class="mb-0">Контактная информация</h4>-->
+<!--        </div>-->
+<!--        <div class="card-body">-->
+<!--          <p class="mb-3">Если у вас возникли вопросы об услуге, свяжитесь с нами:</p>-->
+
+<!--          <div class="d-grid gap-2 mb-3">-->
+<!--            <a href="tel:+71234567890" class="btn btn-outline-success">-->
+<!--              <i class="fas fa-phone me-2"></i> +7 (123) 456-78-90-->
+<!--            </a>-->
+<!--            <a href="mailto:info@cliniktour.ru" class="btn btn-outline-secondary">-->
+<!--              <i class="fas fa-envelope me-2"></i> info@cliniktour.ru-->
+<!--            </a>-->
+<!--          </div>-->
+
+<!--          <div class="alert alert-info">-->
+<!--            <i class="fas fa-info-circle me-2"></i> Время работы: Пн-Пт с 9:00 до 20:00, Сб-Вс с 10:00 до 18:00-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+
+<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>-->
+<!--</body>-->
+<!--</html>-->
+
+
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title th:text="${service.title} + ' | КлиникТур'">Название услуги | КлиникТур</title>
+
+  <!-- Bootstrap and Font Awesome -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+  <!-- Custom CSS -->
   <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" th:href="@{/css/header.css}">
+  <link rel="stylesheet" th:href="@{/css/footer.css}">
 
   <style>
+    /* Service Image Styles */
     .service-image {
-      max-height: 400px;
+      max-height: 500px;
+      min-height: 250px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       overflow: hidden;
-      border-radius: 8px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
 
     .service-image img {
       width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transition: transform 0.3s ease;
+    }
+
+    .service-image img:hover {
+      transform: scale(1.05);
+    }
+
+    /* Related Services Styles */
+    .related-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .related-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .related-card .card-img-container {
+      height: 200px;
+      overflow: hidden;
+    }
+
+    .related-card .card-img-container img {
+      width: 100%;
+      height: 100%;
       object-fit: cover;
     }
 
+    .related-card .card-body {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Price Badge */
     .price-badge {
       background-color: var(--bs-primary);
       color: white;
@@ -30,36 +333,39 @@
       display: inline-block;
     }
 
-    .related-card {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .related-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-
-    .card-img-container {
-      height: 160px;
-      overflow: hidden;
-    }
-
-    .card-img-container img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
+    /* Appointment Form */
     .appointment-form {
       background-color: #f8f9fa;
       border-radius: 8px;
       padding: 1.5rem;
     }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .service-image {
+        max-height: 300px;
+        min-height: 200px;
+      }
+
+      .related-card .card-img-container {
+        height: 150px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .service-image {
+        max-height: 250px;
+        min-height: 150px;
+      }
+
+      .related-card .card-img-container {
+        height: 120px;
+      }
+    }
   </style>
 </head>
 <body>
 <!-- Header -->
-<link rel="stylesheet" th:href="@{/css/header.css}">
 <header th:replace="~{fragments/header :: header}"></header>
 
 <div class="container py-4">
@@ -81,8 +387,16 @@
           <h1 class="card-title mb-3" th:text="${service.title}">Название услуги</h1>
 
           <div class="service-image mb-4">
-            <img th:if="${service.imagePath}" th:src="${service.imagePath}" alt="Изображение услуги" class="img-fluid">
-            <img th:unless="${service.imagePath}" src="/img/service-placeholder.jpg" alt="Изображение услуги" class="img-fluid">
+            <img th:if="${service.imagePath}"
+                 th:src="${service.imagePath}"
+                 alt="Изображение услуги"
+                 class="img-fluid"
+            >
+            <img th:unless="${service.imagePath}"
+                 src="/img/service-placeholder.jpg"
+                 alt="Изображение услуги"
+                 class="img-fluid"
+            >
           </div>
 
           <div class="d-flex justify-content-between align-items-center mb-4">
@@ -107,14 +421,22 @@
         <div class="card-body">
           <div class="row g-3">
             <div class="col-md-4" th:each="relatedService : ${relatedServices}" th:if="${relatedService.id != service.id}">
-              <div class="card related-card h-100 shadow-sm">
+              <div class="card related-card">
                 <div class="card-img-container">
-                  <img th:if="${relatedService.imagePath}" th:src="${relatedService.imagePath}" alt="Изображение услуги">
-                  <img th:unless="${relatedService.imagePath}" src="/img/service-placeholder.jpg" alt="Изображение услуги">
+                  <img th:if="${relatedService.imagePath}"
+                       th:src="${relatedService.imagePath}"
+                       alt="Изображение услуги"
+                  >
+                  <img th:unless="${relatedService.imagePath}"
+                       src="/img/service-placeholder.jpg"
+                       alt="Изображение услуги"
+                  >
                 </div>
                 <div class="card-body">
-                  <h5 class="card-title" th:text="${relatedService.title}">Название услуги</h5>
-                  <p class="card-text small text-muted" th:text="${relatedService.shortDescription}">Краткое описание услуги.</p>
+                  <div>
+                    <h5 class="card-title" th:text="${relatedService.title}">Название услуги</h5>
+                    <p class="card-text small text-muted" th:text="${relatedService.shortDescription}">Краткое описание услуги.</p>
+                  </div>
                   <div class="d-flex justify-content-between align-items-center mt-2">
                     <span class="fw-bold text-primary" th:text="${relatedService.formattedPrice}">1 000 ₽</span>
                     <a th:href="@{/services/{id}(id=${relatedService.id})}" class="btn btn-sm btn-outline-primary">Подробнее</a>
@@ -171,40 +493,7 @@
             <button type="submit" class="btn btn-primary w-100">Записаться</button>
           </form>
         </div>
-<!--        <div class="card-body">-->
-<!--          <form th:action="@{/appointment/create}" method="post" class="appointment-form">-->
-<!--            <input type="hidden" name="serviceId" th:value="${service.id}">-->
-
-<!--            <div class="mb-3">-->
-<!--              <label for="name" class="form-label">Ваше имя</label>-->
-<!--              <input type="text" class="form-control" id="name" name="name" required>-->
-<!--            </div>-->
-
-<!--            <div class="mb-3">-->
-<!--              <label for="phone" class="form-label">Телефон</label>-->
-<!--              <input type="tel" class="form-control" id="phone" name="phone" required>-->
-<!--            </div>-->
-
-<!--            <div class="mb-3">-->
-<!--              <label for="date" class="form-label">Предпочтительная дата</label>-->
-<!--              <input type="date" class="form-control" id="date" name="date" required>-->
-<!--            </div>-->
-
-<!--            <div class="mb-3">-->
-<!--              <label for="comment" class="form-label">Комментарий</label>-->
-<!--              <textarea class="form-control" id="comment" name="comment" rows="2"></textarea>-->
-<!--            </div>-->
-
-<!--            <div class="mb-3 form-check">-->
-<!--              <input type="checkbox" class="form-check-input" id="privacyConsent" required>-->
-<!--              <label class="form-check-label small" for="privacyConsent">Я согласен на обработку персональных данных</label>-->
-<!--            </div>-->
-
-<!--            <button type="submit" class="btn btn-primary w-100">Записаться</button>-->
-<!--          </form>-->
-<!--        </div>-->
       </div>
-
 
       <!-- Quick Contact -->
       <div class="card shadow-sm">
@@ -232,7 +521,10 @@
   </div>
 </div>
 
+<!--&lt;!&ndash; Footer &ndash;&gt;-->
+<!--<footer th:replace="~{fragments/footer :: footer}"></footer>-->
 
+<!-- Bootstrap JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -26,6 +26,10 @@ public class ClinikTourApplication {
 
 
 
+    // добавить редрект после  записи к врачу или секвису
+
+
+
 
 
 }

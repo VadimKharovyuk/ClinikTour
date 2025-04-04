@@ -18,6 +18,8 @@
   <link rel="stylesheet" th:href="@{/css/thank-you.css}">
 </head>
 <body>
+<link rel="stylesheet" th:href="@{/css/header.css}">
+<header th:replace="~{fragments/header :: header}"></header>
 <div class="thank-you-container">
   <!-- Карточка благодарности -->
   <div class="thank-you-card">
@@ -47,7 +49,14 @@
         <a th:href="@{/services}" class="btn-services">
           <i class="bi bi-list-ul"></i> Смотреть другие услуги
         </a>
+        <a th:href="@{/doctors}" class="btn-services">
+          <i class="bi bi-list-ul"></i> Смотреть других докторов
+        </a>
+        <a th:href="@{/clinics}" class="btn-services">
+          <i class="bi bi-list-ul"></i> Смотреть другие клиники
+        </a>
       </div>
+
 
       <div class="contact-info">
         <p>При возникновении вопросов вы можете связаться с нами:</p>

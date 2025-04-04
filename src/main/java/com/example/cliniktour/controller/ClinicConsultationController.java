@@ -27,6 +27,7 @@ public class ClinicConsultationController {
             redirectAttributes.addFlashAttribute("error", "Произошла ошибка при отправке заявки: " + e.getMessage());
         }
 
-        return "redirect:/clinics/" + consultationDTO.getClinicId();
+//        return "redirect:/clinics/" + consultationDTO.getClinicId();
+        return "redirect:/appointments/thank-you";
     }
 }
