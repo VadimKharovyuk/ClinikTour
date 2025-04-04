@@ -176,4 +176,42 @@ public class ClinicService {
                 .sorted()
                 .toList();
     }
+
+
+    public void cleanAllClinicDescriptions() {
+        List<Clinic> clinics = clinicRepository.findAll();
+        for (Clinic clinic : clinics) {
+            if (clinic.getDescriptionBlock1() != null) {
+                clinic.setDescriptionBlock1(cleanHtml(clinic.getDescriptionBlock1()));
+            }
+            if (clinic.getDescriptionBlock2() != null) {
+                clinic.setDescriptionBlock2(cleanHtml(clinic.getDescriptionBlock2()));
+            }
+            if (clinic.getDescriptionBlock3() != null) {
+                clinic.setDescriptionBlock3(cleanHtml(clinic.getDescriptionBlock3()));
+            }
+            if (clinic.getDescriptionBlock4() != null) {
+                clinic.setDescriptionBlock4(cleanHtml(clinic.getDescriptionBlock4()));
+            }
+        }
+        clinicRepository.saveAll(clinics);
+    }
+
+    private String cleanHtml(String html) {
+        if (html == null) return null;
+
+        return html.replaceAll("<span\\s+[^>]*>", "")
+                .replaceAll("</span>", "")
+                .replaceAll("style=\"[^\"]*\"", "")
+                .replaceAll("font-family:[^;]*;?", "")
+                .replaceAll("font-variant-ligatures:[^;]*;?", "")
+                .replaceAll("orphans:[^;]*;?", "")
+                .replaceAll("widows:[^;]*;?", "")
+                .replaceAll("text-decoration-thickness:[^;]*;?", "")
+                .replaceAll("text-decoration-style:[^;]*;?", "")
+                .replaceAll("text-decoration-color:[^;]*;?", "")
+                .replaceAll("<p[^>]*>", "<p>") // Упростить p-теги, убрав из них атрибуты
+                .replaceAll("\\s{2,}", " ") // Убрать лишние пробелы
+                .trim();
+    }
 }
