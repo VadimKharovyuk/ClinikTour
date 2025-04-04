@@ -210,7 +210,9 @@ public class ClinicService {
                 .replaceAll("text-decoration-thickness:[^;]*;?", "")
                 .replaceAll("text-decoration-style:[^;]*;?", "")
                 .replaceAll("text-decoration-color:[^;]*;?", "")
-                .replaceAll("<p[^>]*>", "<p>") // Упростить p-теги, убрав из них атрибуты
+                .replaceAll("<p[^>]*>", "") // Полностью удалить открывающие теги p
+                .replaceAll("</p>", " ") // Заменить закрывающие теги p на пробел
+                .replaceAll("<br>", " ") // Заменить br на пробел
                 .replaceAll("\\s{2,}", " ") // Убрать лишние пробелы
                 .trim();
     }

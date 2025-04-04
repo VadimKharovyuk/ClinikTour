@@ -5,6 +5,7 @@ import com.example.cliniktour.dto.ServiceDto;
 import com.example.cliniktour.mapper.AppointmentMapper;
 import com.example.cliniktour.mapper.ServiceMapper;
 import com.example.cliniktour.model.Appointment;
+import com.example.cliniktour.model.Clinic;
 import com.example.cliniktour.model.Service;
 import com.example.cliniktour.repository.AppointmentRepository;
 import com.example.cliniktour.repository.ServiceRepository;
@@ -194,5 +195,35 @@ public class ServiceService {
         return serviceRepository.findAll(
                 PageRequest.of(0, limit, Sort.by(Sort.Direction.ASC, "price"))
         ).getContent();
+    }
+
+    public void cleanAllServicesDescriptions() {
+        List<Service> services = serviceRepository.findAll();
+        for (Service service : services) {
+            if (service.getDescription() != null) {
+                service.setDescription(cleanHtml(service.getDescription()));
+            }
+        }
+        serviceRepository.saveAll(services);
+    }
+
+    private String cleanHtml(String html) {
+        if (html == null) return null;
+
+        return html.replaceAll("<span\\s+[^>]*>", "")
+                .replaceAll("</span>", "")
+                .replaceAll("style=\"[^\"]*\"", "")
+                .replaceAll("font-family:[^;]*;?", "")
+                .replaceAll("font-variant-ligatures:[^;]*;?", "")
+                .replaceAll("orphans:[^;]*;?", "")
+                .replaceAll("widows:[^;]*;?", "")
+                .replaceAll("text-decoration-thickness:[^;]*;?", "")
+                .replaceAll("text-decoration-style:[^;]*;?", "")
+                .replaceAll("text-decoration-color:[^;]*;?", "")
+                .replaceAll("<p[^>]*>", "") // Полностью удалить открывающие теги p
+                .replaceAll("</p>", " ") // Заменить закрывающие теги p на пробел
+                .replaceAll("<br>", " ") // Заменить br на пробел
+                .replaceAll("\\s{2,}", " ") // Убрать лишние пробелы
+                .trim();
     }
 }
