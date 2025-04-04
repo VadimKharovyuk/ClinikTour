@@ -1,401 +1,395 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Врачи - Asiamedtour</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-  <link rel="stylesheet" th:href="@{/css/styles.css}">
-  <style>
-    :root {
-      --primary-color: #2563eb;
-      --primary-dark: #1e40af;
-      --primary-light: #3b82f6;
-      --secondary-color: #f0f9ff;
-      --accent-color: #4f46e5;
-      --text-color: #1e293b;
-      --text-muted: #64748b;
-      --border-radius: 12px;
-      --transition: all 0.3s ease;
-    }
+<head th:replace="~{fragments/head :: head('Asiamedtour - Медицинский туризм в Турции | Лечение за рубежом', 'Организация медицинского туризма в Турции. Лечение в лучших клиниках с сопровождением на всех этапах. Индивидуальный подход и доступные цены.')}">
+  <title>Медицинский туризм в Турции</title></head>
+<body>
+<style>
+  :root {
+    --primary-color: #2563eb;
+    --primary-dark: #1e40af;
+    --primary-light: #3b82f6;
+    --secondary-color: #f0f9ff;
+    --accent-color: #4f46e5;
+    --text-color: #1e293b;
+    --text-muted: #64748b;
+    --border-radius: 12px;
+    --transition: all 0.3s ease;
+  }
 
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-      color: var(--text-color);
-      line-height: 1.7;
-      background-color: #f8fafc;
-    }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    color: var(--text-color);
+    line-height: 1.7;
+    background-color: #f8fafc;
+  }
 
-    /* Заголовок страницы */
-    .page-header {
-      margin-bottom: 40px;
-    }
+  /* Заголовок страницы */
+  .page-header {
+    margin-bottom: 40px;
+  }
 
+  .page-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--text-color);
+    margin-bottom: 15px;
+  }
+
+  .page-description {
+    color: var(--text-muted);
+    max-width: 700px;
+    margin-bottom: 0;
+  }
+
+  /* Фильтры и поиск */
+  .filters-card {
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    padding: 25px;
+    margin-bottom: 40px;
+    border: none;
+    overflow: hidden;
+  }
+
+  .custom-tabs {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .custom-tabs .nav-link {
+    color: var(--text-muted);
+    font-weight: 600;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 0;
+    position: relative;
+    transition: var(--transition);
+  }
+
+  .custom-tabs .nav-link:hover {
+    color: var(--primary-color);
+  }
+
+  .custom-tabs .nav-link.active {
+    color: var(--primary-color);
+    background-color: transparent;
+  }
+
+  .custom-tabs .nav-link.active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 100%;
+    height: 3px;
+    background-color: var(--primary-color);
+    border-radius: 3px 3px 0 0;
+  }
+
+  .search-input {
+    border-radius: var(--border-radius);
+    padding: 12px 20px;
+    border: 1px solid #e2e8f0;
+    transition: var(--transition);
+  }
+
+  .search-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.25);
+  }
+
+  .filter-select, .filter-input {
+    border-radius: var(--border-radius);
+    padding: 12px 20px;
+    border: 1px solid #e2e8f0;
+    transition: var(--transition);
+    color: var(--text-color);
+  }
+
+  .filter-select:focus, .filter-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.25);
+  }
+
+  .form-label {
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 10px;
+  }
+
+  .btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    border-radius: var(--border-radius);
+    padding: 12px 24px;
+    font-weight: 600;
+    transition: var(--transition);
+  }
+
+  .btn-primary:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px rgba(37, 99, 235, 0.1);
+  }
+
+  .btn-outline-primary {
+    color: var(--primary-color);
+    background-color: transparent;
+    border-color: var(--primary-color);
+    border-radius: var(--border-radius);
+    padding: 12px 24px;
+    font-weight: 600;
+    transition: var(--transition);
+  }
+
+  .btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px rgba(37, 99, 235, 0.1);
+  }
+
+  .btn-outline-secondary {
+    color: var(--text-muted);
+    background-color: transparent;
+    border-color: #e2e8f0;
+    border-radius: var(--border-radius);
+    padding: 12px 24px;
+    font-weight: 600;
+    transition: var(--transition);
+  }
+
+  .btn-outline-secondary:hover {
+    background-color: #f8fafc;
+    color: var(--text-color);
+    transform: translateY(-2px);
+  }
+
+  .btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+  }
+
+  /* Результаты поиска */
+  .search-results {
+    background-color: #f0f9ff;
+    border-radius: var(--border-radius);
+    padding: 15px 25px;
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .search-results-text {
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 0;
+  }
+
+  .search-results-query {
+    color: var(--primary-color);
+  }
+
+  /* Карточки докторов */
+  .doctor-card {
+    border: none;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    transition: var(--transition);
+    height: 100%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .doctor-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  .doctor-image-container {
+    position: relative;
+    height: 300px;
+    overflow: hidden;
+  }
+
+  .doctor-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+  }
+
+  .doctor-card:hover .doctor-image {
+    transform: scale(1.05);
+  }
+
+  .doctor-specialization {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    box-shadow: 0 2px 10px rgba(37, 99, 235, 0.3);
+  }
+
+  .doctor-card-body {
+    padding: 25px;
+    background-color: white;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .doctor-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: var(--text-color);
+    line-height: 1.3;
+  }
+
+  .doctor-info-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+
+  .doctor-info-icon {
+    color: var(--primary-color);
+    margin-right: 12px;
+    margin-top: 4px;
+    flex-shrink: 0;
+  }
+
+  .doctor-short-bio {
+    color: var(--text-muted);
+    margin-top: 15px;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+    flex-grow: 1;
+  }
+
+  .doctor-card-footer {
+    padding: 0;
+    background-color: transparent;
+    border-top: none;
+  }
+
+  .btn-details {
+    width: 100%;
+    padding: 12px;
+    font-weight: 600;
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+  }
+
+  /* Пагинация */
+  .pagination-container {
+    margin-top: 50px;
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+  }
+
+  .pagination .page-item .page-link {
+    border: none;
+    color: var(--text-color);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 5px;
+    border-radius: 50%;
+    transition: var(--transition);
+  }
+
+  .pagination .page-item .page-link:hover {
+    background-color: rgba(37, 99, 235, 0.1);
+    color: var(--primary-color);
+  }
+
+  .pagination .page-item.active .page-link {
+    background-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+  }
+
+  .pagination .page-item.disabled .page-link {
+    color: #ccc;
+    background-color: transparent;
+  }
+
+  /* Сообщение об отсутствии докторов */
+  .no-doctors-container {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 60px 30px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  }
+
+  .no-doctors-icon {
+    font-size: 4rem;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+  }
+
+  .no-doctors-title {
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: var(--text-color);
+  }
+
+  .no-doctors-text {
+    color: var(--text-muted);
+    max-width: 500px;
+    margin: 0 auto 30px;
+  }
+
+  /* Адаптивность */
+  @media (max-width: 991px) {
     .page-title {
-      font-size: 2.5rem;
-      font-weight: 800;
-      color: var(--text-color);
-      margin-bottom: 15px;
-    }
-
-    .page-description {
-      color: var(--text-muted);
-      max-width: 700px;
-      margin-bottom: 0;
-    }
-
-    /* Фильтры и поиск */
-    .filters-card {
-      background-color: white;
-      border-radius: var(--border-radius);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-      padding: 25px;
-      margin-bottom: 40px;
-      border: none;
-      overflow: hidden;
-    }
-
-    .custom-tabs {
-      margin-bottom: 20px;
-      border-bottom: 1px solid #e2e8f0;
-    }
-
-    .custom-tabs .nav-link {
-      color: var(--text-muted);
-      font-weight: 600;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 0;
-      position: relative;
-      transition: var(--transition);
-    }
-
-    .custom-tabs .nav-link:hover {
-      color: var(--primary-color);
-    }
-
-    .custom-tabs .nav-link.active {
-      color: var(--primary-color);
-      background-color: transparent;
-    }
-
-    .custom-tabs .nav-link.active::after {
-      content: '';
-      position: absolute;
-      left: 0;
-      bottom: -1px;
-      width: 100%;
-      height: 3px;
-      background-color: var(--primary-color);
-      border-radius: 3px 3px 0 0;
-    }
-
-    .search-input {
-      border-radius: var(--border-radius);
-      padding: 12px 20px;
-      border: 1px solid #e2e8f0;
-      transition: var(--transition);
-    }
-
-    .search-input:focus {
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.25);
-    }
-
-    .filter-select, .filter-input {
-      border-radius: var(--border-radius);
-      padding: 12px 20px;
-      border: 1px solid #e2e8f0;
-      transition: var(--transition);
-      color: var(--text-color);
-    }
-
-    .filter-select:focus, .filter-input:focus {
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.25);
-    }
-
-    .form-label {
-      font-weight: 600;
-      color: var(--text-color);
-      margin-bottom: 10px;
-    }
-
-    .btn-primary {
-      background-color: var(--primary-color);
-      border-color: var(--primary-color);
-      border-radius: var(--border-radius);
-      padding: 12px 24px;
-      font-weight: 600;
-      transition: var(--transition);
-    }
-
-    .btn-primary:hover {
-      background-color: var(--primary-dark);
-      border-color: var(--primary-dark);
-      transform: translateY(-2px);
-      box-shadow: 0 10px 15px rgba(37, 99, 235, 0.1);
-    }
-
-    .btn-outline-primary {
-      color: var(--primary-color);
-      background-color: transparent;
-      border-color: var(--primary-color);
-      border-radius: var(--border-radius);
-      padding: 12px 24px;
-      font-weight: 600;
-      transition: var(--transition);
-    }
-
-    .btn-outline-primary:hover {
-      background-color: var(--primary-color);
-      color: white;
-      transform: translateY(-2px);
-      box-shadow: 0 10px 15px rgba(37, 99, 235, 0.1);
-    }
-
-    .btn-outline-secondary {
-      color: var(--text-muted);
-      background-color: transparent;
-      border-color: #e2e8f0;
-      border-radius: var(--border-radius);
-      padding: 12px 24px;
-      font-weight: 600;
-      transition: var(--transition);
-    }
-
-    .btn-outline-secondary:hover {
-      background-color: #f8fafc;
-      color: var(--text-color);
-      transform: translateY(-2px);
-    }
-
-    .btn-icon {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 48px;
-      height: 48px;
-      padding: 0;
-    }
-
-    /* Результаты поиска */
-    .search-results {
-      background-color: #f0f9ff;
-      border-radius: var(--border-radius);
-      padding: 15px 25px;
-      margin-bottom: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .search-results-text {
-      font-weight: 600;
-      color: var(--text-color);
-      margin-bottom: 0;
-    }
-
-    .search-results-query {
-      color: var(--primary-color);
-    }
-
-    /* Карточки докторов */
-    .doctor-card {
-      border: none;
-      border-radius: var(--border-radius);
-      overflow: hidden;
-      transition: var(--transition);
-      height: 100%;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .doctor-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+      font-size: 2rem;
     }
 
     .doctor-image-container {
-      position: relative;
-      height: 300px;
-      overflow: hidden;
+      height: 250px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .page-title {
+      font-size: 1.8rem;
     }
 
-    .doctor-image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.5s;
+    .doctor-image-container {
+      height: 200px;
     }
 
-    .doctor-card:hover .doctor-image {
-      transform: scale(1.05);
-    }
-
-    .doctor-specialization {
-      position: absolute;
-      bottom: 15px;
-      left: 15px;
-      background-color: var(--primary-color);
-      color: white;
-      padding: 8px 16px;
-      border-radius: 30px;
-      font-size: 0.85rem;
-      font-weight: 500;
-      box-shadow: 0 2px 10px rgba(37, 99, 235, 0.3);
-    }
-
-    .doctor-card-body {
-      padding: 25px;
-      background-color: white;
-      flex-grow: 1;
-      display: flex;
+    .search-results {
       flex-direction: column;
-    }
-
-    .doctor-title {
-      font-size: 1.25rem;
-      font-weight: 700;
-      margin-bottom: 15px;
-      color: var(--text-color);
-      line-height: 1.3;
-    }
-
-    .doctor-info-item {
-      display: flex;
       align-items: flex-start;
-      margin-bottom: 10px;
     }
 
-    .doctor-info-icon {
-      color: var(--primary-color);
-      margin-right: 12px;
-      margin-top: 4px;
-      flex-shrink: 0;
-    }
-
-    .doctor-short-bio {
-      color: var(--text-muted);
+    .search-results-btn {
       margin-top: 15px;
-      margin-bottom: 20px;
-      font-size: 0.95rem;
-      flex-grow: 1;
     }
-
-    .doctor-card-footer {
-      padding: 0;
-      background-color: transparent;
-      border-top: none;
-    }
-
-    .btn-details {
-      width: 100%;
-      padding: 12px;
-      font-weight: 600;
-      border-radius: 0 0 var(--border-radius) var(--border-radius);
-    }
-
-    /* Пагинация */
-    .pagination-container {
-      margin-top: 50px;
-    }
-
-    .pagination {
-      display: flex;
-      justify-content: center;
-    }
-
-    .pagination .page-item .page-link {
-      border: none;
-      color: var(--text-color);
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 5px;
-      border-radius: 50%;
-      transition: var(--transition);
-    }
-
-    .pagination .page-item .page-link:hover {
-      background-color: rgba(37, 99, 235, 0.1);
-      color: var(--primary-color);
-    }
-
-    .pagination .page-item.active .page-link {
-      background-color: var(--primary-color);
-      color: white;
-      box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
-    }
-
-    .pagination .page-item.disabled .page-link {
-      color: #ccc;
-      background-color: transparent;
-    }
-
-    /* Сообщение об отсутствии докторов */
-    .no-doctors-container {
-      background-color: white;
-      border-radius: var(--border-radius);
-      padding: 60px 30px;
-      text-align: center;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-    }
-
-    .no-doctors-icon {
-      font-size: 4rem;
-      color: var(--text-muted);
-      margin-bottom: 20px;
-    }
-
-    .no-doctors-title {
-      font-weight: 700;
-      margin-bottom: 15px;
-      color: var(--text-color);
-    }
-
-    .no-doctors-text {
-      color: var(--text-muted);
-      max-width: 500px;
-      margin: 0 auto 30px;
-    }
-
-    /* Адаптивность */
-    @media (max-width: 991px) {
-      .page-title {
-        font-size: 2rem;
-      }
-
-      .doctor-image-container {
-        height: 250px;
-      }
-    }
-
-    @media (max-width: 767px) {
-      .page-title {
-        font-size: 1.8rem;
-      }
-
-      .doctor-image-container {
-        height: 200px;
-      }
-
-      .search-results {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .search-results-btn {
-        margin-top: 15px;
-      }
-    }
-  </style>
-</head>
-<body>
+  }
+</style>
 <!-- Навигация -->
 <header th:replace="~{fragments/header :: header}"></header>
 
