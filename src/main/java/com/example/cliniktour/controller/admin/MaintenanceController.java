@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/admin/maintenance")
+@RequestMapping("/maintenance")
 public class MaintenanceController {
 
     private final ClinicService clinicService;
