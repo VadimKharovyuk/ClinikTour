@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Статистика посещений - Административная панель</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <link rel="stylesheet" th:href="@{/css/admin-sidebar.css}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<!-- Боковое меню -->
+<div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+<!-- Основной контент -->
+<main class="main-content">
+    <div class="container-fluid py-4">
+        <!-- Заголовок -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h3">Статистика посещений</h1>
+            <div>
+                <a href="statistics/export-csv" class="btn btn-sm btn-outline-secondary me-2" target="_blank">
+                    <i class="fas fa-download me-2"></i>Экспорт CSV
+                </a>
+                <button id="refreshStatsBtn" class="btn btn-sm btn-outline-primary">
+                    <i class="fas fa-sync-alt me-2"></i>Обновить данные
+                </button>
+            </div>
+        </div>
+
+        <!-- Карточки со статистикой -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card bg-primary text-white h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-uppercase text-white-50">Уникальных посетителей</h6>
+                                <h3 class="mt-2 mb-0 text-white" th:text="${stats.uniqueVisitors}">0</h3>
+                            </div>
+                            <div class="fs-1 text-white-50">
+                                <i class="fas fa-users"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-success text-white h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-uppercase text-white-50">Всего просмотров</h6>
+                                <h3 class="mt-2 mb-0 text-white" th:text="${stats.totalHits}">0</h3>
+                            </div>
+                            <div class="fs-1 text-white-50">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-warning text-white h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-uppercase text-white-50">Среднее посещений в день</h6>
+                                <h3 class="mt-2 mb-0 text-white" id="avgDailyVisits" th:text="${stats.avgDailyVisits != null ? #numbers.formatDecimal(stats.avgDailyVisits, 1, 1) : '0'}">0</h3>
+                            </div>
+                            <div class="fs-1 text-white-50">
+                                <i class="fas fa-calendar-day"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-info text-white h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-uppercase text-white-50">Посетителей сегодня</h6>
+                                <h3 class="mt-2 mb-0 text-white" id="todayVisits" th:text="${stats.todayVisits != null ? stats.todayVisits : '0'}">0</h3>
+                            </div>
+                            <div class="fs-1 text-white-50">
+                                <i class="fas fa-user-clock"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Графики -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <h5 class="mb-0">Посещения по странам</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="countriesChart" height="300"></canvas>
+                        <div class="text-center mt-3" id="noCountriesData" style="display: none;">
+                            <p class="text-muted">Нет данных о странах посетителей</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <h5 class="mb-0">Посещения по дням</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="visitsChart" height="300"></canvas>
+                        <div class="text-center mt-3" id="noDailyData" style="display: none;">
+                            <p class="text-muted">Недостаточно данных для отображения графика</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Таблица с последними посещениями -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Последние посещения</h5>
+                <div class="input-group input-group-sm" style="width: 200px;">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Поиск...">
+                    <button class="btn btn-outline-secondary" type="button" id="clearSearch">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover" id="visitsTable">
+                        <thead>
+                        <tr>
+                            <th>IP-адрес</th>
+                            <th>Местоположение</th>
+                            <th>Посещений</th>
+                            <th>Первый визит</th>
+                            <th>Последний визит</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="visit : ${visits}">
+                            <td th:text="${visit.ipAddress}">127.0.0.1</td>
+                            <td th:text="${visit.location != null ? visit.location : 'Неизвестно'}">Москва, Россия</td>
+                            <td th:text="${visit.visitCount}">1</td>
+                            <td th:text="${#dates.format(visit.firstVisit, 'dd.MM.yyyy HH:mm')}">01.01.2025 12:00</td>
+                            <td th:text="${#dates.format(visit.lastVisit, 'dd.MM.yyyy HH:mm')}">01.01.2025 12:00</td>
+                        </tr>
+                        <tr id="noResultsRow" style="display: none;">
+                            <td colspan="5" class="text-center">Нет результатов для отображения</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Инициализация графиков
+    document.addEventListener('DOMContentLoaded', function() {
+        // График по странам
+        const countriesCtx = document.getElementById('countriesChart').getContext('2d');
+        const countriesChart = new Chart(countriesCtx, {
+            type: 'pie',
+            data: {
+                labels: [],
+                datasets: [{
+                    data: [],
+                    backgroundColor: [
+                        '#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b',
+                        '#5a5c69', '#858796', '#6610f2', '#fd7e14', '#20c997'
+                    ],
+                    hoverBackgroundColor: [
+                        '#2e59d9', '#17a673', '#2c9faf', '#f4b30d', '#e02d1b',
+                        '#4e4f58', '#757683', '#5d0fd8', '#fd6a00', '#1ba97f'
+                    ],
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            font: {
+                                size: 12
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                let value = context.raw || 0;
+                                let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                let percentage = Math.round((value / total) * 100);
+                                return `${label}: ${value} (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // График посещений по дням
+        const visitsCtx = document.getElementById('visitsChart').getContext('2d');
+        const visitsChart = new Chart(visitsCtx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: "Посещения",
+                    lineTension: 0.3,
+                    backgroundColor: "rgba(78, 115, 223, 0.05)",
+                    borderColor: "rgba(78, 115, 223, 1)",
+                    pointRadius: 3,
+                    pointBackgroundColor: "rgba(78, 115, 223, 1)",
+                    pointBorderColor: "rgba(78, 115, 223, 1)",
+                    pointHoverRadius: 5,
+                    pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+                    pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+                    pointHitRadius: 10,
+                    pointBorderWidth: 2,
+                    data: [],
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        grid: {
+                            display: false,
+                            drawBorder: false
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            beginAtZero: true,
+                            precision: 0
+                        },
+                        grid: {
+                            color: "rgb(234, 236, 244)",
+                            zeroLineColor: "rgb(234, 236, 244)",
+                            drawBorder: false,
+                            borderDash: [2],
+                            zeroLineBorderDash: [2]
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                let value = context.raw || 0;
+                                return `${label}: ${value} посещений`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Функция для загрузки данных
+        function loadStatisticsData() {
+            document.getElementById('refreshStatsBtn').disabled = true;
+            document.getElementById('refreshStatsBtn').innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Загрузка...';
+
+            fetch('/statistics/data')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Ошибка загрузки данных');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    updateCharts(data);
+                    updateStats(data);
+                    updateTable(data);
+                    document.getElementById('refreshStatsBtn').disabled = false;
+                    document.getElementById('refreshStatsBtn').innerHTML = '<i class="fas fa-sync-alt me-2"></i>Обновить данные';
+                })
+                .catch(error => {
+                    console.error('Ошибка при загрузке данных:', error);
+                    document.getElementById('refreshStatsBtn').disabled = false;
+                    document.getElementById('refreshStatsBtn').innerHTML = '<i class="fas fa-sync-alt me-2"></i>Обновить данные';
+                    alert('Ошибка при загрузке данных. Пожалуйста, попробуйте позже.');
+                });
+        }
+
+        // Обновление графиков
+        function updateCharts(data) {
+            // Данные для графика стран
+            if (data.visitStats.topCountries && data.visitStats.topCountries.length > 0) {
+                document.getElementById('noCountriesData').style.display = 'none';
+
+                const countries = data.visitStats.topCountries.map(item => item[0]);
+                const counts = data.visitStats.topCountries.map(item => item[2]);
+
+                countriesChart.data.labels = countries;
+                countriesChart.data.datasets[0].data = counts;
+                countriesChart.update();
+
+                document.getElementById('countriesChart').style.display = 'block';
+            } else {
+                document.getElementById('countriesChart').style.display = 'none';
+                document.getElementById('noCountriesData').style.display = 'block';
+            }
+
+            // Данные для графика посещений по дням
+            if (data.visitStats.dailyVisits && data.visitStats.dailyVisits.length > 0) {
+                document.getElementById('noDailyData').style.display = 'none';
+
+                const dates = data.visitStats.dailyVisits.map(item => item[0]);
+                const visits = data.visitStats.dailyVisits.map(item => item[1]);
+
+                visitsChart.data.labels = dates;
+                visitsChart.data.datasets[0].data = visits;
+                visitsChart.update();
+
+                document.getElementById('visitsChart').style.display = 'block';
+            } else {
+                document.getElementById('visitsChart').style.display = 'none';
+                document.getElementById('noDailyData').style.display = 'block';
+            }
+        }
+
+        // Обновление статистики
+        function updateStats(data) {
+            if (data.visitStats) {
+                document.getElementById('avgDailyVisits').textContent =
+                    data.visitStats.avgDailyVisits ? parseFloat(data.visitStats.avgDailyVisits).toFixed(1) : '0';
+                document.getElementById('todayVisits').textContent =
+                    data.visitStats.todayVisits ? data.visitStats.todayVisits : '0';
+            }
+        }
+
+        // Обновление таблицы
+        function updateTable(data) {
+            if (data.recentVisits && data.recentVisits.length > 0) {
+                const tbody = document.querySelector('#visitsTable tbody');
+
+                // Очищаем таблицу, оставляя только строку "нет результатов"
+                const noResultsRow = document.getElementById('noResultsRow');
+                while (tbody.firstChild) {
+                    if (tbody.firstChild !== noResultsRow) {
+                        tbody.removeChild(tbody.firstChild);
+                    } else {
+                        break;
+                    }
+                }
+
+                // Добавляем новые данные
+                data.recentVisits.forEach(visit => {
+                    const row = document.createElement('tr');
+
+                    // IP адрес
+                    const ipCell = document.createElement('td');
+                    ipCell.textContent = visit.ipAddress;
+                    row.appendChild(ipCell);
+
+                    // Местоположение
+                    const locationCell = document.createElement('td');
+                    locationCell.textContent = visit.location || 'Неизвестно';
+                    row.appendChild(locationCell);
+
+                    // Количество посещений
+                    const countCell = document.createElement('td');
+                    countCell.textContent = visit.visitCount;
+                    row.appendChild(countCell);
+
+                    // Первый визит
+                    const firstVisitCell = document.createElement('td');
+                    firstVisitCell.textContent = formatDate(new Date(visit.firstVisit));
+                    row.appendChild(firstVisitCell);
+
+                    // Последний визит
+                    const lastVisitCell = document.createElement('td');
+                    lastVisitCell.textContent = formatDate(new Date(visit.lastVisit));
+                    row.appendChild(lastVisitCell);
+
+                    // Добавляем строку в таблицу
+                    tbody.insertBefore(row, noResultsRow);
+                });
+
+                // Обновляем поиск
+                filterTable();
+            }
+        }
+
+        // Форматирование даты
+        function formatDate(date) {
+            return date.toLocaleDateString('ru-RU', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Поиск в таблице
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', filterTable);
+
+        document.getElementById('clearSearch').addEventListener('click', function() {
+            searchInput.value = '';
+            filterTable();
+        });
+
+        function filterTable() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const table = document.getElementById('visitsTable');
+            const rows = table.querySelectorAll('tbody tr:not(#noResultsRow)');
+            let hasVisibleRows = false;
+
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    row.style.display = '';
+                    hasVisibleRows = true;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            // Показываем/скрываем строку "нет результатов"
+            document.getElementById('noResultsRow').style.display = hasVisibleRows ? 'none' : '';
+        }
+
+        // Загрузка данных при загрузке страницы
+        loadStatisticsData();
+
+        // Обновление при нажатии на кнопку
+        document.getElementById('refreshStatsBtn').addEventListener('click', loadStatisticsData);
+    });
+</script>
+</body>
+</html>
