@@ -21,16 +21,8 @@ public class ClinikTourApplication {
     //______________________________________
 
 
-    //http://localhost:2817/services/2 дизайн и кнопка не работает записаться
-
-    //  <!-- Категории блога (опционально) -->
-    //<!--  <div class="blog-categories">-->
-    //<!--    <a href="#" class="category-pill active">Все статьи</a>-->
-    //<!--    <a href="#" class="category-pill">Лечение за рубежом</a>-->
-    //<!--    <a href="#" class="category-pill">Советы пациентам</a>-->
-    //<!--    <a href="#" class="category-pill">Клиники</a>-->
-    //<!--    <a href="#" class="category-pill">Интересные факты</a>-->
-    //<!--  </div>-->
+   //# В application-prod.properties (для продакшена)
+    //site.base-url=https://asiamedtour.com
 
 
 

@@ -15,12 +15,11 @@
   <meta property="og:title" th:content="${title}" content="Asiamedtour - Медицинский туризм в Турции">
   <meta property="og:description" th:content="${description}" content="Организация лечения в лучших клиниках Турции с полным сопровождением пациентов.">
   <meta property="og:type" content="website">
-  <meta property="og:url" th:content="${request != null ? request.requestURL : '/'}" content="https://asiamedtour.com/">
+  <meta property="og:url" th:content="${request != null ? request.requestURL : baseUrl}" content="https://asiamedtour.com/">
   <meta property="og:image" content="/images/Leonardo_Lightning_XL_modern_clinic_3.jpg">
 
   <!-- Каноническая ссылка -->
-  <link rel="canonical" th:href="${request != null ? request.requestURL : '/'}" href="https://asiamedtour.com/" />
-
+  <link rel="canonical" th:href="${request != null ? request.requestURL : baseUrl}" href="https://asiamedtour.com/" />
   <!-- Метатеги для локализации -->
   <meta name="geo.region" content="TR" />
   <meta name="geo.placename" content="Istanbul" />
