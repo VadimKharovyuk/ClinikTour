@@ -203,6 +203,7 @@
     // Инициализация Summernote для полей описания
     $('.summernote').summernote({
       height: 200,
+      styleTags: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'], // Ограничить доступные стили
       toolbar: [
         ['style', ['style']],
         ['font', ['bold', 'underline', 'clear']],
@@ -215,8 +216,50 @@
       callbacks: {
         onImageUpload: function(files) {
           alert('Загрузка изображений в редакторе не поддерживается. Используйте специальное поле для загрузки основного изображения клиники.');
+        },
+        onPaste: function(e) {
+          // Очистка от стилей при вставке
+          var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
+          e.preventDefault();
+          document.execCommand('insertText', false, bufferText);
+        },
+        // Дополнительная очистка при инициализации
+        onInit: function() {
+          $('.summernote').each(function() {
+            var code = $(this).summernote('code');
+            if (code) {
+              code = code.replace(/<p[^>]*>/g, '').replace(/<\/p>/g, '<br>').replace(/<br><br>/g, '<br>');
+              $(this).summernote('code', code);
+            }
+          });
         }
       }
+    });
+
+    // Добавляем обработчик формы для очистки перед отправкой
+    $('form').on('submit', function() {
+      $('.summernote').each(function() {
+        // Получаем HTML из редактора
+        var content = $(this).summernote('code');
+
+        // Очищаем от лишних span тегов и атрибутов style
+        var cleanContent = content
+                .replace(/<span\s+[^>]*>/g, '')
+                .replace(/<\/span>/g, '')
+                .replace(/style="[^"]*"/g, '')
+                .replace(/font-family:[^;]*;?/g, '')
+                .replace(/font-variant-ligatures:[^;]*;?/g, '')
+                .replace(/orphans:[^;]*;?/g, '')
+                .replace(/widows:[^;]*;?/g, '')
+                .replace(/text-decoration-thickness:[^;]*;?/g, '')
+                .replace(/text-decoration-style:[^;]*;?/g, '')
+                .replace(/text-decoration-color:[^;]*;?/g, '')
+                .replace(/<p[^>]*>/g, '') // Удаляем открывающие теги p
+                .replace(/<\/p>/g, '<br>'); // Заменяем закрывающие теги p на br
+
+        // Обновляем содержимое в скрытом поле
+        $(this).summernote('code', cleanContent);
+      });
     });
 
     // Выбрать/снять выбор со всех отделений
@@ -231,7 +274,65 @@
 
     // Установка начального состояния "выбрать все"
     $('#toggleAllDepartments').prop('checked', $('.department-checkbox:checked').length === $('.department-checkbox').length);
+
+    // Добавляем кнопку для очистки форматирования
+    var clearFormattingBtn = function(context) {
+      var ui = $.summernote.ui;
+      var button = ui.button({
+        contents: '<i class="fa fa-eraser"></i> Очистить форматирование',
+        tooltip: 'Очистить форматирование',
+        click: function() {
+          var text = context.invoke('code');
+          text = text.replace(/<\/?[^>]+(>|$)/g, ''); // Удаляем все HTML теги
+          context.invoke('code', text);
+        }
+      });
+      return button.render();
+    };
+
+    // Добавляем кнопку в toolbar
+    $('.summernote').summernote('addButton', {
+      title: 'clearFormatting',
+      group: 'font',
+      className: 'clear-formatting',
+      fn: clearFormattingBtn
+    });
   });
 </script>
+<!--<script>-->
+<!--  $(document).ready(function() {-->
+<!--    // Инициализация Summernote для полей описания-->
+<!--    $('.summernote').summernote({-->
+<!--      height: 200,-->
+<!--      toolbar: [-->
+<!--        ['style', ['style']],-->
+<!--        ['font', ['bold', 'underline', 'clear']],-->
+<!--        ['color', ['color']],-->
+<!--        ['para', ['ul', 'ol', 'paragraph']],-->
+<!--        ['table', ['table']],-->
+<!--        ['insert', ['link']],-->
+<!--        ['view', ['fullscreen', 'codeview', 'help']]-->
+<!--      ],-->
+<!--      callbacks: {-->
+<!--        onImageUpload: function(files) {-->
+<!--          alert('Загрузка изображений в редакторе не поддерживается. Используйте специальное поле для загрузки основного изображения клиники.');-->
+<!--        }-->
+<!--      }-->
+<!--    });-->
+
+<!--    // Выбрать/снять выбор со всех отделений-->
+<!--    $('#toggleAllDepartments').on('change', function() {-->
+<!--      $('.department-checkbox').prop('checked', $(this).is(':checked'));-->
+<!--    });-->
+
+<!--    // Обновление состояния "выбрать все" при изменении отдельных чекбоксов-->
+<!--    $('.department-checkbox').on('change', function() {-->
+<!--      $('#toggleAllDepartments').prop('checked', $('.department-checkbox:checked').length === $('.department-checkbox').length);-->
+<!--    });-->
+
+<!--    // Установка начального состояния "выбрать все"-->
+<!--    $('#toggleAllDepartments').prop('checked', $('.department-checkbox:checked').length === $('.department-checkbox').length);-->
+<!--  });-->
+<!--</script>-->
 </body>
 </html>
