@@ -171,4 +171,35 @@ public class DepartmentService {
     }
 
 
+    public void cleanAllServicesDescriptions() {
+        List<Department> department = departmentRepository.findAll();
+        for (Department departments : department) {
+            if (departments.getDescription() != null) {
+                departments.setDescription(cleanHtml(departments.getDescription()));
+            }
+        }
+        departmentRepository.saveAll(department);
+    }
+
+    private String cleanHtml(String html) {
+        if (html == null) return null;
+
+        return html.replaceAll("<span\\s+[^>]*>", "")
+                .replaceAll("</span>", "")
+                .replaceAll("style=\"[^\"]*\"", "")
+                .replaceAll("font-family:[^;]*;?", "")
+                .replaceAll("font-variant-ligatures:[^;]*;?", "")
+                .replaceAll("orphans:[^;]*;?", "")
+                .replaceAll("widows:[^;]*;?", "")
+                .replaceAll("text-decoration-thickness:[^;]*;?", "")
+                .replaceAll("text-decoration-style:[^;]*;?", "")
+                .replaceAll("text-decoration-color:[^;]*;?", "")
+                .replaceAll("<p[^>]*>", "") // Полностью удалить открывающие теги p
+                .replaceAll("</p>", " ") // Заменить закрывающие теги p на пробел
+                .replaceAll("<br>", " ") // Заменить br на пробел
+                .replaceAll("\\s{2,}", " ") // Убрать лишние пробелы
+                .trim();
+    }
+
+
 }

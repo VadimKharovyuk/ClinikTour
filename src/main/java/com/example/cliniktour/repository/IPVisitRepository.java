@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Date;
 import java.util.List;
 
+
 @Repository
 public interface IPVisitRepository extends JpaRepository<IPVisit, Long> {
     IPVisit findByIpAddress(String ipAddress);

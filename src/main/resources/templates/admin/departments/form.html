@@ -130,7 +130,98 @@
         onImageUpload: function(files) {
           // Можно добавить логику для загрузки изображений в редакторе
           alert('Загрузка изображений в редакторе не поддерживается. Пожалуйста, используйте специальное поле для загрузки основного изображения отделения.');
+        },
+        // Добавляем обработчик вставки текста
+        onPaste: function(e) {
+          // Запрещаем стандартную вставку
+          e.preventDefault();
+
+          // Получаем чистый текст из буфера обмена
+          const clipboardData = e.originalEvent.clipboardData || window.clipboardData;
+          const plainText = clipboardData.getData('text/plain');
+
+          // Вставляем только текст без форматирования
+          const cleanText = plainText.replace(/(<([^>]+)>)/gi, "");
+
+          // Вставляем текст в редактор
+          document.execCommand('insertText', false, cleanText);
         }
+      }
+    });
+
+    // Добавляем кнопку очистки форматирования
+    const cleanFormattingBtn = $('<button type="button" class="btn btn-warning mb-3" id="clean-formatting-btn"><i class="fas fa-eraser me-2"></i>Очистить форматирование</button>');
+
+    // Добавляем кнопку перед редактором
+    $('.note-editor').before(cleanFormattingBtn);
+
+    // Обработчик для кнопки очистки форматирования
+    $('#clean-formatting-btn').on('click', function() {
+      if (confirm('Вы уверены, что хотите удалить всё форматирование? Это действие нельзя отменить.')) {
+        // Получаем текст без форматирования
+        const plainText = $('#description').summernote('code').replace(/(<([^>]+)>)/gi, "");
+
+        // Очищаем редактор и вставляем только текст
+        $('#description').summernote('code', plainText);
+
+        // Показываем уведомление
+        const alertDiv = $(`
+        <div class="alert alert-success alert-dismissible fade show mt-2">
+          <span>Форматирование успешно очищено!</span>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      `);
+
+        $('.note-editor').before(alertDiv);
+
+        // Автоматически скрываем уведомление через 3 секунды
+        setTimeout(() => {
+          alertDiv.alert('close');
+        }, 3000);
+      }
+    });
+
+    // Обработка формы перед отправкой - очистка лишних тегов
+    $('form').on('submit', function() {
+      let cleanDescription = $('#description').summernote('code');
+      cleanDescription = cleanDescription
+              .replace(/<span\s+[^>]*>/g, '')
+              .replace(/<\/span>/g, '')
+              .replace(/style="[^"]*"/g, '')
+              .replace(/font-family:[^;]*;?/g, '')
+              .replace(/font-variant-ligatures:[^;]*;?/g, '')
+              .replace(/orphans:[^;]*;?/g, '')
+              .replace(/widows:[^;]*;?/g, '')
+              .replace(/text-decoration-thickness:[^;]*;?/g, '')
+              .replace(/text-decoration-style:[^;]*;?/g, '')
+              .replace(/text-decoration-color:[^;]*;?/g, '')
+              .replace(/\s{2,}/g, ' ');
+
+      // Устанавливаем очищенное значение обратно в редактор
+      $('#description').summernote('code', cleanDescription);
+    });
+
+    // Предпросмотр изображения
+    $('#image').on('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          // Если есть элемент предпросмотра, используем его
+          if ($('.img-thumbnail').length) {
+            $('.img-thumbnail').attr('src', event.target.result);
+          } else {
+            // Иначе создаем новый элемент предпросмотра
+            const previewElement = $(`
+            <div class="mb-3">
+              <img src="${event.target.result}" alt="Предпросмотр изображения" class="img-thumbnail mb-2" style="max-height: 200px;">
+              <div class="small text-muted">Новое изображение (предпросмотр)</div>
+            </div>
+          `);
+            $('#image').closest('.mb-3').prepend(previewElement);
+          }
+        }
+        reader.readAsDataURL(file);
       }
     });
   });

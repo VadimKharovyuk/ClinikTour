@@ -28,6 +28,7 @@ public class DoctorAppointmentController {
             redirectAttributes.addFlashAttribute("error", "Произошла ошибка при отправке заявки: " + e.getMessage());
         }
 
-        return "redirect:/doctors/" + appointmentDTO.getDoctorId();
+//        return "redirect:/doctors/" + appointmentDTO.getDoctorId();
+        return "redirect:/appointments/thank-you";
     }
 }

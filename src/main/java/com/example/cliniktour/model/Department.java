@@ -26,11 +26,10 @@ public class Department {
     private String imagePath;
     private String imageDeleteHash;
 
-    // Связь с branches
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Branches> branches;
 
-    // Связь с докторами этой специализации
+
     @OneToMany(mappedBy = "department")
     private List<Doctor> doctors;
 }

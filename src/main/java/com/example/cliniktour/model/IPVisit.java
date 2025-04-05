@@ -3,6 +3,7 @@ package com.example.cliniktour.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+
 import java.util.Date;
 
 @Entity

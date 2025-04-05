@@ -25,6 +25,7 @@ public class ConsultationRequestController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Произошла ошибка при отправке заявки: " + e.getMessage());
         }
-        return "redirect:/departments/" + consultationRequestDto.getDepartmentId();
+//        return "redirect:/departments/" + consultationRequestDto.getDepartmentId();
+        return "redirect:/appointments/thank-you";
     }
 }
