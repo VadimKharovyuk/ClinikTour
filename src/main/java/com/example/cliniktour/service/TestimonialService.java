@@ -48,7 +48,6 @@ public class TestimonialService {
         Testimonial testimonial = testimonialMapper.toEntity(dto, clinic, photoFile);
         testimonial = testimonialRepository.save(testimonial);
 
-        log.info("Отзыв успешно создан с ID: {}", testimonial.getId());
         return testimonialMapper.toDetailDto(testimonial);
     }
 
